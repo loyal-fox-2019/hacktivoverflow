@@ -3,7 +3,7 @@ const { Question } = require('../models');
 
 class QuestionController {
 
-  static async createQuestin(req, res, next) {
+  static async createQuestion(req, res, next) {
     try {
       const { title, description, tags } = req.body;
       const doc = {
