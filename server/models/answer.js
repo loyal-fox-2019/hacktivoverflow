@@ -23,6 +23,10 @@ const answerSchema = new Schema({
         type: Schema.Types.ObjectId,
         ref: 'User'
     }],
+    question: {
+        type: Schema.Types.ObjectId,
+        ref: 'Question'
+    },
 }, {timestamps : true},{versionKey : false});   //timestamps add createdAt, updatedAt fields
 
 answerSchema.pre('save',function(next) {
