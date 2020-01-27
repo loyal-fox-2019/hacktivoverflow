@@ -15,6 +15,7 @@ const UserSchema = new Schema({
     minlength: [8, 'Your password must be between 8 - 12'],
     maxlength: [12, 'Your password must be between 8 - 12'],
   },
+  watchedTags: [],
 })
 
 UserSchema.pre('save', function(next) {
