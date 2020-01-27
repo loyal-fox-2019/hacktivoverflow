@@ -1,5 +1,5 @@
 'use strict';
-const { Question } = require('../models');
+const { Question, Answer } = require('../models');
 
 class QuestionController {
 
@@ -92,6 +92,7 @@ class QuestionController {
   static async removeQuestion(req, res, next) {
     try {
       const { id } = req.params;
+      await Answer.deleteMany({ questionId: id })
       const remove = await Question.deleteOne({ _id: id });
       res.status(200).json(remove);
     } catch (err) {
