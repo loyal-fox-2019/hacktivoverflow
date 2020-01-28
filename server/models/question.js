@@ -26,6 +26,9 @@ const questionSchema = new Schema({
     answers: [{
         type: Schema.Types.ObjectId,
         ref: 'Answer'
+    }],
+    tags: [{
+        type: String
     }]
 }, {timestamps : true},{versionKey : false});   //timestamps add createdAt, updatedAt fields
 

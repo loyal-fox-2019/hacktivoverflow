@@ -29,7 +29,10 @@ const userSchema = new Schema({
     login_type: {
         type: String,
         required: true
-    }
+    },
+    watched_tags: [{
+        type: String
+    }]
 }, {timestamps : true},{versionKey : false});   //timestamps add createdAt, updatedAt fields
 
 userSchema.pre('save',function(next) {

@@ -9,11 +9,11 @@ questionsRouter.get('/:id',QuestionController.getOneQuestion);
 
 questionsRouter.use('/',authentication);
 
-questionsRouter.post('/');
+questionsRouter.post('/',QuestionController.addNewQuestion);
 
-questionsRouter.patch('/');
+questionsRouter.patch('/:id',QuestionController.updateQuestion);
 
-questionsRouter.delete('/');
+questionsRouter.delete('/:id',QuestionController.deleteQuestion);
 
 
 module.exports = questionsRouter;
