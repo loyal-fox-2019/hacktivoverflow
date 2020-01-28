@@ -1,21 +1,23 @@
 <template>
-  <section>
+  <div id="main">
     <div id="image">
-      <img src="https://www.sencha.com/wp-content/uploads/2019/10/s-o-banner.png" alt="" srcset="">
+      <img src="../assets/image/banner.png" alt="">
     </div>
-    <div id="text">
-      <h1 style="text-align: center;">
-        <strong>For developers, by developers</strong>
-        <hr class="hr-1">
-      </h1>
-      <p id="description"
-        style="text-align: center;">
+    <div id="text" class="text-center mt-2">
+      <h3 class="mt-4">
+        <strong
+          style="font-size: 2em; font-family: 'Bitter', serif;">
+          For developers, by developers
+        </strong>
+      </h3>
+      <p style="font-size: 1.5em; font-family: 'Barlow Condensed', sans-serif;">
         Stack Overflow is an open community for anyone that codes. We help you<br>
         get answers to your toughest coding questions, share knowledge with<br>
         your coworkers in private, and find your next dream job.
       </p>
+      <b-button variant="primary" to="/questions">Browse Questions</b-button>
     </div>
-  </section>
+  </div>
 </template>
 
 <script>
@@ -29,30 +31,12 @@ export default {
 </script>
 
 <style scoped>
-@import url('https://fonts.googleapis.com/css?family=Heebo|Quicksand&display=swap');
+@import url('https://fonts.googleapis.com/css?family=Barlow+Condensed|Bitter&display=swap');
 
 img {
   width: 100vw;
-  height: 60vh;
+  height: 50vh;
 }
-h1 {
-  margin-top: 0.5em;
-  font-size: 2em;
-  padding: 0;
-  font-family: 'Quicksand', sans-serif;
-}
-p {
-  padding: 0;
-  margin-top: 0;
-  font-family: 'Heebo', sans-serif;
-}
-.hr-1 {
-  position: relative;
-  left: 50%;
-  transform: translate(-50%, 0%);
-  width: 10vw;
-  border: 3px solid red;
-  margin-bottom: 0.5em;
-  margin-top: 0.5em;
-}
+/* #text {
+} */
 </style>

@@ -1,15 +1,18 @@
-import VueSweetalert2 from 'vue-sweetalert2';
+import { BootstrapVue, IconsPlugin, BootstrapVueIcons } from 'bootstrap-vue';
+import wysiwyg from 'vue-wysiwyg';
 import Vue from 'vue';
-import Buefy from 'buefy';
 import App from './App.vue';
 import router from './router';
 import store from './store';
-import 'buefy/dist/buefy.css';
+import 'bootstrap/dist/css/bootstrap.css';
+import 'bootstrap-vue/dist/bootstrap-vue.css';
 
 Vue.config.productionTip = false;
 
-Vue.use(Buefy);
-Vue.use(VueSweetalert2);
+Vue.use(BootstrapVue);
+Vue.use(IconsPlugin);
+Vue.use(BootstrapVueIcons);
+Vue.use(wysiwyg, {});
 
 new Vue({
   router,

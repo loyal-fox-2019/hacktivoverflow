@@ -1,7 +1,6 @@
 <template>
-  <div>
+  <div id="app">
     <Navbar/>
-    <Modal/>
     <router-view/>
   </div>
 </template>
@@ -10,13 +9,15 @@
 import Navbar from '@/components/Navbar.vue';
 
 export default {
-  components: {
-    Navbar,
-  },
+  components: { Navbar },
   data() {
     return {
       message: 'Hello world',
     };
+  },
+  created() {
+    this.$store.dispatch('fetchData');
+    this.$store.dispatch('checkLogin');
   },
 };
 </script>
