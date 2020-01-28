@@ -2,6 +2,10 @@ const bcryptjs = require('bcryptjs')
 const { Schema, models, model } = require('mongoose')
 
 const userSchema = new Schema({
+  username: {
+    type: String,
+    required: [true, 'Username is required'],
+  },
   email: {
     type: String,
     required: [true, 'Email is required'],
@@ -31,6 +35,9 @@ const userSchema = new Schema({
       },
       msg: 'Email already registered',
     },
+  },
+  avatar: {
+    type: String,
   },
 })
 
