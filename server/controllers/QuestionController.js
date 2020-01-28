@@ -81,6 +81,14 @@ class QuestionController{
             $addToSet: { downvotes: req.payload._id },
             $pull: {upvotes: req.payload._id}
         }, { new: true }).populate('user','-password')
+        .then(data=>{
+            res.status(200).json(data)
+        })
+        .catch(err=>{
+            res.status(400).json({
+                message: err.message
+            })
+        })
     }
 }
 

@@ -7,13 +7,18 @@ const questionSchema = new Schema({
         required: [true, 'Question title is required']
     },
     description:{
-        type: true,
+        type: String,
         required: [true, 'Description is required']
     },
     tags: [{type: Schema.Types.ObjectId, ref: 'Tag'}],
     user:{
         type: Schema.Types.ObjectId,
         ref: 'User',
+        required: true
+    },
+    question:{
+        type: Schema.Types.ObjectId,
+        ref: 'Question',
         required: true
     },
     upvotes: [{type: Schema.Types.ObjectId, ref: 'User'}],
