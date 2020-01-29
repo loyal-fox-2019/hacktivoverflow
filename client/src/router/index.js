@@ -8,29 +8,25 @@ const routes = [
   {
     path: "/",
     name: "home",
-    component: Home
-  },
-  {
-    path: "/about",
-    name: "about",
-    component: () =>
-      import(/* webpackChunkName: "about" */ "../views/About.vue")
-  },
-  {
-    path: "/register",
-    name: "register",
-    component: () =>
-      import(/* webpackChunkName: "register" */ "../views/Register.vue"),
+    component: Home,
     children: [
       {
-        // UserProfile will be rendered inside User's <router-view>
-        // when /user/:id/profile is matched
-        path: ":id",
-        name: "confirm register",
+        path: "/login",
+        name: "login",
         component: () =>
-          import(
-            /* webpackChunkName: "confirmation" */ "../views/ConfirmRegister.vue"
-          )
+          import(/* webpackChunkName: "login" */ "../views/Login.vue")
+      },
+      {
+        path: "/register",
+        name: "register",
+        component: () =>
+          import(/* webpackChunkName: "register" */ "../views/Register.vue")
+      },
+      {
+        path: "/register/:id",
+        name: "confirm",
+        component: () =>
+          import(/* webpackChunkName: "register" */ "../views/Register.vue")
       }
     ]
   }

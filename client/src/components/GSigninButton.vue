@@ -8,7 +8,7 @@
       class="shadow-sm py-2"
     >
       <font-awesome-icon :icon="['fab', 'google']" />
-      Sign Up with
+      Continue with
       <span class="text-success font-weight-bold">
         Google
       </span>

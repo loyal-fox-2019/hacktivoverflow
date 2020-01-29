@@ -1,6 +1,6 @@
 <template>
   <div>
-    <b-navbar type="light" variant="light" class="shadow-sm m-0 p-0">
+    <b-navbar type="light" variant="light" class="shadow-sm m-0 p-0 fixed-top">
       <b-container>
         <b-navbar-brand to="/">
           Error<span class="font-weight-bold text-success">Handler</span>()
@@ -10,7 +10,12 @@
           <!-- Right aligned nav items -->
           <b-navbar-nav class="ml-auto">
             <b-nav-item>
-              <b-button size="sm" variant="outline-dark" class="mx-1">
+              <b-button
+                size="sm"
+                variant="outline-dark"
+                class="mx-1"
+                to="/login"
+              >
                 Login
               </b-button>
               <b-button size="sm" variant="primary" to="/register">

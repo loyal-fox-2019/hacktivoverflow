@@ -1,21 +1,13 @@
 <template>
   <div class="home vh-100 d-flex justify-content-center align-items-center">
     <b-container class="h-75 d-flex justify-content-center align-items-center">
-      <b-row class="w-100">
-        <b-col
-          cols="8"
-          class="d-flex justify-content-center align-items-center"
-        >
-          <p>
-            Try{ } Catch { }
-          </p>
-        </b-col>
+      <b-row class="w-100 justify-content-center">
         <b-col cols="4">
           <g-signin-button class="my-3"></g-signin-button>
-          <register-card :state="userState"></register-card>
+          <login-card></login-card>
           <p class="mt-5" style="font-size:13px;">
-            Already have an account?
-            <router-link to="/">Log in</router-link>
+            Don't have an account?
+            <router-link to="/register">Sign up</router-link>
           </p>
         </b-col>
       </b-row>
@@ -25,12 +17,12 @@
 
 <script>
 import GSigninButton from "@/components/GSigninButton.vue";
-import RegisterCard from "@/components/RegisterCard.vue";
+import LoginCard from "@/components/LoginCard.vue";
 
 export default {
   components: {
     GSigninButton,
-    RegisterCard
+    LoginCard
   },
   data() {
     return {

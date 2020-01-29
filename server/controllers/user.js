@@ -1,15 +1,13 @@
 const userModel = require('../models/User');
-const tokenization = require('../helpers/tokenization');
+const jwt = require('jsonwebtoken');
 const generatePassword = require('../helpers/generatePassword');
 const nodemailer = require('nodemailer');
 const ObjectId = require('mongoose').Types.ObjectId;
+const bcrypt = require('bcrypt');
 
 class User {
     static register(req, res, next) {
-        console.log('MASUK req.body', req.body);
-        
         let password = generatePassword()
-        console.log('abis generate password', password);
         userModel
             .create({
                 email: req.body.email,
@@ -19,8 +17,6 @@ class User {
                 isConfirm: false
             })
             .then((user) => {
-                console.log('udah create user', user);
-                
                 const transporter = nodemailer.createTransport({
                     service: 'gmail',
                     auth: {
@@ -35,13 +31,14 @@ class User {
                     subject: 'no-reply: Register Confirmation for Error Handler',
                     html: `
                     <h1>1 Step Closer to Error Handler</h1>
-                    <p> Here, you can :
+                    <p> 
+                        Here, you can :
                         try {
                             to ask your error();
                         }
-                        
-                        OR
-                        
+                    </p> 
+                    <p>OR</p>
+                    <p>
                         catch {
                             other people error();
                         }
@@ -55,8 +52,6 @@ class User {
                     <p style="font-weight:bold;">${password}</p>
                 `
                 }
-
-                console.log('mau kirim email');
                 
                 return transporter.sendMail(mailOptions);
             }).then((info) => {
@@ -66,8 +61,9 @@ class User {
 
     static getConfirmData(req, res, next) {
         userModel
-            .find({
-                _id: ObjectId(req.params.id)
+            .findOne({
+                _id: ObjectId(req.params.id),
+                isConfirm: false
             })
             .then((user) => {
                 if (!user) {
@@ -82,24 +78,48 @@ class User {
     }
 
     static confirm(req, res, next) {
-        let name
+        let userData
+
         userModel
-            .updateOne({
-                email: req.body.email,
-                name: req.body.name,
-                username: req.body.username,
-                password: req.body.password,
-                isConfirm: true
+            .findOne({
+                _id: ObjectId(req.params.id),
+                isConfirm: false
             })
             .then((user) => {
-                name = user.name
-                return tokenization({
-                    _id: user._id,
-                    name: user.name
-                })
+                if (!user) {
+                    let err = new Error('This page is not valid')
+                    err.statusCode = 404
+                    err.errMessage = 'This page is not valid'
+                    throw err
+                } else if (!bcrypt.compareSync(req.body.password, user.password)) {
+                    let err = new Error('Invalid password')
+                    err.statusCode = 404
+                    err.errMessage = 'Invalid password'
+                    throw err
+                } else if (!req.body.newPassword) {
+                    let err = new Error('New password required')
+                    err.statusCode = 404
+                    err.errMessage = 'New password required'
+                    throw err
+                } else {
+                    userData = {
+                        _id: user._id,
+                        name: user.name
+                    }
+                    return userModel.updateOne({
+                        _id: ObjectId(req.params.id),
+                        isConfirm: false
+                    }, {
+                        username: req.body.username,
+                        password: req.body.newPassword,
+                        isConfirm: true
+                    })
+                }
+            }).then((result) => {
+                return jwt.sign(userData, process.env.JWT_SECRET)
             }).then((token) => {
                 res.status(201).json({
-                    name,
+                    name: userData.name,
                     token
                 })
             }).catch(next);

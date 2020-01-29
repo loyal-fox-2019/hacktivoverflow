@@ -41,7 +41,7 @@ const userSchema = new Schema({
 });
 
 userSchema.pre('save', function (next) {
-    hashPassword(this.password)
+    this.password = hashPassword(this.password)
     next()
 })
 

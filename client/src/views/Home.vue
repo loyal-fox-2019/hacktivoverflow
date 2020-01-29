@@ -1,6 +1,7 @@
 <template>
   <b-container fluid class="p-0">
     <top-navbar></top-navbar>
+    <router-view></router-view>
   </b-container>
 </template>
 
