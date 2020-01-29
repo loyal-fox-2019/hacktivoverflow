@@ -5,11 +5,24 @@ class QuestionController
 {
     static getAllQuestions(req, res, next)
     {
+        let selected = [];
         Question.find()
-        .populate('answers')
-        .exec()
+        .populate('user','username')
+        .exec()        
         .then((questions) => {
-            res.status(200).json(questions)
+            if(req.query.search)
+            {
+                selected = questions.filter((v) => {
+                    return RegExp(`\\b${req.query.search}`,'i').test(v.title) || 
+                        RegExp(`\\b${req.query.search}`,'i').test(v.description)
+                });
+                res.status(200).json(selected)
+            }
+            else
+            {
+                res.status(200).json(questions)
+            }
+            
         })
         .catch((err) => {
             console.log(err);            
@@ -45,7 +58,14 @@ class QuestionController
         data.upvotes = [];
         data.downvotes = [];
         data.answers = [];
-        data.tags = req.body.tags.split(' ').filter((v) => {return !!v});
+        if(req.body.tags)
+        {
+            data.tags = req.body.tags.split(' ').filter((v) => {return !!v});
+        }
+        else
+        {
+            data.tags = [];
+        }
 
         Question.create(data)
         .then((question) => {
@@ -59,10 +79,12 @@ class QuestionController
     static updateQuestion(req, res, next)
     {
         const data = _.pick(req.body,'title','description');
-        data.tags = req.body.tags.split(' ').filter((v) => {return !!v});
+        if(req.body.tags)
+        {
+            data.tags = req.body.tags.split(' ').filter((v) => {return !!v});
+        }
 
         Question.findById(req.params.id)
-        .populate('answers')
         .exec()
         .then((question) => {
             if(question)

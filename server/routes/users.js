@@ -14,6 +14,6 @@ usersRouter.post('/gsignin',verifyGoogleToken,generateTokenGoogle);
 
 usersRouter.use('/',authentication);
 
-usersRouter.get('/myquestions');
+usersRouter.get('/myquestions',UserController.getMyQuestions);
 
 module.exports = usersRouter;

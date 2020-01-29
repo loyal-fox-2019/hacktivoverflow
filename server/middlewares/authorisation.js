@@ -6,7 +6,13 @@ function question_authorisation(req,res,next)
 {    
     Question.findById(req.params.id)
     .then((question) => {
-        if(question.user.toString() != req.userInfo.id)
+        if(!question)
+        {
+            res.status(404).json({
+                msg: "Question not found"
+            })
+        }
+        else if(question.user.toString() != req.userInfo.id)
         {
             res.status(403).json({
                 msg: "Not authorised"
@@ -27,7 +33,13 @@ function answer_authorisation(req,res,next)
 {    
     Answer.findById(req.params.id)
     .then((answer) => {
-        if(answer.user.toString() != req.userInfo.id)
+        if(!answer)
+        {
+            res.status(404).json({
+                msg: "Answer not found"
+            })
+        }
+        else if(answer.user.toString() != req.userInfo.id)
         {
             res.status(403).json({
                 msg: "Not authorised"

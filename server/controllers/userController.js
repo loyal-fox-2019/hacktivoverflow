@@ -1,4 +1,8 @@
 const User = require("../models/user.js");
+const Question = require("../models/question.js");
+const _ = require("underscore");
+const comparePassword = require("../helpers/bcrypt").comparePassword;
+const generateToken = require("../helpers/jwt").generateToken;
 
 class UserController
 {
@@ -36,7 +40,8 @@ class UserController
                             username: user.username,
                             email: user.email
                         }),
-                        username: user.username
+                        username: user.username,
+                        email: user.email
                     });
                 }
                 else
@@ -52,6 +57,22 @@ class UserController
                     msg: "Account does not exist"
                 });
             }
+        })
+    }
+
+    static getMyQuestions(req, res, next)
+    {
+        Question.find({
+            user: req.userInfo.id
+        })
+        .exec()
+        .catch((questions) => {
+            res.status(200).json(questions)
+        })
+        .then((err) => {
+
+            console.log(err);
+            
         })
     }
 }

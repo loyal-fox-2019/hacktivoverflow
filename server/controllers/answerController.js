@@ -4,6 +4,19 @@ const _ = require("underscore");
 
 class AnswerController
 {
+    static getOneAnswer(req, res, next)
+    {
+        Answer.findById(req.params.id)
+        .exec()
+        .then((answer) => {
+            res.status(200).json(answer)
+        })
+        .catch((err) => {
+            console.log(err);
+            
+        })
+    }
+
     static addNewAnswer(req, res, next)
     {
         const data = _.pick(req.body,'title','description','question');
@@ -44,6 +57,65 @@ class AnswerController
         .catch((err) => {
             console.log(err);            
         });
+    }
+
+    static getMyVote(req, res, next)
+    {
+        Answer.findById(req.params.id)
+        .exec()
+        .then((answer) => {
+            if(answer.user.toString() == req.userInfo.id)
+            {
+                res.status(200).json({
+                    vote: 0
+                })
+            }
+            else
+            {
+                let hasUpvoted = false;
+                let hasDownvoted = false;
+
+                for(let i=0;i<answer.upvotes.length;i++)
+                {
+                    if(answer.user.toString()==answer.upvotes[i].toString())
+                    {
+                        hasUpvoted = true;
+                        break;
+                    }
+                }
+                for(let i=0;i<answer.downvotes.length;i++)
+                {
+                    if(answer.user.toString()==answer.downvotes[i].toString())
+                    {
+                        hasDownvoted = true;
+                        break;
+                    }
+                }
+
+                if(!hasUpvoted && !hasDownvoted)
+                {
+                    res.status(200).json({
+                        vote: 0
+                    })
+                }
+                else if(hasDownvoted)
+                {
+                    res.status(200).json({
+                        vote: -1
+                    })
+                }
+                else
+                {
+                    res.status(200).json({
+                        vote: 1
+                    })
+                }
+            }
+        })
+        .catch((err) => {
+            console.log(err);
+            
+        })
     }
 
     static voteAnswer(req, res, next)
@@ -87,12 +159,19 @@ class AnswerController
                 {
                     if(!hasUpvoted && !hasDownvoted)
                     {
+                        //new upvote
                         answer.upvotes.push(req.userInfo.id);
                     }
                     else if(hasDownvoted)
                     {
+                        // switch downvote to upvote
                         answer.downvotes.splice(downIdx,1);
                         answer.upvotes.push(req.userInfo.id);
+                    }
+                    else
+                    {
+                        // undo upvote
+                        answer.upvotes.splice(upIdx,1);
                     }
 
                     res.status(201).json({
@@ -103,12 +182,19 @@ class AnswerController
                 {
                     if(!hasUpvoted && !hasDownvoted)
                     {
+                        //new downvote
                         answer.downvotes.push(req.userInfo.id);
                     }
                     else if(hasUpvoted)
                     {
+                        // switch upvote to downvote
                         answer.upvotes.splice(upIdx,1);
                         answer.downvotes.push(req.userInfo.id);
+                    }
+                    else
+                    {
+                        // undo downvote
+                        answer.downvotes.splice(downIdx,1);
                     }
 
                     res.status(201).json({
@@ -123,6 +209,10 @@ class AnswerController
                 }
                 
             }
+        })
+        .catch((err) => {
+            console.log(err);
+            
         })
     }
 }

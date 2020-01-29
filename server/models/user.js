@@ -6,12 +6,12 @@ const hashPassword = require("../helpers/bcrypt.js").hashPassword;
 const userSchema = new Schema({    
     username: {
         type: String,
-        required: true,
+        required: [true,"Username is required."],
         unique: true
     },
     email: {
         type: String,
-        required: true,
+        required: [true,"Email is required."],
         unique: true,
         validate: {
             validator(v) {
@@ -22,9 +22,9 @@ const userSchema = new Schema({
     },
     password: {
         type: String,
-        required: function() {
+        required: [function() {
             return this.login_type == "standard"
-        }
+        },"Password is required."]
     },
     login_type: {
         type: String,
