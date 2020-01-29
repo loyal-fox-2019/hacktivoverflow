@@ -3,6 +3,7 @@ const { User } = require('../models');
 const { verify } = require('../helpers/jwt');
 
 module.exports =  async (req, res, next) => {
+  console.log(req.headers, 'dari auth');
   const { token } = req.headers;
   if (!token) {
     next({ auth: true, status: 403, message: 'You have to login' });

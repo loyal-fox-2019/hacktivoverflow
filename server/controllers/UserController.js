@@ -1,10 +1,29 @@
 'use strict';
-const { User } = require('../models');
+const { User, Question } = require('../models');
 const { sign } = require('../helpers/jwt');
 const { compare } = require('../helpers/bcryptjs');
 
 class UserController {
 
+  static async getMyQuestions(req, res, next) {
+    try {
+      const { id } = req.token;
+      const question = await Question.find({ userId: id });
+      res.status(200).json(question);
+    } catch (err) {
+      next(err);
+    }  
+  }
+
+  static async getTags(req, res, next) {
+    try {
+      const { id } = req.token;
+      const tags = User.findOne({ _id: id })
+      res.status(200).json(tags);
+    } catch (err) {
+      next(err);
+    }
+  }
   static async addTags(req, res, next) {
     try {
       const { tags } = req.body;

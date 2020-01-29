@@ -15,7 +15,7 @@
               <b-dropdown-item v-b-modal.modal-profile >Profile</b-dropdown-item>
             </div>
             <div>
-              <b-modal id="modal-profile" centered title="My Profile">
+              <b-modal id="modal-profile" size="lg" centered title="My Profile">
                 <section id="follow-tag">
                   <div>
                     <b-form-tags v-model="$store.state.tags" class="mb-2"></b-form-tags>
@@ -26,6 +26,30 @@
                     </div>
                   </div>
                 </section>
+                <table class="table mt-2">
+                  <thead>
+                    <tr>
+                      <th scope="col">ID</th>
+                      <th scope="col">Title</th>
+                      <th scope="col">Upvotes</th>
+                      <th scope="col">DownVotes</th>
+                      <th scope="col">Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr v-for="(question, i) in this.$store.state.myQuestions"
+                    :key="i">
+                      <th scope="row">{{ question._id }}</th>
+                      <td>{{ question.title }}</td>
+                      <td>{{ question.upvotes }}</td>
+                      <td>{{ question.downvotes }}</td>
+                      <td>
+                        <b-button @click="remove(question._id)"
+                        variant="outline-primary">DELETE</b-button>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
                 <section id="questions"></section>
               </b-modal>
             </div>
@@ -100,7 +124,12 @@
 </template>
 
 <script>
+import axios from 'axios';
+import Axios from '../config/server';
 import Alert from '@/components/Alert.vue';
+import router from '@/router';
+
+const BASE_URL = 'http://localhost:3000';
 
 export default {
   components: { Alert },
@@ -113,24 +142,88 @@ export default {
     };
   },
   methods: {
+    async remove(id) {
+      try {
+        await Axios.delete(`/questions/${id}`, { headers: { token: localStorage.getItem('token') } });
+        this.$store.dispatch('fetchData');
+        this.$store.dispatch('getMyQuestions');
+        this.$swal('Question deleted!');
+      } catch (err) {
+        console.log(err.response.data);
+        this.$swal('Oppss... something went wrong');
+      }
+    },
+    // async removeQuestions() {
+    //   try {
+    //   } catch (err) {
+    //   }
+    // },
     signout() {
       localStorage.clear();
       this.$store.dispatch('checkLogin');
     },
-    loginAttempt() {
-      const doc = {
+    async loginAttempt() {
+      const payload = {
         username: this.username,
         password: this.password,
       };
-      this.$store.dispatch('loginAttempt', doc);
-      this.password = '';
+      this.$store.commit('SET_BUTTON', true);
+      this.$store.commit('SET_ISERROR', false);
+      try {
+        const response = await axios({
+          method: 'POST',
+          url: `${BASE_URL}/user`,
+          data: payload,
+        });
+        const { data } = response;
+        const { token, username, tags } = data;
+        localStorage.setItem('token', token);
+        localStorage.setItem('username', username);
+        this.$store.commit('SET_TAGS', tags);
+        setTimeout(() => {
+          this.$store.commit('SET_BUTTON', false);
+          this.$bvModal.hide('modal-signin');
+          this.$store.dispatch('checkLogin');
+        });
+        router.push('/questions');
+      } catch (err) {
+        const { errors } = err.response.data;
+        this.$store.commit('SET_BUTTON', false);
+        this.$store.commit('SET_ISERROR', true);
+        this.$store.commit('SET_ERRMESSAGE', errors);
+        setTimeout(() => {
+          this.$store.commit('SET_ISERROR', false);
+        }, 2500);
+      }
     },
-    submitSignUp() {
-      const doc = {
+    async submitSignUp() {
+      const payload = {
         username: this.username,
         password: this.password,
       };
-      this.$store.dispatch('signupAttempt', doc);
+      this.$store.commit('SET_ISERROR', false);
+      this.$store.commit('SET_BUTTON', true);
+      try {
+        const response = await axios({ method: 'POST', url: `${BASE_URL}/user/register`, data: payload });
+        const { data } = response;
+        const { token, username } = data;
+        localStorage.setItem('token', token);
+        localStorage.setItem('username', username);
+        setTimeout(() => {
+          this.$store.commit('SET_BUTTON', false);
+          this.$store.dispatch('checkLogin');
+          this.$bvModal.hide('modal-signup');
+        }, 500);
+        router.push('/questions');
+      } catch (err) {
+        const { errors } = err.response.data;
+        this.$store.commit('SET_ISERROR', true);
+        this.$store.commit('SET_ERRMESSAGE', errors);
+        setTimeout(() => {
+          this.$store.commit('SET_ISERROR', false);
+          this.$store.commit('SET_BUTTON', false);
+        }, 2500);
+      }
       this.username = '';
       this.password = '';
     },
@@ -140,6 +233,10 @@ export default {
       return localStorage.getItem('username');
     },
     getTags() {
+      console.log(this.$store.state.tags);
+      if (!this.$store.state.tags) {
+        return '';
+      }
       return this.$store.state.tags.join(',');
     },
   },

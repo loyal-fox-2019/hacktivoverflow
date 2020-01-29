@@ -2,10 +2,14 @@
   <div>
     <section id="card" class="mb-2">
       <div id="votes">
-        <b-button variant="outline-primary" class="mb-2">
+        <b-button
+        @click="upvotes"
+        variant="outline-primary" class="mb-2">
         <b-icon-chevron-up></b-icon-chevron-up>
         </b-button><br>
-        <b-button variant="outline-primary">
+        <b-button
+        @click="downvotes"
+        variant="outline-primary">
         <b-icon-chevron-down></b-icon-chevron-down>
         </b-button>
       </div>
@@ -22,15 +26,18 @@
           <hr>
           <section id="comment"></section>
         </b-collapse>
-        Tags: <em>tags, tags, tags,</em> <br>
-        Upvotes: 10, <br>
-        Downvotes: 0
+        Tags: <em>{{ getTags(question.tags) }}</em> <br>
+        Upvotes: {{ getVotes(question.upvotes) }}, <br>
+        Downvotes: {{ getVotes(question.downvotes) }} <br>
+        <strong>Asked by:</strong> {{ question.userId.username }}
       </div>
     </section>
   </div>
 </template>
 
 <script>
+import axios from '../config/server';
+
 export default {
   name: 'card',
   props: {
@@ -44,8 +51,48 @@ export default {
     };
   },
   methods: {
+    getVotes(value) {
+      if (!value) {
+        return 0;
+      }
+      return value;
+    },
     open(value) {
       this.$root.$emit('bv::toggle::collapse', value);
+    },
+    getTags(tags) {
+      console.log(tags);
+      if (!tags) {
+        return '';
+      }
+      return tags.join(',');
+    },
+    async downvotes() {
+      if (!this.$store.state.isLogged) {
+        this.$swal('You have login');
+      } else {
+        const { _id } = this.question;
+        try {
+          await axios.patch(`/questions/${_id}/downvotes`, null, { headers: { token: localStorage.getItem('token') } });
+          this.$store.dispatch('fetchData');
+        } catch (err) {
+          this.$swal(err.response.data.errors[0]);
+        }
+      }
+    },
+    async upvotes() {
+      if (!this.$store.state.isLogged) {
+        this.$swal('You have login');
+      } else {
+        const { _id } = this.question;
+        try {
+          await axios.patch(`/questions/${_id}/upvotes`, null, { headers: { token: localStorage.getItem('token') } });
+          this.$store.dispatch('fetchData');
+        } catch (err) {
+          console.log(err.response);
+          this.$swal(err.response.data.errors[0]);
+        }
+      }
     },
   },
 };

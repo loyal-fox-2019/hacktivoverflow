@@ -90,6 +90,7 @@ class QuestionController {
   }
 
   static async removeQuestion(req, res, next) {
+    console.log(req, 'dari controller');
     try {
       const { id } = req.params;
       await Answer.deleteMany({ questionId: id })

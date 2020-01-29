@@ -6,5 +6,5 @@ const authentication = require('../middlewares/authentication');
 Router.post('/register', controller.registerUser);
 Router.post('/', controller.login);
 Router.patch('/addtags', authentication, controller.addTags);
-
+Router.get('/questions', authentication, controller.getMyQuestions);
 module.exports = Router;

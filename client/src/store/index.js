@@ -1,7 +1,6 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
 import axios from 'axios';
-import router from '../router';
 
 const BASE_URL = 'http://localhost:3000';
 
@@ -18,6 +17,7 @@ export default new Vuex.Store({
     isError: false,
     buttonLoading: false,
     tags: [],
+    myQuestions: [],
   },
   mutations: {
     SET_QUESTIONS(state, payload) {
@@ -41,6 +41,9 @@ export default new Vuex.Store({
     SET_TAGS(state, payload) {
       state.tags = payload;
     },
+    SET_MYQUESTIONS(state, payload) {
+      state.myQuestions = payload;
+    },
   },
   actions: {
     async fetchData({ state, commit }) {
@@ -56,20 +59,21 @@ export default new Vuex.Store({
     },
     checkLogin({ commit }) {
       commit('SET_ISERROR', false);
-      commit('SET_LOADING', true);
+      // commit('SET_LOADING', true);
       if (!localStorage.getItem('token')) {
         setTimeout(() => {
           commit('SET_LOADING', false);
           commit('SET_ISLOGGED', false);
         }, 500);
       } else {
+        this.dispatch('getMyQuestions');
         setTimeout(() => {
           commit('SET_LOADING', false);
           commit('SET_ISLOGGED', true);
         }, 500);
       }
     },
-    async updateTags({ state }) {
+    async updateTags({ state, commit }) {
       try {
         const payload = {
           tags: state.tags,
@@ -82,70 +86,29 @@ export default new Vuex.Store({
             token: localStorage.getItem('token'),
           },
         });
-        // send swal 'Tags updated!'
+        this.$swal('Tags updated!');
       } catch (err) {
-        // const { errors } = err.response.data;
-        // commit('SET_ISERROR', true);
-        // commit('SET_ERRMESSAGE', errors);
-        // setTimeout(() => {
-        //   commit('SET_ISERROR', false);
-        // }, 2500);
+        const { errors } = err.response.data;
+        commit('SET_ISERROR', true);
+        commit('SET_ERRMESSAGE', errors);
+        setTimeout(() => {
+          commit('SET_ISERROR', false);
+        }, 2500);
       }
     },
-    async loginAttempt({ dispatch, commit }, payload) {
-      commit('SET_BUTTON', true);
-      commit('SET_ISERR0R', false);
+    async getMyQuestions({ commit }) {
       try {
         const response = await axios({
-          method: 'POST',
-          url: `${BASE_URL}/user`,
-          data: payload,
+          method: 'GET',
+          url: `${BASE_URL}/user/questions`,
+          headers: {
+            token: localStorage.getItem('token'),
+          },
         });
         const { data } = response;
-        console.log(data);
-        const { token, username, tags } = data;
-        localStorage.setItem('token', token);
-        localStorage.setItem('username', username);
-        commit('SET_TAGS', tags);
-        setTimeout(() => {
-          commit('SET_BUTTON', false);
-          dispatch('checkLogin');
-        });
-        router.push('/questions');
+        commit('SET_MYQUESTIONS', data);
       } catch (err) {
-        const { errors } = err.response.data;
-        commit('SET_BUTTON', false);
-        commit('SET_ISERROR', true);
-        commit('SET_ERRMESSAGE', errors);
-        setTimeout(() => {
-          commit('SET_ISERROR', false);
-        }, 2500);
-      }
-    },
-    async signupAttempt({ dispatch, commit }, payload) {
-      commit('SET_ISERROR', false);
-      commit('SET_BUTTON', true);
-      try {
-        const response = await axios({ method: 'POST', url: `${BASE_URL}/user/register`, data: payload });
-        const { data } = response;
-        console.log(data);
-        const { token, username } = data;
-        localStorage.setItem('token', token);
-        localStorage.setItem('username', username);
-        setTimeout(() => {
-          commit('SET_BUTTON', false);
-          dispatch('checkLogin');
-        }, 500);
-        router.push('/questions');
-      } catch (err) {
-        const { errors } = err.response.data;
-        console.log(err.response);
-        commit('SET_ISERROR', true);
-        commit('SET_ERRMESSAGE', errors);
-        setTimeout(() => {
-          commit('SET_ISERROR', false);
-          commit('SET_BUTTON', false);
-        }, 2500);
+        console.log(err);
       }
     },
   },
