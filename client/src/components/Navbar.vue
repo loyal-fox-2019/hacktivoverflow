@@ -73,7 +73,8 @@
               style="margin: 0; padding: 0;">
                 <b-form-input v-model="username"
                   class="mb-2"
-                  placeholder="Enter your username"></b-form-input>
+                  placeholder="Enter your username">
+                </b-form-input>
                 <b-form-input v-model="password"
                 type="password"
                 placeholder="Enter your password"></b-form-input>
@@ -99,18 +100,21 @@
                 <b-form-input v-model="username"
                   class="mb-2"
                   placeholder="Enter your username"></b-form-input>
-                <b-form-input v-model="password"
-                type="password"
-                placeholder="Enter your password"></b-form-input>
+                <password
+                  v-model="password"
+                  :toggle="true"
+                  @score="showScore"
+                  :secureLength="8"
+                  :placeholder="'Enter your password'"
+                />
                 <div class="text-center">
-                  <b-button variant="outline-primary"
-                    class="text-center mt-2"
-                    disabled v-if="$store.state.buttonLoading">
-                    <b-spinner small></b-spinner>
-                    <span class="sr-only">Loading...</span>
-                  </b-button>
+                  <div class="mt-2 text-center" v-if="isButton">
+                    <b-button @click="submitSignUp"
+                    variant="outline-primary">SIGN UP</b-button>
+                  </div>
                   <div class="mt-2 text-center" v-else>
                     <b-button @click="submitSignUp"
+                    disabled
                     variant="outline-primary">SIGN UP</b-button>
                   </div>
                 </div>
@@ -125,6 +129,7 @@
 
 <script>
 import axios from 'axios';
+import Password from 'vue-password-strength-meter';
 import Axios from '../config/server';
 import Alert from '@/components/Alert.vue';
 import router from '@/router';
@@ -132,16 +137,24 @@ import router from '@/router';
 const BASE_URL = 'http://localhost:3000';
 
 export default {
-  components: { Alert },
+  components: { Alert, Password },
   name: 'navbar',
   data() {
     return {
       message: 'Hello world',
       username: '',
       password: '',
+      isButton: false,
     };
   },
   methods: {
+    showScore(score) {
+      if (score < 2) {
+        this.isButton = false;
+      } else {
+        this.isButton = true;
+      }
+    },
     async remove(id) {
       try {
         await Axios.delete(`/questions/${id}`, { headers: { token: localStorage.getItem('token') } });

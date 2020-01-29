@@ -63,14 +63,16 @@ export default new Vuex.Store({
       }
     },
     async fetchData({ state, commit }) {
+      commit('SET_LOADING', true);
       try {
         const response = await axios(
           { method: 'GET', url: `${BASE_URL}/questions?page=${state.page}` },
         );
         const { data } = response;
         commit('SET_QUESTIONS', data.response);
+        commit('SET_LOADING', false);
       } catch (err) {
-        //
+        commit('SET_LOADING', false);
       }
     },
     checkLogin({ commit, dispatch }) {
