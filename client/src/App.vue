@@ -11,6 +11,12 @@ export default {
   name: "App",
   components: {
     Navbar
+  },
+  created() {
+    if(this.$cookies.isKey('token') && this.$cookies.isKey('username') && this.$cookies.isKey('email'))
+    {
+      this.$store.commit('SET_LOGIN_STATE',true)
+    }
   }
 }
 </script>

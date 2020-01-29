@@ -1,5 +1,5 @@
 <template>
-    <div id="login-page">
+    <div class="login-page">
         <form class="form-signin" @submit.prevent="loginUser">
             <h1 class="h3 mb-3 font-weight-normal">Sign in</h1>
 
@@ -63,10 +63,14 @@
 </script>
 
 <style scoped>
+.login-page {
+    width: 100vw!important;
+}
 .form-signin {
     margin: auto;
     height: 100%;
     width: 20vw !important;
+    text-align: center
 }
 .switch-signinup {
     border: 1px solid black;

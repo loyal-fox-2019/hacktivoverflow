@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="reg-page">
         <form class="form-signin" @submit.prevent="registerUser">
             <h1 class="h3 mb-3 font-weight-normal">Sign up</h1>
 
@@ -84,18 +84,21 @@
 </script>
 
 <style scoped>
-    .form-signin {
-        width: 20vw;
-        text-align: center;
-        margin-left: auto;
-        margin-right: auto;
-    }
+.reg-page {
+    width: 100vw!important;
+}
+.form-signin {
+    margin: auto;
+height: 100%;
+width: 20vw !important;
+text-align: center
+}
 
-    .switch-signinup {
-        border: 1px solid black;
-    }
+.switch-signinup {
+    border: 1px solid black;
+}
 
-    #error-msg {
-        color: red;
-    }
+#error-msg {
+    color: red;
+}
 </style>

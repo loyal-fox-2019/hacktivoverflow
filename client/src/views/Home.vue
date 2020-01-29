@@ -1,7 +1,12 @@
 <template>
   <div class="home">
-    <button class="btn btn-primary" id="ask-qn" v-if="this.$store.state.isLogin">Ask a question!</button>
-    <button class="btn btn-primary" id="ask-qn" v-if="!this.$store.state.isLogin">Login to ask a question!</button>
+    <router-link to="/newquestion">
+      <button class="btn btn-primary" id="ask-qn" v-if="this.$store.state.isLogin">Ask a question!</button>
+    </router-link>
+
+    <router-link to="/login">
+      <button class="btn btn-primary" id="ask-qn" v-if="!this.$store.state.isLogin">Login to ask a question!</button>
+    </router-link>
     <h1>Questions</h1>
     <questionSummary v-for="qn in this.$store.state.allQuestions" :key="qn._id" :question="qn"></questionSummary>
   </div>

@@ -8,7 +8,8 @@ export default new Vuex.Store({
   state: {
     allQuestions: [],
     isLogin: false,
-    searchStr: ""
+    searchStr: "",
+    currentQuestion: {}
   },
   mutations: {
     SET_ALL_QUESTIONS(state,payload) {
@@ -19,6 +20,9 @@ export default new Vuex.Store({
     },
     SET_SEARCH_STR(state,payload) {
       state.searchStr = payload;
+    },
+    SET_CURRENT_QUESTION(state,payload) {
+      state.currentQuestion = payload;
     }
   },
   actions: {
@@ -31,6 +35,15 @@ export default new Vuex.Store({
         context.commit('SET_ALL_QUESTIONS',data);
       })
 
+    },
+    getOneQuestion(context,id) {
+      axiosReq({
+        url: `/questions/${id}`,
+        method: "get"
+      })
+      .then(({data}) => {
+        context.commit('SET_CURRENT_QUESTION',data);
+      })
     }
   },
   modules: {

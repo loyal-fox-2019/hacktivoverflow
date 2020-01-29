@@ -33,6 +33,7 @@ class QuestionController
     {
         Question.findById(req.params.id)
         .populate('answers')
+        .populate('user','username')
         .exec()
         .then((question) => {
             if(question)

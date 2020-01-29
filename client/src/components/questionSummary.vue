@@ -1,7 +1,7 @@
 <template>
     <div class="qn-sum">
         <div class="card-header">
-            <button class="btn btn-success" style="float:right!important;width:10%">View</button>
+            <button class="btn btn-success" style="float:right!important;width:10%" @click="viewQuestion">View</button>
         <div class="card-body">
             <div class="stats">
                 <div>{{question.upvotes.length}}<br>upvotes</div>
@@ -28,6 +28,11 @@
         name: "questionSummary",
         props: {
             question: Object
+        },
+        methods: {
+            viewQuestion() {
+                this.$router.push({path: `/question/${this.question._id}`})
+            }
         }
     }
 </script>
@@ -46,7 +51,7 @@
 .stats {
     display: flex;
     flex-direction: column;
-    justify-content: space-evenly;
+    justify-content: space-between;
     text-align: center;
 }
 .stats > div {
