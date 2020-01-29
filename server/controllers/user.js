@@ -4,8 +4,21 @@ const User = require('../models/user'),
   { generateToken } = require('../helpers/jwt')
 
 class UserController {
-  static addTag(req, res, next) {
-    res.send('BARU SUKSES AUTHORIZATON USER')
+  static addTags(req, res, next) {
+    let { tags } = req.body
+    User.updateOne({_id: req.user.id}, { $addToSet: { tags }})
+      .then(updated => {
+        res.send(updated)
+      })
+      .catch(next)
+  }
+  static removeTag(req, res, next) {
+    let { tag } = req.body
+    User.updateOne({_id: req.user.id}, { $pull: { tags: tag }})
+      .then(updated => {
+        res.send(updated)
+      })
+      .catch(next)
   }
   static googleLogin(req, res, next) {
     const clientId = process.env.GOOGLE_CLIENT_ID;

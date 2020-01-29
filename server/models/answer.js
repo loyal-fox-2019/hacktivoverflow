@@ -14,11 +14,11 @@ const answerSchema = new Schema({
     type: Schema.Types.ObjectId,
     ref: 'Question'
   },
-  upvote: [{
+  upvotes: [{
     type: Schema.Types.ObjectId,
     ref: 'User'
   }],
-  downvote: [{
+  downvotes: [{
     type: Schema.Types.ObjectId,
     ref: 'User'
   }]

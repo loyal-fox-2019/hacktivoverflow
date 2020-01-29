@@ -1,6 +1,14 @@
 function errorHandler(err, req, res, next) {
   console.log(err)
   switch (err.name) {
+      case 'CastError': {
+        //   let message = []
+        //   for (let key in err.errors) {
+        //       message.push(err.errors[key].message)
+        //   }
+          res.status(404).json({ message: 'Not Found' })
+      }
+          break;
       case 'ValidationError': {
           let message = []
           for (let key in err.errors) {

@@ -16,11 +16,11 @@ const questionSchema = new Schema({
     type: Schema.Types.ObjectId,
     ref: 'User'
   },
-  upvote: [{
+  upvotes: [{
     type: Schema.Types.ObjectId,
     ref: 'User'
   }],
-  downvote: [{
+  downvotes: [{
     type: Schema.Types.ObjectId,
     ref: 'User'
   }]
