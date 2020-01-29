@@ -1,12 +1,32 @@
 <template>
   <div id="app">
+    <NavBar></NavBar>
     <router-view />
   </div>
 </template>
 
+<script>
+import NavBar from '../src/components/NavBar'
+export default {
+  components: {
+    NavBar
+  },
+  methods: {
+    checkLocalStorage() {
+      if (localStorage.getItem('token')) {
+        this.$store.commit('CHANGE_STATE_LOGIN', true)
+      }
+    }
+  },
+  created() {
+    this.checkLocalStorage()
+  }
+}
+</script>
+
 <style>
 #app {
-  font-family: "Avenir", Helvetica, Arial, sans-serif;
+  font-family: 'Avenir', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
