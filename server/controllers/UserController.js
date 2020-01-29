@@ -18,8 +18,8 @@ class UserController {
   static async getTags(req, res, next) {
     try {
       const { id } = req.token;
-      const tags = User.findOne({ _id: id })
-      res.status(200).json(tags);
+      const response = await User.findOne({ _id: id }).select('watchedTags');
+      res.status(200).json(response.watchedTags);
     } catch (err) {
       next(err);
     }

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <section id="card" class="mb-2">
+    <section id="card" :style="followed" class="mb-2">
       <div id="votes">
         <b-button
         @click="upvotes"
@@ -24,7 +24,21 @@
             <p v-html="question.description">hello</p>
           </section>
           <hr>
-          <section id="comment"></section>
+          <section id="comment">
+            <!-- Create answer -->
+            <b-form-input v-model="titleAnswer" placeholder="Title..."
+            class="mb-2"
+            ></b-form-input>
+            <wysiwyg v-model="descriptionAnswer" id="w-answer"/>
+            <div class="text-right mt-2">
+              <b-button @click="publishAnswer"
+              variant="outline-primary">Publish Answer</b-button>
+            </div>
+            <hr>
+            <!-- List comment -->
+            <h4 style="text-align: center;">Answer</h4>
+            <hr>
+          </section>
         </b-collapse>
         Tags: <em>{{ getTags(question.tags) }}</em> <br>
         Upvotes: {{ getVotes(question.upvotes) }}, <br>
@@ -48,6 +62,9 @@ export default {
   data() {
     return {
       message: 'Hello world',
+      titleAnswer: '',
+      descriptionAnswer: '',
+      followed: 'background-color: white;',
     };
   },
   methods: {
@@ -95,6 +112,20 @@ export default {
       }
     },
   },
+  created() {
+    let isFollowed = false;
+    for (let i = 0; i < this.$store.state.tags.length; i += 1) {
+      for (let j = 0; j < this.question.tags.length; j += 1) {
+        if (this.$store.state.tags[i] === this.question.tags[j]) {
+          isFollowed = true;
+        }
+      }
+    }
+    console.log(isFollowed);
+    if (isFollowed) {
+      this.followed = 'background-color: yellow;';
+    }
+  },
 };
 </script>
 
@@ -109,5 +140,8 @@ export default {
 }
 #votes {
   margin-top: 2%
+}
+#w-answer {
+  height: 30vh;
 }
 </style>

@@ -46,6 +46,22 @@ export default new Vuex.Store({
     },
   },
   actions: {
+    async getMyTags({ commit }) {
+      try {
+        const response = await axios({
+          method: 'GET',
+          url: `${BASE_URL}/user/tags`,
+          headers: {
+            token: localStorage.getItem('token'),
+          },
+        });
+        const { data } = response;
+        console.log(data, 'my tags');
+        commit('SET_TAGS', data);
+      } catch (err) {
+        //
+      }
+    },
     async fetchData({ state, commit }) {
       try {
         const response = await axios(
@@ -54,10 +70,10 @@ export default new Vuex.Store({
         const { data } = response;
         commit('SET_QUESTIONS', data.response);
       } catch (err) {
-        console.log(err.response);
+        //
       }
     },
-    checkLogin({ commit }) {
+    checkLogin({ commit, dispatch }) {
       commit('SET_ISERROR', false);
       // commit('SET_LOADING', true);
       if (!localStorage.getItem('token')) {
@@ -66,7 +82,8 @@ export default new Vuex.Store({
           commit('SET_ISLOGGED', false);
         }, 500);
       } else {
-        this.dispatch('getMyQuestions');
+        dispatch('getMyQuestions');
+        dispatch('getMyTags');
         setTimeout(() => {
           commit('SET_LOADING', false);
           commit('SET_ISLOGGED', true);

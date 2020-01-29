@@ -153,11 +153,6 @@ export default {
         this.$swal('Oppss... something went wrong');
       }
     },
-    // async removeQuestions() {
-    //   try {
-    //   } catch (err) {
-    //   }
-    // },
     signout() {
       localStorage.clear();
       this.$store.dispatch('checkLogin');
