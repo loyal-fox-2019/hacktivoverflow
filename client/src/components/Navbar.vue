@@ -9,10 +9,27 @@
         <b-navbar-nav class="ml-auto">
           <b-nav-item-dropdown right v-if="$store.state.isLogged">
             <template v-slot:button-content>
-              <em>User</em>
+              <em>{{ getName }}</em>
             </template>
-            <b-dropdown-item href="#">Profile</b-dropdown-item>
-            <b-dropdown-item href="#">Sign Out</b-dropdown-item>
+            <div>
+              <b-dropdown-item v-b-modal.modal-profile >Profile</b-dropdown-item>
+            </div>
+            <div>
+              <b-modal id="modal-profile" centered title="My Profile">
+                <section id="follow-tag">
+                  <div>
+                    <b-form-tags v-model="$store.state.tags" class="mb-2"></b-form-tags>
+                    <p>Followed Tag(s): {{ getTags }}</p>
+                    <div class="text-right">
+                      <b-button @click="$store.dispatch('updateTags')"
+                      variant="outline-primary">Update</b-button>
+                    </div>
+                  </div>
+                </section>
+                <section id="questions"></section>
+              </b-modal>
+            </div>
+            <b-dropdown-item @click="signout">Sign Out</b-dropdown-item>
           </b-nav-item-dropdown>
           <b-button variant="outline-primary"
             v-if="!$store.state.isLogged"
@@ -27,7 +44,9 @@
                 questions and give back by sharing your knowledge<br>
                 with others.
               </p>
-              <form method="post" class="form">
+              <Alert v-show="$store.state.isError"/>
+              <form method="post" class="form"
+              style="margin: 0; padding: 0;">
                 <b-form-input v-model="username"
                   class="mb-2"
                   placeholder="Enter your username"></b-form-input>
@@ -51,13 +70,25 @@
               <p style="text-align: center;">
                 Join the Stack Overflow community
               </p>
+              <Alert v-show="$store.state.isError"/>
               <form method="post" class="form">
                 <b-form-input v-model="username"
                   class="mb-2"
                   placeholder="Enter your username"></b-form-input>
-                <b-form-input v-model="password" placeholder="Enter your password"></b-form-input>
-                <div class="mt-2 text-center">
-                  <b-button variant="outline-primary">SIGN UP</b-button>
+                <b-form-input v-model="password"
+                type="password"
+                placeholder="Enter your password"></b-form-input>
+                <div class="text-center">
+                  <b-button variant="outline-primary"
+                    class="text-center mt-2"
+                    disabled v-if="$store.state.buttonLoading">
+                    <b-spinner small></b-spinner>
+                    <span class="sr-only">Loading...</span>
+                  </b-button>
+                  <div class="mt-2 text-center" v-else>
+                    <b-button @click="submitSignUp"
+                    variant="outline-primary">SIGN UP</b-button>
+                  </div>
                 </div>
               </form>
             </b-modal>
@@ -69,7 +100,10 @@
 </template>
 
 <script>
+import Alert from '@/components/Alert.vue';
+
 export default {
+  components: { Alert },
   name: 'navbar',
   data() {
     return {
@@ -79,12 +113,34 @@ export default {
     };
   },
   methods: {
+    signout() {
+      localStorage.clear();
+      this.$store.dispatch('checkLogin');
+    },
     loginAttempt() {
       const doc = {
         username: this.username,
         password: this.password,
       };
       this.$store.dispatch('loginAttempt', doc);
+      this.password = '';
+    },
+    submitSignUp() {
+      const doc = {
+        username: this.username,
+        password: this.password,
+      };
+      this.$store.dispatch('signupAttempt', doc);
+      this.username = '';
+      this.password = '';
+    },
+  },
+  computed: {
+    getName() {
+      return localStorage.getItem('username');
+    },
+    getTags() {
+      return this.$store.state.tags.join(',');
     },
   },
 };

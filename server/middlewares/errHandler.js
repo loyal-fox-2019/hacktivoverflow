@@ -18,8 +18,8 @@ module.exports = function(err, req, res, next) {
   } else if (stringifiedErr.indexOf('E11000') !== -1) {
     let errors = null;
 
-    if (stringifiedErr.indexOf('email') !== -1) {
-      errors = ['Email is already in use'];
+    if (stringifiedErr.indexOf('username') !== -1) {
+      errors = ['Username is already in use'];
     }
     res.status(400).json({ errors });
   } else if (err.auth) {

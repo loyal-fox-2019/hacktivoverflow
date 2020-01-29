@@ -2,6 +2,7 @@
   <section id="main">
     <div class="text-center mt-2">
       <b-button
+      v-if="$store.state.isLogged"
       variant="outline-primary"
       v-b-toggle.formquestions
       >ASK!</b-button>
@@ -48,6 +49,9 @@ export default {
       tags: [],
       myHTML: '',
     };
+  },
+  created() {
+    this.$store.dispatch('fetchData');
   },
 };
 </script>

@@ -5,6 +5,17 @@ const { compare } = require('../helpers/bcryptjs');
 
 class UserController {
 
+  static async addTags(req, res, next) {
+    try {
+      const { tags } = req.body;
+      const { id } = req.token;
+      await User.updateOne({ _id: id }, { watchedTags: tags });
+      res.status(200).json({ message: 'Updated!' });
+    } catch (err) {
+      next(err);
+    }
+  }
+
   static async registerUser(req, res, next) {
     try {
       const { username, password } = req.body;
@@ -33,13 +44,13 @@ class UserController {
         next({ auth: true, status: 400, message: 'Username or password is wrong' });
       } else {
         if (compare(password, check.password)) {
-          const { _id } = check;
+          const { _id, tags } = check;
           const payload = {
             username,
-            id: _id
+            id: _id,
           };
           const token = sign(payload);
-          res.status(200).json({ token, username });
+          res.status(200).json({ token, username, tags });
         } else {
           next({ auth: true, status: 400, message: 'Username or password is wrong' });
         }
