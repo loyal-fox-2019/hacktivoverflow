@@ -3,12 +3,27 @@ const Question = require('../models/question')
 class QuestionController {
   static getAllQuestions(req, res, next) {
     Question.find({})
-      .select('-votes._id -votes.owner -answers')
+      .select('-votes._id -votes.owner')
       .populate('owner', 'username avatar')
-      .then(questions => {
+      .then(results => {
+        const questions = results.map(result => {
+          return {
+            _id: result.id,
+            title: result.title,
+            description: result.description,
+            owner: result.owner,
+            votes: result.votes,
+            createdAt: result.createdAt,
+            updatedAt: result.updatedAt,
+            answers: result.answers.length,
+          }
+        })
         res.json({ questions })
       })
-      .catch(next)
+      .catch(err => {
+        console.log(err)
+        next(err)
+      })
   }
 
   static getQuestionDetail(req, res, next) {
