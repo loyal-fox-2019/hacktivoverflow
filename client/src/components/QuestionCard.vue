@@ -4,18 +4,18 @@
       <div class="row">
         <div class="col-md-8">
           <p class="question-title text-primary">
-            Lorem ipsum dolor sit, amet consectetur adipisicing elit. Neque
-            deserunt eum quasi!
+            {{ substringtitle }}
           </p>
           <p class="question-detail">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Fuga
-            provident voluptatum iusto adipisci aliquam vel error cum totam.
+            {{ substringdescription }}
           </p>
-          <p class="user-post">Posted by <strong>Username</strong></p>
+          <p class="user-post">
+            Posted by <strong>{{ data.userId.username }}</strong>
+          </p>
         </div>
         <div class="col-md list-detail">
           <div class="votes">
-            <p class="votes-count">2</p>
+            <p class="votes-count">{{ totalvotes }}</p>
             <p class="votes-text">Votes</p>
           </div>
           <div class="answer">
@@ -29,7 +29,23 @@
 </template>
 
 <script>
-export default {}
+export default {
+  props: ['data'],
+  computed: {
+    substringtitle() {
+      return this.data.title.substring(0, 100)
+    },
+    substringdescription() {
+      let regex = /(<([^>]+)>)/gi
+      return this.data.description.substring(0, 150).replace(regex, '')
+    },
+    totalvotes() {
+      let upvote = this.data.upvote.length
+      let downvote = this.data.upvote.length
+      return upvote - downvote
+    }
+  }
+}
 </script>
 
 <style>
@@ -74,7 +90,7 @@ export default {}
 }
 .question-card {
   width: 100%;
-  min-height: 165px;
+  min-height: 130px;
 }
 .question-title {
   font-size: 16px;

@@ -47,6 +47,7 @@ class Question {
   }
   static getAllQuestion(req, res, next) {
     Model.find({})
+      .populate("userId", "username")
       .then(QuestionList => {
         res.status(200).json(QuestionList);
       })

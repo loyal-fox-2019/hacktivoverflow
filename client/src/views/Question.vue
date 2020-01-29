@@ -16,7 +16,11 @@
             <el-button size="small">My Question</el-button>
           </el-button-group>
         </div>
-        <QuestionCard></QuestionCard>
+        <QuestionCard
+          v-for="(question, i) in questionlist"
+          :key="i"
+          :data="question"
+        ></QuestionCard>
       </div>
       <div class="col-md"></div>
     </div>
@@ -28,6 +32,14 @@ import QuestionCard from '../components/QuestionCard'
 export default {
   components: {
     QuestionCard
+  },
+  computed: {
+    questionlist() {
+      return this.$store.state.listQuestion
+    }
+  },
+  created() {
+    this.$store.dispatch('fetch_question')
   }
 }
 </script>
