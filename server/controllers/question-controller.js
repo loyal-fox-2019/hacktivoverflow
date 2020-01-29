@@ -18,7 +18,7 @@ class QuestionController {
             answers: result.answers.length,
           }
         })
-        res.json({ questions })
+        res.json(questions)
       })
       .catch(err => {
         console.log(err)

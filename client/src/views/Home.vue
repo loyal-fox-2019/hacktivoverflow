@@ -1,90 +1,37 @@
 <template>
-  <div class="home">
-    <h1>Hello from Home</h1>
-    <GoogleLogin
-      :params="params"
-      :renderParams="renderParams"
-      :onSuccess="onSuccess"
-      :onFailure="onFailure"
-    ></GoogleLogin>
-    <b-button
-      variant="dark"
-      href="https://github.com/login/oauth/authorize?client_id=c5b093d439b87c326086&scope=read:user%20user:email"
-      >Continue with Github</b-button
-    >
-    <b-button variant="primary" class="d-block" @click="requestTwitterToken"
-      >Continue with Twitter</b-button
-    >
+  <div>
+    <div class="relative">
+      <img src="@/assets/background.jpg" />
+      <div class="absolute inset-x-0 top-0 custom-content">
+        <div class="flex flex-col justify-center h-full items-center">
+          <div class="custom-hero rounded-sm px-2 shadow">
+            <div class="text-6xl">We &lt;3 people who get stuck</div>
+          </div>
+          <div class="text-center mt-10">
+            <router-link
+              to="/questions"
+              class="bg-orange-400 px-3 py-4 hover:bg-orange-500 hover:text-white rounded-sm focus:border-none shadow hover:shadow-lg"
+              >Let's get started</router-link
+            >
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
-import GoogleLogin from 'vue-google-login'
-import HelloWorld from '@/components/HelloWorld.vue'
-import api from '@/config/api'
-
 export default {
   name: 'home',
-  components: {
-    HelloWorld,
-    GoogleLogin,
-  },
-  data: function() {
-    return {
-      // client_id is the only required property but you can add several more params, full list down bellow on the Auth api section
-      params: {
-        client_id: process.env.VUE_APP_GOOGLE_CLIENT_ID,
-      },
-      // only needed if you want to render the button with the google ui
-      renderParams: {
-        width: 250,
-        height: 50,
-        longtitle: true,
-      },
-    }
-  },
-  methods: {
-    onSuccess(googleUser) {
-      const token = googleUser.getAuthResponse().id_token
-
-      console.log('loading...')
-
-      api
-        .post('/third-api-login/google', { token })
-        .then(({ data }) => {
-          console.log('udah selesai loading')
-          console.log(data)
-        })
-        .catch(err => {
-          if (err.response) {
-            console.log('err with response')
-            console.log(err.response)
-          } else {
-            console.log('err without response')
-            console.log(err)
-          }
-        })
-    },
-    onFailure() {
-      console.log('terjadi kesalahan')
-    },
-    requestTwitterToken() {
-      api
-        .get('/third-api-login/request-twitter-token')
-        .then(({ data }) => {
-          console.log(data)
-          window.location = data.url
-        })
-        .catch(err => {
-          if (err.response) {
-            console.log('err with response')
-            console.log(err.response)
-          } else {
-            console.log('err without response')
-            console.log(err)
-          }
-        })
-    },
-  },
 }
 </script>
+
+<style scoped>
+.custom-content {
+  height: 57rem;
+}
+
+.custom-hero {
+  background-color: rgb(255, 255, 255, 0.5);
+}
+</style>

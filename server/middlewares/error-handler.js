@@ -10,23 +10,23 @@ module.exports = function(err, req, res, next) {
       break
 
     case 'BadRequest':
-      res.status(400).json({ errors: err.message })
+      res.status(400).json({ errors: [err.message] })
       break
 
     case 'JsonWebTokenError':
-      res.status(400).json({ errors: err.message })
+      res.status(400).json({ errors: [err.message] })
       break
 
     case 'NotFound':
-      res.status(404).json({ errors: err.message })
+      res.status(404).json({ errors: [err.message] })
       break
 
     case 'NotAuthorized':
-      res.status(401).json({ errors: err.message })
+      res.status(401).json({ errors: [err.message] })
       break
 
     case 'CastError':
-      res.status(400).json({ errors: 'Bad Object Id' })
+      res.status(400).json({ errors: ['Bad Object Id'] })
       break
 
     default:

@@ -11,20 +11,11 @@ const routes = [
     component: Home,
   },
   {
-    path: '/about',
-    name: 'about',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () =>
-      import(/* webpackChunkName: "about" */ '../views/About.vue'),
-  },
-  {
     path: '/callback-github',
     name: 'callback-github',
     component: () =>
       import(
-        /* webpackChunkName: "callback-github" */ '../views/GithubCallback.vue'
+        /* webpackChunkName: "callback-github" */ '@/views/GithubCallback.vue'
       ),
   },
   {
@@ -32,8 +23,26 @@ const routes = [
     name: 'callback-twitter',
     component: () =>
       import(
-        /* webpackChunkName: "callback-twitter" */ '../views/TwitterCallback.vue'
+        /* webpackChunkName: "callback-twitter" */ '@/views/TwitterCallback.vue'
       ),
+  },
+  {
+    path: '/login',
+    name: 'login',
+    component: () =>
+      import(/* webpackChunkName: "login" */ '@/views/Login.vue'),
+  },
+  {
+    path: '/register',
+    name: 'register',
+    component: () =>
+      import(/* webpackChunkName: "register" */ '@/views/Register.vue'),
+  },
+  {
+    path: '/questions',
+    name: 'questions',
+    component: () =>
+      import(/* webpackChunkName: "questions" */ '@/views/Questions.vue'),
   },
 ]
 
