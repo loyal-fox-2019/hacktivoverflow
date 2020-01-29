@@ -6,7 +6,6 @@ const { decodeToken } = require('../helpers/jwt'),
 function authenticate(req, res, next) {
   try {
     req.user = decodeToken(req.headers.token)
-    // console.log(req.user);
     User.findById(req.user._id)
       .then(user => {
         if(!user){
@@ -22,32 +21,6 @@ function authenticate(req, res, next) {
       .catch(next)
   } catch (error) {
     next(error)
-  }
-}
-
-function userAuthorize(req, res, next) { // is this necesarry? I DONT THINK SO
-  try {
-    // console.log("INI ADALAH ID USER", req.params.id)
-    User.findOne({_id: req.params.id})
-      .then(user => {
-        // console.log('USER NYA KETEMU GAAA?', user)
-        if(!user){
-          let err = new Error('NotFound')
-          err.status = 404
-          err.message = 'id not found'
-          throw err
-        } else if (user.id == req.user.id){
-          next()
-        } else {
-          let err = new Error('AuthorizationFailed')
-          err.status = 401
-          err.message = 'Authorization failed'
-          throw err
-        }
-      })
-      .catch(next)
-  } catch (err) {
-    next(err)
   }
 }
 
@@ -99,4 +72,4 @@ function answerAuthorize(req, res, next) {
   }
 }
 
-module.exports = { authenticate, userAuthorize, questionAuthorize, answerAuthorize }
+module.exports = { authenticate, questionAuthorize, answerAuthorize }

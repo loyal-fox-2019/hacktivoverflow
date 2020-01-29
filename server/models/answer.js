@@ -10,10 +10,10 @@ const answerSchema = new Schema({
     type: Schema.Types.ObjectId,
     ref: 'User'
   },
-  question: {
-    type: Schema.Types.ObjectId,
-    ref: 'Question'
-  },
+  // question: {
+  //   type: Schema.Types.ObjectId,
+  //   ref: 'Question'
+  // },
   upvotes: [{
     type: Schema.Types.ObjectId,
     ref: 'User'

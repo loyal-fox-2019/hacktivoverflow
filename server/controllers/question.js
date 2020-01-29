@@ -4,7 +4,10 @@ const Question = require('../models/question'),
 class QuestionController {
   static all(req, res, next) {
     Question.find()
-      // .populate('author')
+      .populate({
+        path: 'author',
+        select: '-_id -tags -password'
+      })
       .then(questions => {
         res.send(questions)
       })
@@ -14,8 +17,18 @@ class QuestionController {
     let id = req.params.id
     Question.findById(id)
       .populate('author')
+      .populate({
+        path: 'answers',
+        select: '-_id',
+        populate: {
+          path: 'author',
+          select: '-_id -password -tags'
+        }
+      })
       .then(result => {
         res.send(result)
+        // test virtual
+        // res.send({answerCount: result.answerCount})
       })
       .catch(next)
   }
@@ -51,22 +64,22 @@ class QuestionController {
       let { title, content, tags } = req.body,
         id = req.params.id
       let question = await Question.findById(id)
-      if(question.upvotes.length != 0 || question.downvotes.length != 0) {
+      if(question.upvotes.length != 0 || question.downvotes.length != 0 || question.answers.length != 0 ) {
         let err = new Error('Responded')
         err.status = 403
         err.message = 'you cant update an already responded question'
         throw(err)
       } else {
-        let answer = await Answer.findOne({question: id})
-        if(!answer) {
-          let update = await Question.updateOne({ _id: id }, { title, content, tags }, {runValidators: true})
-          res.send(update)
-        } else {
-          let err = new Error('Responded')
-          err.status = 403
-          err.message = 'you cant update an already ansewred question'
-          throw(err)
-        }
+        // let answer = await Answer.findOne({question: id})
+        // if(!answer) {
+        let update = await Question.updateOne({ _id: id }, { title, content, tags }, {runValidators: true})
+        res.send(update)
+        // } else {
+        //   let err = new Error('Responded')
+        //   err.status = 403
+        //   err.message = 'you cant update an already ansewred question'
+        //   throw(err)
+        // }
       }
     } catch (error) {
       next(error)
@@ -84,6 +97,22 @@ class QuestionController {
       })
       .catch(next)
   }
+
+  static async remove(req, res, next) {
+    // findOne dulu, trus di loop buat delete answer, kalau udah kelar, baru delete questionnya
+    try {
+      let id = req.params.id
+      let question = await Question.findById(id)
+      for (let i = 0; i < question.answers.length; i++) {
+        let deleted = await Answer.deleteOne({_id: question.answers[i]})
+      }
+      let questionDeleted = await Question.deleteOne({ _id: id })
+      res.send(questionDeleted)
+    } catch (error) {
+      next(error)
+    }
+  }
+
   static async upvote(req, res, next) {
     // findOne
     // cek downvote kalau ada di pull trus push ke upvote

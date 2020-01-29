@@ -9,6 +9,7 @@ router.post('/', QuestionController.create)
 router.patch('/:id/upvote', QuestionController.upvote)
 router.patch('/:id/downvote', QuestionController.downvote)
 router.put('/:id', questionAuthorize, QuestionController.update)
-router.delete('/:id', questionAuthorize, QuestionController.destroy)
+// router.delete('/:id', questionAuthorize, QuestionController.destroy)
+router.delete('/:id', questionAuthorize, QuestionController.remove)
 
 module.exports = router

@@ -1,4 +1,5 @@
-const Answer = require('../models/answer')
+const Answer = require('../models/answer'),
+  Question = require('../models/question')
 
 class AnswerController {
   static all(req, res, next) {
@@ -8,17 +9,20 @@ class AnswerController {
       })
       .catch(next)
   }
-  static question(req, res, next) {
-    let questionId = req.params.id
-    Answer.find({question: questionId})
-      .then(answers => {
-        res.send(answers)
-      })
-      .catch(next)
-  }
+  // static question(req, res, next) {
+  //   let questionId = req.params.id
+  //   Answer.find({question: questionId})
+  //     .then(answers => {
+  //       res.send(answers)
+  //     })
+  //     .catch(next)
+  // }
   static destroy(req, res, next) {
     let id = req.params.id
     Answer.deleteOne({ _id: id })
+      .then(result => {
+        return Question.updateOne({ $in: { answers: id }}, { $pull: {answers: id}})
+      })
       .then(result => {
         res.status(200).json(result)
       })
@@ -28,10 +32,15 @@ class AnswerController {
     let { content } = req.body,
       author = req.user.id,
       question = req.params.id
-    Answer.create({ content, author, question })
+    Answer.create({ content, author })
       .then(answer => {
-        res.status(201).json(answer)
+        return Question.updateOne({ _id: question }, { $push: {answers: answer.id}})
+        // res.status(201).json(answer)
       })
+      .then(result => {
+        res.status(201).json(result)
+      })
+      .catch(next)
   }
   static async upvote(req, res, next) {
     // findOne

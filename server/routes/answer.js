@@ -3,7 +3,7 @@ const router = require('express').Router(),
   { authenticate, answerAuthorize } = require('../middlewares/auth')
 
 router.get('/', AnswerController.all)
-router.get('/:id', AnswerController.question) // id question
+// router.get('/:id', AnswerController.question) // id question
 router.use(authenticate)
 router.post('/:id', AnswerController.create) // id question
 router.patch('/:id/upvote', AnswerController.upvote)
