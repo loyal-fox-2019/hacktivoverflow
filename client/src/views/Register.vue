@@ -1,5 +1,5 @@
 <template>
-  <div class="home vh-100 d-flex justify-content-center align-items-center">
+  <div class="register vh-100 d-flex justify-content-center align-items-center">
     <b-container class="h-75 d-flex justify-content-center align-items-center">
       <b-row class="w-100">
         <b-col
@@ -48,7 +48,7 @@ export default {
 </script>
 
 <style scoped>
-.home {
+* {
   background-color: #eff0f1;
 }
 </style>

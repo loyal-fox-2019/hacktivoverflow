@@ -19,6 +19,19 @@
 <script>
 import GoogleSignInButton from "vue-google-signin-button-directive";
 import axios from "axios";
+import Swal from "sweetalert2";
+
+const Toast = Swal.mixin({
+  toast: true,
+  position: "top-end",
+  showConfirmButton: false,
+  timer: 3000,
+  timerProgressBar: true,
+  onOpen: toast => {
+    toast.addEventListener("mouseenter", Swal.stopTimer);
+    toast.addEventListener("mouseleave", Swal.resumeTimer);
+  }
+});
 
 export default {
   directives: {
@@ -35,23 +48,38 @@ export default {
       // Receive the idToken and make your magic with the backend
       axios({
         method: "POST",
-        url: `${this.$baseUrl}/users/oauth`,
+        url: `${this.$store.state.API}/users/oauth`,
         data: {
           token: idToken
         }
       })
         .then(({ data }) => {
-          localStorage.userId = data.userId;
+          localStorage.name = data.name;
           localStorage.token = data.token;
-          localStorage.name = data.fullname;
-          this.$emit("loggedIn", true);
+          this.$store.commit("SET_USERLOGIN", data.name);
+          this.$store.commit("SET_LOGIN", true);
+          this.$router.replace({ name: "home" });
+          Toast.fire({
+            icon: "success",
+            title: "Signed in successfully"
+          });
         })
         .catch(err => {
-          console.log(err);
+          this.$swal(
+            "Error",
+            err.response.data.errMessage ||
+              "Something went wrong, please try again later!",
+            "error"
+          );
         });
     },
     OnGoogleAuthFail(error) {
       console.log(error);
+      this.$swal(
+        "Error",
+        "Something went wrong, please try again later!",
+        "error"
+      );
     }
   }
 };

@@ -5,6 +5,8 @@ const nodemailer = require('nodemailer');
 const ObjectId = require('mongoose').Types.ObjectId;
 const bcrypt = require('bcrypt');
 const hashPassword = require('../helpers/hashPassword');
+const {OAuth2Client} = require('google-auth-library');
+const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 
 class User {
     static register(req, res, next) {
@@ -162,7 +164,45 @@ class User {
     }
 
     static oauth(req, res, next) {
+        let gPayload;
+        let userStatus = 200;
+        client.verifyIdToken({
+            idToken: req.body.token,
+            audience: process.env.GOOGLE_CLIENT_ID
+        })
+        .then(({payload}) => {
+            gPayload = payload
+            return userModel
+                .findOne({
+                    email: payload.email
+                })
+        })
+        .then((user) => {
 
+            if (user) {
+                return user
+            } else { 
+                userStatus = 201;
+                return userModel
+                    .create({
+                        name: gPayload.name,
+                        email: gPayload.email,
+                        username: gPayload.email,
+                        password: generatePassword(),
+                        isConfirm: true
+                    })
+            }
+        }).then((registeredUser) => {
+            return jwt.sign({
+                _id: registeredUser._id,
+                name: registeredUser.name
+            }, process.env.JWT_SECRET)
+        }).then((token) => {
+            res.status(userStatus).json({
+                token,
+                name: gPayload.name
+            })
+        }).catch(next);
     }
 }
 

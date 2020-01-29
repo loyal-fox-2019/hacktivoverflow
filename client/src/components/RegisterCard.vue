@@ -148,7 +148,8 @@ export default {
         .then(({ data }) => {
           localStorage.name = data.name;
           localStorage.token = data.token;
-          this.$store.state.isLogin = true;
+          this.$store.commit("SET_USERLOGIN", data.name);
+          this.$store.commit("SET_LOGIN", true);
           this.$router.replace({ name: "home" });
           Toast.fire({
             icon: "success",

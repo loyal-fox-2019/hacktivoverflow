@@ -1,6 +1,5 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
-import Home from "../views/Home.vue";
 
 Vue.use(VueRouter);
 
@@ -8,7 +7,7 @@ const routes = [
   {
     path: "/",
     name: "home",
-    component: Home
+    component: () => import(/* webpackChunkName: "home" */ "../views/Home.vue")
   },
   {
     path: "/login",
@@ -29,6 +28,11 @@ const routes = [
           import(/* webpackChunkName: "register" */ "../views/Register.vue")
       }
     ]
+  },
+  {
+    path: "/try",
+    name: "try",
+    component: () => import(/* webpackChunkName: "try" */ "../views/AddTry.vue")
   }
 ];
 
@@ -44,6 +48,8 @@ router.beforeEach((to, from, next) => {
     localStorage.token &&
     (to.name === "login" || to.name === "register" || to.name === "confirm")
   ) {
+    next("/");
+  } else if (!localStorage.token && to.name === "try") {
     next("/");
   } else {
     next();

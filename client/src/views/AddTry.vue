@@ -2,13 +2,12 @@
   <div class="login vh-100 d-flex justify-content-center align-items-center">
     <b-container class="h-75 d-flex justify-content-center align-items-center">
       <b-row class="w-100 justify-content-center">
-        <b-col cols="4">
-          <g-signin-button class="my-3"></g-signin-button>
-          <login-card></login-card>
-          <p class="mt-5" style="font-size:13px;">
-            Don't have an account?
-            <router-link to="/register">Sign up</router-link>
-          </p>
+        <b-col cols="8">
+          <h2 class="text-left mb-4">Add a public try</h2>
+          <add-edit-form></add-edit-form>
+        </b-col>
+        <b-col cols="3">
+          <accordion-tips></accordion-tips>
         </b-col>
       </b-row>
     </b-container>
@@ -16,13 +15,13 @@
 </template>
 
 <script>
-import GSigninButton from "@/components/GSigninButton.vue";
-import LoginCard from "@/components/LoginCard.vue";
+import AddEditForm from "@/components/AddEditForm.vue";
+import AccordionTips from "@/components/AccordionTips.vue";
 
 export default {
   components: {
-    GSigninButton,
-    LoginCard
+    AddEditForm,
+    AccordionTips
   },
   data() {
     return {

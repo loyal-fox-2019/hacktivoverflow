@@ -8,18 +8,23 @@ export default new Vuex.Store({
   state: {
     API: "http://localhost:3000",
     registerData: null,
-    isLogin: !!localStorage.token
+    isLogin: !!localStorage.token,
+    userLogin: localStorage.name,
+    questions: []
   },
   mutations: {
     SET_REGISTERDATA(state, payload) {
       state.registerData = payload;
+    },
+    SET_LOGIN(state, isLogin) {
+      state.isLogin = isLogin;
+    },
+    SET_USERLOGIN(state, name) {
+      state.userLogin = name;
     }
   },
   actions: {
     fetchConfirmationData(context) {
-      console.log(this.state.API);
-      console.log(this.route.params.id);
-
       axios({
         method: "GET",
         url: `${this.state.API}/users/register/${this.$route.params.id}`

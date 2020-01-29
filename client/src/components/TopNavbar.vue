@@ -38,13 +38,18 @@
           <!-- Right aligned nav items when login -->
           <b-navbar-nav class="ml-auto" v-if="isLogin">
             <b-nav-item>
-              {{ name }}
+              <b-nav-text>
+                {{ name }}
+              </b-nav-text>
               <b-button
+                variant="outline-danger"
+                class="mx-2 font-weight-bold"
                 size="sm"
-                variant="link"
-                class="text-danger font-weight-light"
+                squared
                 @click.prevent="logout"
+                title="Log out"
               >
+                <b-icon icon="power"></b-icon>
                 Log out
               </b-button>
             </b-nav-item>
@@ -62,6 +67,7 @@ export default {
       localStorage.removeItem("token");
       localStorage.removeItem("name");
       this.$store.state.isLogin = false;
+      this.$router.replace({ name: "home" });
     }
   },
   computed: {
@@ -69,7 +75,7 @@ export default {
       return this.$store.state.isLogin;
     },
     name() {
-      return localStorage.name;
+      return this.$store.state.userLogin;
     }
   }
 };
