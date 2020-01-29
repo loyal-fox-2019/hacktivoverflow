@@ -14,6 +14,20 @@ class QuestionController {
       .catch(next)
   }
 
+  static getQuestionDetail(req, res, next) {
+    Question.findOne({ _id: req.params.questionId })
+      .populate('owner', 'username avatar')
+      .populate('answers.owner', 'username avatar')
+      .then(question => {
+        if (!question) {
+          throw { name: 'NotFound', message: 'Question not found' }
+        }
+
+        res.json({ question })
+      })
+      .catch(next)
+  }
+
   static addQuestion(req, res, next) {
     Question.create({
       title: req.body.title,
@@ -34,7 +48,7 @@ class QuestionController {
 
         return question.save()
       })
-      .then(_ => {
+      .then(() => {
         res.json({ message: 'Question edited' })
       })
       .catch(next)

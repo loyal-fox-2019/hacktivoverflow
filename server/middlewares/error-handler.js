@@ -1,5 +1,5 @@
 module.exports = function(err, req, res, next) {
-  console.log(err)
+  // console.log(err)
   switch (err.name) {
     case 'ValidationError':
       const errors = []
@@ -23,6 +23,10 @@ module.exports = function(err, req, res, next) {
 
     case 'NotAuthorized':
       res.status(401).json({ errors: err.message })
+      break
+
+    case 'CastError':
+      res.status(400).json({ errors: 'Bad Object Id' })
       break
 
     default:
