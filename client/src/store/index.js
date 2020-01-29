@@ -34,6 +34,22 @@ export default new Vuex.Store({
     }
   },
   actions: {
+    updateAnswer(context,payload){
+      axios({
+        method: 'put',
+        url: `http://localhost:3000/question/${payload._id}`,
+        headers: {
+          token: localStorage.getItem('token')
+        },
+        data:{
+          title: payload.title,
+          description: payload.description
+        }
+      })
+      .then(({data})=>{
+        context.dispatch('getAnswers', data.question)
+      })
+    },
     updateQuestion(context, payload){
       axios({
         method: 'put',

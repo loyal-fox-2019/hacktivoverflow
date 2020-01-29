@@ -13,8 +13,8 @@
           <template v-slot:button-content>
           <em>User</em>
         </template>
-        <b-dropdown-item href="#">Profile</b-dropdown-item>
-        <b-dropdown-item href="#">Sign Out</b-dropdown-item>
+        <b-dropdown-item disable href="#">Profile</b-dropdown-item>
+        <b-dropdown-item href="#" v-on:click="signOut">Sign Out</b-dropdown-item>
         </b-nav-item-dropdown>
       </b-navbar-nav>
 
@@ -34,6 +34,11 @@
 export default {
     name: 'navbar',
     methods:{
+      signOut(){
+        localStorage.removeItem('token')
+        localStorage.removeItem('email')
+        this.$router.push('/login')
+      }
     }
 }
 </script>

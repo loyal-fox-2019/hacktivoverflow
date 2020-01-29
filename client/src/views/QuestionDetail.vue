@@ -20,10 +20,10 @@
             </b-card-text>
             <div class="text-right">
                 <div v-if="userEmail==question.user.email">
-                <b-button variant="danger" v-on:click="deleteQuestion(question._id)">Delete</b-button>
-                <b-button variant="success" v-b-modal.modal-center v-on:click="$bvModal.show('update'+question._id)">Edit</b-button>
+                    <b-button variant="danger" v-on:click="deleteQuestion(question._id)">Delete</b-button>
+                    <b-button variant="success" v-b-modal.modal-xl.modal-center v-on:click="$bvModal.show('update'+question._id)">Edit</b-button>
                 </div>
-                    <b-modal hide-footer :id="'update'+question._id" centered title="Update Your Question">
+                    <b-modal size="xl" hide-footer :id="'update'+question._id" centered title="Update Your Question">
                     <p>Title</p>
                     <input type="text" v-model="title" :placeholder="question.title">
                     <p>Content</p>
@@ -40,8 +40,8 @@
     <div class="text-left">
         <div class="row justify-content-center" style="margin-top: 15px; margin-bottom: 15px;">
             <h3 v-if="answers.length>0" class="col-md-2">Answers: </h3>
-            <b-button variant="light" class="col-md-4" v-b-modal.modal-center v-on:click="$bvModal.show(question._id)">Answer Question</b-button>
-                <b-modal hide-footer :id="question._id" centered title="Answer">
+            <b-button variant="light" class="col-md-4" v-b-modal.modal-xl.modal-center v-on:click="$bvModal.show(question._id)">Answer Question</b-button>
+                <b-modal size="xl" hide-footer :id="question._id" centered title="Answer">
                     <p>Title</p>
                     <input type="text" v-model="title">
                     <p>Content</p>
@@ -54,7 +54,7 @@
         <div v-for="item in answers" :key="item._id">
             <b-card no-body class="overflow-hidden">
                 <b-row no-gutters>
-                <b-col md="2" class="row">
+                <b-col md="2" class="row justify-content-center">
                     <div class="col-md">
                         <b-icon icon="arrow-up" style="width: 50px; height: 50px;" v-on:click="upvoteAnswer(item._id)"></b-icon>
                         {{ item.upvotes.length }}
@@ -63,15 +63,26 @@
                         <b-icon icon="arrow-down" style="width: 50px; height: 50px;" v-on:click="downvoteAnswer(item._id)"></b-icon>
                         {{ item.downvotes.length }}
                     </div>
-                    
                 </b-col>
-                <b-col md="10">
+                <b-col md="8">
                     <b-card-body :title="item.title">
                     <b-card-text v-html="item.description">
                     </b-card-text>
                     </b-card-body>
                 </b-col>
                 </b-row>
+                <div class="text-right" v-if="userEmail==item.user.email">
+                    <b-button  variant="success" class="col-md-2" v-b-modal.modal-xl.modal-center v-on:click="$bvModal.show('update'+item._id)">Update</b-button>
+                    <b-modal size="xl" hide-footer :id="'update'+item._id" centered title="Answer">
+                        <p>Title</p>
+                        <input type="text" v-model="title">
+                        <p>Content</p>
+                        <div class="fr-view" >
+                            <wysiwyg v-model="description"/>
+                        </div>
+                        <b-button variant="dark" v-on:click="updateAnswer(item._id)" @click="$bvModal.hide('update'+item._id)">Submit</b-button>
+                    </b-modal>
+                </div>
                 <div class="text-right" style="padding-right: 15px;">
                     Answered by: {{ item.user.username }}
                 </div>
@@ -91,6 +102,14 @@ export default {
         }
     },
     methods:{
+        updateAnswer(id){
+            let payload={
+                title:this.title,
+                description:this.description,
+                _id: id
+            }
+            this.$store.dispatch('updateAnswer', payload)
+        },
         editQuestion(id){
             let payload={
                 title: this.title,

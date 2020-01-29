@@ -10,8 +10,8 @@
                 <b-nav-item>Unanswered</b-nav-item>
                 <b-navbar-nav class="ml-auto">
                   <!-- <b-nav-item>Unanswered</b-nav-item> -->
-                  <b-button variant="primary" v-b-modal.modal-center v-on:click="$bvModal.show('newquestion')">Ask a Question</b-button>
-                  <b-modal hide-footer :id="'newquestion'" centered title="Post A Question">
+                  <b-button variant="primary" v-b-modal.modal-xl.modal-center v-on:click="$bvModal.show('newquestion')">Ask a Question</b-button>
+                  <b-modal size='xl' hide-footer :id="'newquestion'" centered title="Post A Question">
                     <p>Title</p>
                     <input type="text" v-model="title">
                     <p>Content</p>
