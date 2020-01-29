@@ -8,7 +8,7 @@
     <div class="w-screen mt-2">
       <div class="w-8/12 flex mx-auto">
         <div class="w-8/12">
-          <QuestionCard />
+          <QuestionCard v-for="qs in questions" :key="qs._id" :question="qs" />
         </div>
         <div class="w-1/12"></div>
         <div class="w-3/12 border border-grey-300">

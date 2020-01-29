@@ -36,7 +36,7 @@ class QuestionController {
           throw { name: 'NotFound', message: 'Question not found' }
         }
 
-        res.json({ question })
+        res.json(question)
       })
       .catch(next)
   }

@@ -1,39 +1,63 @@
 <template>
   <div
-    class="w-full border-t border-b border-grey-200 flex rounded-sm"
+    class="w-full border-t border-b border-grey-200 flex rounded-sm hover:bg-orange-100"
     style="cursor: pointer;"
+    @click="getDetail"
   >
     <div class="w-24 pl-5 py-3 text-center flex items-center h-48">
       <div>
-        <div>0</div>
+        <div>{{ localeVotes }}</div>
         <div>Vote(s)</div>
-        <div class="mt-10">0</div>
+        <div class="mt-10">{{ question.answers }}</div>
         <div>Answer(s)</div>
       </div>
     </div>
     <div class="py-3 pl-8 w-5/6">
       <h1 class="text-xl text-blue-400">
-        Contoh judul pertanyaan yang lumayan panjang kita tambah hin panjang
-        dari judul yang ga jelas ini ya?
+        {{ question.title }}
       </h1>
       <div class="flex mt-5 mb-1">
-        <img src="https://placekitten.com/200/200" width="24" height="24" />
-        <p class="ml-1 font-hairline tracking-wide">Username</p>
+        <img :src="localeAvatar" width="32" height="32" />
+        <p class="ml-1 font-hairline tracking-wide">
+          {{ question.owner.username }}
+        </p>
       </div>
-      <small class="italic text-gray-600">Created at 6 Jan 2020 6:12PM</small>
+      <small class="italic text-gray-600">Asked at {{ localeTime }}</small>
       <p class="mt-8 truncate">
-        Lorem Ipsum is simply dummy text of the printing and typesetting
-        industry. Lorem Ipsum has been the industry's standard dummy text ever
-        since the 1500s, when an unknown printer took a galley of type and
-        scrambled it to make a type specimen book.
+        {{ question.description }}
       </p>
     </div>
   </div>
 </template>
 
 <script>
+import moment from 'moment'
+
 export default {
   name: 'question-card',
+  props: ['question'],
+  computed: {
+    localeTime() {
+      return this.question.createdAt
+        ? moment(this.question.createdAt).format('D MMM YYYY H:mA')
+        : new Date().toLocaleString()
+    },
+    localeAvatar() {
+      return this.question.owner.avatar
+        ? this.question.owner.avatar
+        : 'https://placekitten.com/200/200'
+    },
+    localeVotes() {
+      return this.question.votes.reduce((a, q) => {
+        return (a += q.value)
+      }, 0)
+    },
+  },
+  methods: {
+    getDetail() {
+      this.$router.push(`/question/${this.question._id}`)
+    },
+  },
 }
 </script>
 

@@ -44,6 +44,21 @@ const routes = [
     component: () =>
       import(/* webpackChunkName: "questions" */ '@/views/Questions.vue'),
   },
+  {
+    path: '/question',
+    name: 'question',
+    component: () =>
+      import(/* webpackChunkName: "question" */ '@/views/Question.vue'),
+    children: [
+      {
+        path: ':questionId',
+        component: () =>
+          import(
+            /* webpackChunkName: "question-detail" */ '@/components/QuestionDetail.vue'
+          ),
+      },
+    ],
+  },
 ]
 
 const router = new VueRouter({

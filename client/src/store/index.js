@@ -12,6 +12,18 @@ export default new Vuex.Store({
     isLoading: false,
     token: '',
     questions: [],
+    question: {
+      _id: '',
+      owner: {
+        username: '',
+        avatar: '',
+      },
+      title: '',
+      description: '',
+      createdAt: '',
+      votes: [],
+      answers: [],
+    },
   },
   mutations: {
     UPDATE_QUESTIONS(state, payload) {
@@ -19,6 +31,9 @@ export default new Vuex.Store({
     },
     UPDATE_IS_LOADING(state, payload) {
       state.isLoading = payload
+    },
+    UPDATE_QUESTION(state, payload) {
+      state.question = payload
     },
   },
   actions: {
@@ -74,6 +89,9 @@ export default new Vuex.Store({
         })
     },
     fetchAllQuestions(context, payload) {
+      context.dispatch('proxyAction', payload)
+    },
+    fetchQuestion(context, payload) {
       context.dispatch('proxyAction', payload)
     },
   },
