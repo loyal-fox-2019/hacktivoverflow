@@ -28,6 +28,12 @@ class VoteController {
           if (question.votes[voteIndex].value > 1) {
             question.votes[voteIndex].value = 1
           }
+
+          if (question.votes[voteIndex].value == 0) {
+            question.votes = question.votes.filter(vote => {
+              return vote.owner != req.payload.id
+            })
+          }
         }
 
         return question.save()
@@ -74,6 +80,12 @@ class VoteController {
 
           if (answer.votes[voteIndex].value > 1) {
             answer.votes[voteIndex].value = 1
+          }
+
+          if (answer.votes[voteIndex].value == 0) {
+            answer.votes = answer.votes.filter(vote => {
+              return vote.owner != req.payload.id
+            })
           }
         }
 

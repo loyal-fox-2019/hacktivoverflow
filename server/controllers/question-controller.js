@@ -3,11 +3,8 @@ const Question = require('../models/question')
 class QuestionController {
   static getAllQuestions(req, res, next) {
     Question.find({})
+      .select('-votes._id -votes.owner -answers')
       .populate('owner', 'username avatar')
-      .populate({
-        path: 'answers.owner',
-        select: 'username avatar',
-      })
       .then(questions => {
         res.json({ questions })
       })
@@ -16,6 +13,7 @@ class QuestionController {
 
   static getQuestionDetail(req, res, next) {
     Question.findOne({ _id: req.params.questionId })
+      .select('-votes._id -votes.owner -answers.votes._id -answers.votes.owner')
       .populate('owner', 'username avatar')
       .populate('answers.owner', 'username avatar')
       .then(question => {
