@@ -4,6 +4,7 @@ const authenticate = require('../middlewares/authentication')
 
 router.post('/', authenticate, QuestionController.create)
 router.get('/', authenticate, QuestionController.findAll)
+router.get('/user', authenticate, QuestionController.findAllUser)
 router.get('/:questionId', authenticate, QuestionController.findOne)
 router.put('/:questionId', authenticate, QuestionController.update)
 router.delete('/:questionId', authenticate, QuestionController.delete)

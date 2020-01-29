@@ -18,26 +18,16 @@
 
 <script src="https://apis.google.com/js/platform.js" async defer></script>
 <script>
-// import GoogleLogin from 'vue-google-login';
 export default {
     name: 'registration',
     data(){
         return{
             username: '',
             email: '',
-            password:'',
-            // params: {
-            //     client_id: process.env.VUE_APP_GOOGLE_ID
-            // },
-            // renderParams: {
-            //     width: 250,
-            //     height: 50,
-            //     longtitle: true
-            // }
+            password:''
         }
     },
     components:{
-        // GoogleLogin
     },
     methods:{
         register(){
@@ -48,25 +38,6 @@ export default {
             }
             this.$store.dispatch('registerUser', payload)
         },
-        // onSuccess(googleUser) {
-        // // const profile = googleUser.getBasicProfile();
-        // const id_token = googleUser.getAuthResponse().id_token;
-        // // console.log(id_token)
-        // axios.post('http://35.240.228.104:3000/user/gsignin',{
-        //     data: {
-        //         id_token
-        //     }
-        // })
-        // .then(({data})=>{
-        //     localStorage.setItem('token', data.token)
-        //     localStorage.setItem('userId', data.payload._id)
-        //     localStorage.setItem('email', data.payload.email)
-        //     this.$router.push('/')
-        // })
-        // .catch(err=>{
-        //     console.log(err)
-        // })
-        // }
         
     }
 }

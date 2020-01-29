@@ -11,6 +11,11 @@ export default {
   name: 'app',
   components:{
     navbar
+  },
+  created(){
+    if(!localStorage.hasOwnProperty('token')){
+      this.$router.replace('/register')
+    }
   }
 }
 </script>

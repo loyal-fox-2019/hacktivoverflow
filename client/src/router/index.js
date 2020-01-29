@@ -4,6 +4,8 @@ import Home from '../views/Home.vue'
 import Register from '../views/register.vue'
 import Login from '../views/login.vue'
 import Askquestion from '../views/askquestion.vue'
+import QuestionDetail from '../views/QuestionDetail.vue'
+import MyQuestions from '../views/MyQuestions'
 
 Vue.use(VueRouter)
 
@@ -26,6 +28,14 @@ const routes = [
     path: '/askquestion',
     name: 'askquestion',
     component: Askquestion
+  },{
+    path: '/detail/:id',
+    name: 'questiondetail',
+    component: QuestionDetail
+  },{
+    path: '/myquestion',
+    name: 'myquestions',
+    component: MyQuestions
   }
   // {
   //   path: '/about',

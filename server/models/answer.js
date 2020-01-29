@@ -7,7 +7,7 @@ const answerSchema = new Schema({
         required: [true, 'Question title is required']
     },
     description:{
-        type: true,
+        type: String,
         required: [true, 'Description is required']
     },
     tags: [{type: Schema.Types.ObjectId, ref: 'Tag'}],

@@ -8,32 +8,19 @@
         <input v-model="password" type="password" id="inputPassword" class="form-control" placeholder="Password" required="">
         <button class="btn btn-lg btn-primary btn-block" v-on:click.prevent="login" type="submit">Log in</button>
         <p><router-link :to="`/register`">Register Here</router-link></p>
-        <p>or</p>
-        <GoogleLogin :params="params" :renderParams="renderParams" :onSuccess="onSuccess" ></GoogleLogin>
+        <!-- <p>or</p>
+        <GoogleLogin :params="params" :renderParams="renderParams" :onSuccess="onSuccess" ></GoogleLogin> -->
         <p class="mt-5 mb-3 text-muted">© 2020-2021</p>
     </form>
 </template>
 
 <script>
-import axios from 'axios'
-import GoogleLogin from 'vue-google-login';
 export default {
     name: 'login',
-  components: {
-    GoogleLogin
-  },
   data(){
     return{
       email: '',
-      password: '',
-      params: {
-        client_id: process.env.VUE_APP_GOOGLE_ID
-      },
-      renderParams: {
-        width: 250,
-        height: 50,
-        longtitle: true
-      }
+      password: ''
     }
   },
   methods:{
@@ -43,26 +30,7 @@ export default {
           password: this.password
       }
         this.$store.dispatch('loginUser', payload)
-    },
-    onSuccess(googleUser) {
-      // const profile = googleUser.getBasicProfile();
-      const id_token = googleUser.getAuthResponse().id_token;
-      // console.log(id_token)
-      axios.post('http://35.240.228.104:3000/user/gsignin',{
-          data: {
-            id_token
-          }
-      })
-      .then(({data})=>{
-        localStorage.setItem('token', data.token)
-        localStorage.setItem('userId', data.payload._id)
-        localStorage.setItem('email', data.payload.email)
-        this.$router.push('/')
-      })
-      .catch(err=>{
-        console.log(err)
-      })
-    },
+    }
   }
 }
 

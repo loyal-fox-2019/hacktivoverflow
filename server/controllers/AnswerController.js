@@ -2,6 +2,7 @@ const Answer = require('../models/answer')
 
 class AnswerController{
     static create(req,res){
+        // console.log('controller create answer', req.body)
         Answer.create({
             title: req.body.title,
             description: req.body.description,
@@ -20,7 +21,7 @@ class AnswerController{
         })
     }
     static findAll(req,res){
-        Answer.find({user: req.payload._id}).populate('user', '-password')
+        Answer.find({question: req.params.questionId}).populate('user', '-password')
         .then(data=>{
             res.status(200).json(data)
         })
@@ -64,10 +65,19 @@ class AnswerController{
         })
     }
     static upvote(req,res){
-        Answer.findByIdAndUpdate({_id: req.params.questionId},{
-            $addToSet: { upvotes: req.payload._id },
-            $pull: {downvotes: req.payload._id}
-        }, { new: true }).populate('user','-password')
+        Answer.findById({_id: req.params.answerId})
+        .then(data=>{
+            if(data.upvotes.includes(req.payload._id)){
+                return Answer.findByIdAndUpdate({_id: req.params.answerId},{
+                    $pull: {upvotes: req.payload._id}
+                }, { new: true }).populate('user','-password')
+            }else{
+                return Answer.findByIdAndUpdate({_id: req.params.answerId},{
+                    $addToSet: { upvotes: req.payload._id },
+                    $pull: {downvotes: req.payload._id}
+                }, { new: true }).populate('user','-password')
+            }
+        })
         .then(data=>{
             res.status(200).json(data)
         })
@@ -78,10 +88,19 @@ class AnswerController{
         })
     }
     static downvote(req,res){
-        Answer.findByIdAndUpdate({_id: req.params.questionId},{
-            $addToSet: { downvotes: req.payload._id },
-            $pull: {upvotes: req.payload._id}
-        }, { new: true }).populate('user','-password')
+        Answer.findById({_id: req.params.answerId})
+        .then(data=>{
+            if(data.downvotes.includes(req.payload._id)){
+                return Answer.findByIdAndUpdate({_id: req.params.answerId},{
+                    $pull: {downvotes: req.payload._id}
+                }, { new: true }).populate('user','-password')
+            }else{
+                return Answer.findByIdAndUpdate({_id: req.params.answerId},{
+                    $addToSet: { downvotes: req.payload._id },
+                    $pull: {upvotes: req.payload._id}
+                }, { new: true }).populate('user','-password')
+            }
+        })
         .then(data=>{
             res.status(200).json(data)
         })

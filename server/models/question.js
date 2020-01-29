@@ -10,20 +10,18 @@ const questionSchema = new Schema({
         type: String,
         required: [true, 'Description is required']
     },
-    tags: [{type: Schema.Types.ObjectId, ref: 'Tag'}],
+    tags: {
+        type: Array
+    },
     user:{
         type: Schema.Types.ObjectId,
         ref: 'User',
         required: true
     },
-    question:{
-        type: Schema.Types.ObjectId,
-        ref: 'Question',
-        required: true
-    },
     upvotes: [{type: Schema.Types.ObjectId, ref: 'User'}],
     downvotes:[{type: Schema.Types.ObjectId, ref: 'User'}]
 },{timestamps: true})
+
 
 const Question = mongoose.model('Question', questionSchema)
 

@@ -6,6 +6,7 @@ class QuestionController{
             title: req.body.title,
             description: req.body.description,
             user: req.payload._id,
+            tags: req.body.tags,
             upvotes: [],
             downvotes: []
         })
@@ -19,6 +20,17 @@ class QuestionController{
         })
     }
     static findAll(req,res){
+        Question.find().populate('user', '-password')
+        .then(data=>{
+            res.status(200).json(data)
+        })
+        .catch(err=>{
+            res.status(400).json({
+                message: err.message
+            })
+        })
+    }
+    static findAllUser(req,res){
         Question.find({user: req.payload._id}).populate('user', '-password')
         .then(data=>{
             res.status(200).json(data)
@@ -41,7 +53,11 @@ class QuestionController{
         })
     }
     static update(req,res){
-        Question.findByIdAndUpdate({_id: req.params.questionId}).populate('user', '-password')
+        console.log('masuk update question', req.params, req.body)
+        Question.findByIdAndUpdate({_id: req.params.questionId},{
+            title: req.body.title,
+            description: req.body.description
+        }).populate('user', '-password')
         .then(data=>{
             res.status(200).json(data)
         })
@@ -52,6 +68,7 @@ class QuestionController{
         })
     }
     static delete(req,res){
+        console.log('masuk delete question', req.params)
         Question.findByIdAndDelete({_id: req.params.questionId})
         .then(data=>{
             res.status(200).json(data)
@@ -63,10 +80,19 @@ class QuestionController{
         })
     }
     static upvote(req,res){
-        Question.findByIdAndUpdate({_id: req.params.questionId},{
-            $addToSet: { upvotes: req.payload._id },
-            $pull: {downvotes: req.payload._id}
-        }, { new: true }).populate('user','-password')
+        Question.findById({_id: req.params.questionId})
+        .then(data=>{
+            if(data.upvotes.includes(req.payload._id)){
+                return Question.findByIdAndUpdate({_id: req.params.questionId},{
+                    $pull: {upvotes: req.payload._id}
+                }, { new: true }).populate('user','-password')
+            }else{
+                return Question.findByIdAndUpdate({_id: req.params.questionId},{
+                    $addToSet: { upvotes: req.payload._id },
+                    $pull: {downvotes: req.payload._id}
+                }, { new: true }).populate('user','-password')
+            }
+        })
         .then(data=>{
             res.status(200).json(data)
         })
@@ -77,10 +103,19 @@ class QuestionController{
         })
     }
     static downvote(req,res){
-        Question.findByIdAndUpdate({_id: req.params.questionId},{
-            $addToSet: { downvotes: req.payload._id },
-            $pull: {upvotes: req.payload._id}
-        }, { new: true }).populate('user','-password')
+        Question.findById({_id: req.params.questionId})
+        .then(data=>{
+            if(data.downvotes.includes(req.payload._id)){
+                return Question.findByIdAndUpdate({_id: req.params.questionId},{
+                    $pull: {downvotes: req.payload._id}
+                }, { new: true }).populate('user','-password')
+            }else{
+                return Question.findByIdAndUpdate({_id: req.params.questionId},{
+                    $addToSet: { downvotes: req.payload._id },
+                    $pull: {upvotes: req.payload._id}
+                }, { new: true }).populate('user','-password')
+            }
+        })
         .then(data=>{
             res.status(200).json(data)
         })
