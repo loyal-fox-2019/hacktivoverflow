@@ -19,6 +19,8 @@ class AuthController{
         }, process.env.JWT_SECRET)
 
         res.status(200).json({
+          id: user.id,
+          email: user.email,
           token
         })
       })
@@ -45,6 +47,8 @@ class AuthController{
             }, process.env.JWT_SECRET)
 
             res.status(200).json({
+              id: user.id,
+              email: user.email,
               token
             })    
           }else{

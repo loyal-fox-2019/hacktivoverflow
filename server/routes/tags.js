@@ -1,9 +1,9 @@
 const express = require('express');
 const router = express.Router();
+const TagController = require('../controllers/TagController')
 
-/* GET home page. */
-router.get('/', function(req, res, next) {
-  res.send('hello world')
-});
+router.get('/', TagController.getAll)
+router.post('/', TagController.create)
+router.get('/:id', TagController.get)
 
 module.exports = router;

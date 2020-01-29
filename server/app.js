@@ -17,13 +17,12 @@ app.use('/', indexRouter);
 
 // catch 404 and forward to error handler
 app.use(function(err, req, res, next) {
+  console.log(err)
   if(err.name === "AuthError"){
     res.status(400).json({
       errors: [err.message]
     })
-  }
-
-  if (err.name === "ValidationError") {
+  }else if (err.name === "ValidationError") {
     const result =  err.errors
     const errors = []
     for (const key in result) {
@@ -34,9 +33,7 @@ app.use(function(err, req, res, next) {
     res.status(409).json({
       errors: errors
     })
-  }
-
-  if (err.name === 'MongoError') {
+  }else if (err.name === 'MongoError') {
     const errors = []
     for (const key in err.keyValue) {
       if (err.keyValue.hasOwnProperty(key)) {
@@ -46,12 +43,12 @@ app.use(function(err, req, res, next) {
     res.status(409).json({
       errors: errors
     })
+  }else{
+    console.log("Ada errors", err)
+    res.status(500).json({
+      errors: ['internal server error']
+    })
   }
-
-  // console.log("Ada errors", err)
-  res.status(500).json({
-    errors: ['internal server error']
-  })
 });
 
 app.listen(3000, () => console.log('listening app by port: 3000'))

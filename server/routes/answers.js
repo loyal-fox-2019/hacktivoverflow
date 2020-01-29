@@ -1,9 +1,8 @@
 const express = require('express');
 const router = express.Router();
+const AnswerController = require('../controllers/AnswerController')
+const Authentication = require('../middlewares/Authentication')
 
-/* GET home page. */
-router.get('/', function(req, res, next) {
-  res.send('hello world')
-});
+
 
 module.exports = router;
