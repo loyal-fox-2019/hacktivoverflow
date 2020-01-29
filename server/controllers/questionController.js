@@ -32,7 +32,13 @@ class QuestionController
     static getOneQuestion(req, res, next)
     {
         Question.findById(req.params.id)
-        .populate('answers')
+        .populate({
+            path: 'answers',
+            populate: {
+                path: 'user',
+                select: 'username'
+            }
+        })
         .populate('user','username')
         .exec()
         .then((question) => {
@@ -54,19 +60,21 @@ class QuestionController
 
     static addNewQuestion(req, res, next)
     {
-        const data = _.pick(req.body,'title','description');
+        const data = _.pick(req.body,'title','description','tags');
         data.user = req.userInfo.id;
         data.upvotes = [];
         data.downvotes = [];
         data.answers = [];
-        if(req.body.tags)
-        {
-            data.tags = req.body.tags.split(' ').filter((v) => {return !!v});
-        }
-        else
-        {
-            data.tags = [];
-        }
+        // if(req.body.tags)
+        // {
+        //     data.tags = req.body.tags.split(' ').filter((v) => {return !!v});
+        // }
+        // else
+        // {
+        //     data.tags = [];
+        // }
+        console.log(req.body);
+        
 
         Question.create(data)
         .then((question) => {
@@ -79,11 +87,11 @@ class QuestionController
 
     static updateQuestion(req, res, next)
     {
-        const data = _.pick(req.body,'title','description');
-        if(req.body.tags)
-        {
-            data.tags = req.body.tags.split(' ').filter((v) => {return !!v});
-        }
+        const data = _.pick(req.body,'title','description','tags');
+        // if(req.body.tags)
+        // {
+        //     data.tags = req.body.tags.split(' ').filter((v) => {return !!v});
+        // }
 
         Question.findById(req.params.id)
         .exec()
@@ -128,6 +136,165 @@ class QuestionController
             res.status(404).json({
                 msg: "Product not found."
             })
+        })
+    }
+
+    static voteQuestion(req, res, next)
+    {
+        Question.findById(req.params.id)
+        .exec()
+        .then((question) => {
+            if(question.user.toString() == req.userInfo.id)
+            {
+                res.status(400).json({
+                    msg: "You cannot vote for your question."
+                })
+            }
+            else
+            {
+                let hasUpvoted = false;
+                let upIdx;
+                let hasDownvoted = false;
+                let downIdx;
+
+                for(let i=0;i<question.upvotes.length;i++)
+                {
+                    if(question.upvotes[i].toString() == req.userInfo.id.toString())
+                    {
+                        hasUpvoted = true;
+                        upIdx = i;
+                        break;
+                    }
+                }
+                for(let i=0;i<question.downvotes.length;i++)
+                {
+                    if(question.downvotes[i].toString() == req.userInfo.id.toString())
+                    {
+                        hasDownvoted = true;
+                        downIdx = i;
+                        break;
+                    }
+                }
+
+                if(req.body.vote == 1)
+                {
+                    if(!hasUpvoted && !hasDownvoted)
+                    {
+                        //new upvote
+                        question.upvotes.push(req.userInfo.id);
+                    }
+                    else if(hasDownvoted)
+                    {
+                        // switch downvote to upvote
+                        question.downvotes.splice(downIdx,1);
+                        question.upvotes.push(req.userInfo.id);
+                    }
+                    else
+                    {
+                        // undo upvote
+                        question.upvotes.splice(upIdx,1);
+                    }
+
+                    return question.save();
+                }
+                else if(req.body.vote == -1)
+                {
+                    if(!hasUpvoted && !hasDownvoted)
+                    {
+                        //new downvote
+                        question.downvotes.push(req.userInfo.id);
+                    }
+                    else if(hasUpvoted)
+                    {
+                        // switch upvote to downvote
+                        question.upvotes.splice(upIdx,1);
+                        question.downvotes.push(req.userInfo.id);
+                    }
+                    else
+                    {
+                        // undo downvote
+                        question.downvotes.splice(downIdx,1);
+                    }
+
+                    return question.save();
+                    
+                }
+                else
+                {
+                    res.status(400).json({
+                        msg: "Invalid vote."
+                    })
+                }
+                
+            }
+        })
+        .then(() => {
+            res.status(201).json({
+                msg: "Vote success."
+            })
+        })
+        .catch((err) => {
+            console.log(err);
+            
+        })
+    }
+
+    static getMyVote(req, res, next)
+    {
+        Question.findById(req.params.id)
+        .exec()
+        .then((question) => {
+            if(question.user.toString() == req.userInfo.id)
+            {
+                res.status(200).json({
+                    vote: 0
+                })
+            }
+            else
+            {
+                let hasUpvoted = false;
+                let hasDownvoted = false;
+
+                for(let i=0;i<question.upvotes.length;i++)
+                {
+                    if(question.upvotes[i].toString()==req.userInfo.id.toString())
+                    {
+                        hasUpvoted = true;
+                        break;
+                    }
+                }
+                for(let i=0;i<question.downvotes.length;i++)
+                {
+                    if(question.downvotes[i].toString()==req.userInfo.id.toString())
+                    {
+                        hasDownvoted = true;
+                        break;
+                    }
+                }
+
+                if(!hasUpvoted && !hasDownvoted)
+                {
+                    res.status(200).json({
+                        vote: 0
+                    })
+                }
+                else if(hasDownvoted)
+                {
+                    res.status(200).json({
+                        vote: -1
+                    })
+                }
+                else
+                {
+                    res.status(200).json({
+                        vote: 1
+                    })
+                }
+            }
+        })
+        .catch((err) => {
+            console.log(err);
+            
         })
     }
 }

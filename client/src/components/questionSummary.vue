@@ -4,7 +4,7 @@
             <button class="btn btn-success" style="float:right!important;width:10%" @click="viewQuestion">View</button>
         <div class="card-body">
             <div class="stats">
-                <div>{{question.upvotes.length}}<br>upvotes</div>
+                <div>{{question.upvotes.length - question.downvotes.length}}<br>upvotes</div>
                 <div>{{question.answers.length}}<br>answers</div>
             </div>
             
@@ -12,7 +12,7 @@
                 <h5 class="card-title">{{question.title}}</h5>
                 <h6 class="card-subtitle mb-2 text-muted"><i>Asked {{(new Date(question.createdAt)).toDateString()}}</i></h6>
                 <p class="card-text">
-                    {{question.description}}
+                    {{strippedDesc}}
                 </p>
                 <div style="float:right">Asked by {{question.user.username}}</div>
             </div>
@@ -29,11 +29,17 @@
         props: {
             question: Object
         },
+        data() {
+            return {
+                strippedDesc: this.question.description.replace(/<\/?[^>]+>/ig, " ")
+            }
+        },
         methods: {
             viewQuestion() {
                 this.$router.push({path: `/question/${this.question._id}`})
             }
-        }
+        },
+
     }
 </script>
 

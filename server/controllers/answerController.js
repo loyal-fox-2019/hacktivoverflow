@@ -77,7 +77,7 @@ class AnswerController
 
                 for(let i=0;i<answer.upvotes.length;i++)
                 {
-                    if(answer.user.toString()==answer.upvotes[i].toString())
+                    if(answer.upvotes[i].toString()==req.userInfo.id.toString())
                     {
                         hasUpvoted = true;
                         break;
@@ -85,7 +85,7 @@ class AnswerController
                 }
                 for(let i=0;i<answer.downvotes.length;i++)
                 {
-                    if(answer.user.toString()==answer.downvotes[i].toString())
+                    if(answer.downvotes[i].toString()==req.userInfo.id.toString())
                     {
                         hasDownvoted = true;
                         break;
@@ -138,7 +138,7 @@ class AnswerController
 
                 for(let i=0;i<answer.upvotes.length;i++)
                 {
-                    if(answer.user.toString()==answer.upvotes[i].toString())
+                    if(answer.upvotes[i].toString()==req.userInfo.id.toString())
                     {
                         hasUpvoted = true;
                         upIdx = i;
@@ -147,7 +147,7 @@ class AnswerController
                 }
                 for(let i=0;i<answer.downvotes.length;i++)
                 {
-                    if(answer.user.toString()==answer.downvotes[i].toString())
+                    if(answer.downvotes[i].toString()==req.userInfo.id.toString())
                     {
                         hasDownvoted = true;
                         downIdx = i;
@@ -174,9 +174,7 @@ class AnswerController
                         answer.upvotes.splice(upIdx,1);
                     }
 
-                    res.status(201).json({
-                        msg: "Upvote success."
-                    })
+                    return answer.save()
                 }
                 else if(req.body.vote == -1)
                 {
@@ -197,9 +195,7 @@ class AnswerController
                         answer.downvotes.splice(downIdx,1);
                     }
 
-                    res.status(201).json({
-                        msg: "Downvote success."
-                    })
+                    return answer.save()
                 }
                 else
                 {
@@ -210,6 +206,11 @@ class AnswerController
                 
             }
         })
+        .then(() => {
+            res.status(201).json({
+                msg: "Vote success."
+            })
+        })        
         .catch((err) => {
             console.log(err);
             

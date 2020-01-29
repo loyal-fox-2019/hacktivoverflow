@@ -3,6 +3,9 @@
     <router-link to="/newquestion">
       <button class="btn btn-primary" id="ask-qn" v-if="this.$store.state.isLogin">Ask a question!</button>
     </router-link>
+    <router-link to="/myquestions">
+      <button class="btn btn-primary" id="ask-qn" v-if="this.$store.state.isLogin">My questions</button>
+    </router-link>
 
     <router-link to="/login">
       <button class="btn btn-primary" id="ask-qn" v-if="!this.$store.state.isLogin">Login to ask a question!</button>
@@ -33,5 +36,8 @@ export default {
 }
 #ask-qn {
   float: right;
+}
+button {
+  margin: 5px
 }
 </style>

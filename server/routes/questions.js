@@ -9,7 +9,11 @@ questionsRouter.get('/:id',QuestionController.getOneQuestion);
 
 questionsRouter.use('/',authentication);
 
+questionsRouter.get('/:id/vote',QuestionController.getMyVote);
+
 questionsRouter.post('/',QuestionController.addNewQuestion);
+
+questionsRouter.post('/:id/vote',QuestionController.voteQuestion);
 
 questionsRouter.patch('/:id',QuestionController.updateQuestion);
 

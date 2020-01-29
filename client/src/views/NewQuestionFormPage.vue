@@ -1,11 +1,11 @@
 <template>
     <div class="add-qn-page">        
-        <form id="add-form" @submit.prevent="addProduct" enctype="multipart/form-data" method="post">
+        <form id="add-form" @submit.prevent="addQuestion">
         <button class="btn btn-primary" id="add-qn-btn" type="submit">Submit question</button>
             <h3>Ask a question</h3>
             <div class="form-group">
                 Title*
-                <input type="text" class="form-control" v-model="name" required>
+                <input type="text" class="form-control" v-model="title" required>
             </div>
             <!-- <div class="form-group">
                 Image
@@ -26,7 +26,7 @@
                 Description*
                 <!-- <textarea class="form-control" v-model="description" required></textarea> -->
 
-                <quill-editor v-model="description" ref="myQuillEditor" :options="editorOption" style="height:500px">
+                <quill-editor v-model="description" ref="myQuillEditor" :options="editorOption" style="height:500px" required>
                 </quill-editor>
             </div>
             
@@ -41,7 +41,7 @@
         name: "NewQuestion",
         data() {
             return {
-                name: "",
+                title: "",
                 tags: [],
                 description: "",
                 file: "",
@@ -67,29 +67,22 @@
             }
         },
         methods: {
-            addProduct() {
-                let fd = new FormData();
-                fd.append('name',this.name);
-                fd.append('price',this.price);
-                fd.append('stock',this.stock);
-                fd.append('tags',this.tags);
-                fd.append('description',this.description);
-                //fd.append('file',this.file);
-
+            addQuestion() {
                 axiosReq({
-                    url: "/products",
+                    url: "/questions",
                     method: "post",
                     headers: {
-                        token: this.$cookies.get('token'),
-                        'content-type': 'multipart/form-data'
+                        token: this.$cookies.get('token')
                     },
-                    data: fd
+                    data: {
+                        title: this.title,
+                        description: this.description,
+                        tags: this.tags
+                    }
                 })
                 .then(({data}) => {
-                    this.name = "";
-                    this.price = null;
-                    this.stock = null;
-                    this.tags = "";
+                    this.title = "";
+                    this.tags = [];
                     this.description = "";
                     this.$router.push({path: `/question/${data._id}`})
                 })
@@ -118,5 +111,7 @@
 }
 #add-qn-btn {
     float:right;
+    position: sticky;
+    top: 65px
 }
 </style>
