@@ -5,7 +5,7 @@
         <h3>Login()</h3>
       </b-card-text>
       <b-card-text class="text-left font-weight-bold">
-        <b-form>
+        <b-form @submit.prevent="login">
           <b-form-group
             id="input-username"
             label="Username / Email"
@@ -42,6 +42,21 @@
 </template>
 
 <script>
+import axios from "axios";
+import Swal from "sweetalert2";
+
+const Toast = Swal.mixin({
+  toast: true,
+  position: "top-end",
+  showConfirmButton: false,
+  timer: 3000,
+  timerProgressBar: true,
+  onOpen: toast => {
+    toast.addEventListener("mouseenter", Swal.stopTimer);
+    toast.addEventListener("mouseleave", Swal.resumeTimer);
+  }
+});
+
 export default {
   data() {
     return {
@@ -50,6 +65,35 @@ export default {
         password: null
       }
     };
+  },
+  methods: {
+    login() {
+      axios({
+        method: "POST",
+        url: `${this.$store.state.API}/users/login`,
+        data: this.form
+      })
+        .then(({ data }) => {
+          localStorage.name = data.name;
+          localStorage.token = data.token;
+          this.$store.state.isLogin = true;
+          this.$router.replace({ name: "home" });
+          Toast.fire({
+            icon: "success",
+            title: "Signed in successfully"
+          });
+        })
+        .catch(err => {
+          this.form.username = null;
+          this.form.password = null;
+          this.$swal(
+            "Error",
+            err.response.data.errMessage ||
+              "Something went wrong, please try again later!",
+            "error"
+          );
+        });
+    }
   }
 };
 </script>

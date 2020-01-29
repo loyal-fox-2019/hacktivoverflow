@@ -4,6 +4,7 @@ const generatePassword = require('../helpers/generatePassword');
 const nodemailer = require('nodemailer');
 const ObjectId = require('mongoose').Types.ObjectId;
 const bcrypt = require('bcrypt');
+const hashPassword = require('../helpers/hashPassword');
 
 class User {
     static register(req, res, next) {
@@ -111,7 +112,7 @@ class User {
                         isConfirm: false
                     }, {
                         username: req.body.username,
-                        password: req.body.newPassword,
+                        password: hashPassword(req.body.newPassword),
                         isConfirm: true
                     })
                 }
@@ -126,7 +127,38 @@ class User {
     }
 
     static login(req, res, next) {
-
+        let name
+        userModel
+            .findOne({
+                $or: [
+                    {username: req.body.username},
+                    {email: req.body.username}
+                ]
+            })
+            .then((user) => {
+                if (!user) {
+                    let err = new Error('You are not registered')
+                    err.statusCode = 404
+                    err.errMessage = 'You are not registered'
+                    throw err
+                } else if (!bcrypt.compareSync(req.body.password, user.password)) {
+                    let err = new Error('Invalid username or password')
+                    err.statusCode = 404
+                    err.errMessage = 'Invalid username or password'
+                    throw err
+                } else {
+                    name = user.name
+                    return jwt.sign({
+                        _id: user._id,
+                        name: user.name
+                    }, process.env.JWT_SECRET)
+                }
+            }).then((token) => {
+                res.status(200).json({
+                    name,
+                    token
+                })
+            }).catch(next);
     }
 
     static oauth(req, res, next) {

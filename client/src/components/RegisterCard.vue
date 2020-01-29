@@ -148,6 +148,7 @@ export default {
         .then(({ data }) => {
           localStorage.name = data.name;
           localStorage.token = data.token;
+          this.$store.state.isLogin = true;
           this.$router.replace({ name: "home" });
           Toast.fire({
             icon: "success",
@@ -169,7 +170,7 @@ export default {
       this.isLoading = true;
       axios({
         method: "POST",
-        url: `${this.$store.state.API}/users/register/`,
+        url: `${this.$store.state.API}/users/register`,
         data: this.form
       })
         .then(() => {

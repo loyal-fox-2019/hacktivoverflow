@@ -7,7 +7,8 @@ Vue.use(Vuex);
 export default new Vuex.Store({
   state: {
     API: "http://localhost:3000",
-    registerData: null
+    registerData: null,
+    isLogin: !!localStorage.token
   },
   mutations: {
     SET_REGISTERDATA(state, payload) {

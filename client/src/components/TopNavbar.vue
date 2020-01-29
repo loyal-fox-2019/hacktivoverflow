@@ -7,8 +7,8 @@
         </b-navbar-brand>
 
         <b-collapse id="nav-collapse" is-nav>
-          <!-- Right aligned nav items -->
-          <b-navbar-nav class="ml-auto">
+          <!-- Right aligned nav items when not login -->
+          <b-navbar-nav class="ml-auto" v-if="!isLogin">
             <b-nav-item>
               <b-button
                 size="sm"
@@ -22,6 +22,7 @@
                 Register
               </b-button>
             </b-nav-item>
+
             <!-- <b-nav-form>
             <b-form-input
               size="sm"
@@ -33,6 +34,21 @@
             >
           </b-nav-form> -->
           </b-navbar-nav>
+
+          <!-- Right aligned nav items when login -->
+          <b-navbar-nav class="ml-auto" v-if="isLogin">
+            <b-nav-item>
+              {{ name }}
+              <b-button
+                size="sm"
+                variant="link"
+                class="text-danger font-weight-light"
+                @click.prevent="logout"
+              >
+                Log out
+              </b-button>
+            </b-nav-item>
+          </b-navbar-nav>
         </b-collapse>
       </b-container>
     </b-navbar>
@@ -40,7 +56,23 @@
 </template>
 
 <script>
-export default {};
+export default {
+  methods: {
+    logout() {
+      localStorage.removeItem("token");
+      localStorage.removeItem("name");
+      this.$store.state.isLogin = false;
+    }
+  },
+  computed: {
+    isLogin() {
+      return this.$store.state.isLogin;
+    },
+    name() {
+      return localStorage.name;
+    }
+  }
+};
 </script>
 
 <style scoped>
