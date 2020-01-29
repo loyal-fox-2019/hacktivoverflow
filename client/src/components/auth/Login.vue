@@ -9,13 +9,22 @@
             class="form-control"
             id="email"
             autofocus
+            placeholder="your@mail.com"
             autocomplete="off"
             required
+            v-model="form.email"
           />
         </div>
         <div class="form-group">
           <label for="password">Password</label>
-          <input type="password" class="form-control" id="password" required />
+          <input
+            type="password"
+            class="form-control"
+            id="password"
+            placeholder="******"
+            required
+            v-model="form.password"
+          />
         </div>
         <button type="submit" class="btn btn-primary">Login</button>
       </form>
@@ -28,11 +37,16 @@ export default {
   name: 'Login',
 
   data() {
-    return {};
+    return {
+      form: {
+        email: '',
+        password: '',
+      },
+    };
   },
   methods: {
     login() {
-      console.log('login');
+      this.$store.dispatch('login', this.form);
     },
   },
 };

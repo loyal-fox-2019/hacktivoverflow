@@ -14,14 +14,19 @@ export default {
       component: () => import(/* webpackChunkName: "auth" */ '../views/home/Auth.vue'),
     },
     {
-      path: '/questions/details',
-      name: 'QuestionDetail',
-      component: () => import(/* webpackChunkName: "QuestionDetail" */ '../views/home/QuestionDetail.vue'),
-    },
-    {
-      path: '/questions/ask',
+      path: 'questions/ask',
       name: 'askQuestion',
       component: () => import(/* webpackChunkName: "askQuestion" */ '../views/clientarea/askQuestion.vue'),
+    },
+    {
+      path: 'questions/update/:slug',
+      name: 'updateQuestion',
+      component: () => import(/* webpackChunkName: "askQuestion" */ '../views/clientarea/askQuestion.vue'),
+    },
+    {
+      path: 'questions/:slug',
+      name: 'QuestionDetail',
+      component: () => import(/* webpackChunkName: "QuestionDetail" */ '../views/home/QuestionDetail.vue'),
     },
   ],
 };

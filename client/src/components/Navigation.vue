@@ -11,7 +11,7 @@
     >
       <span class="navbar-toggler-icon"></span>
     </button>
-    <a class="navbar-brand text-dark" href="#">StuckOverlow</a>
+    <router-link class="navbar-brand text-dark" to="/">StuckOverlow</router-link>
 
     <div class="collapse navbar-collapse" id="navbarTogglerDemo03">
       <ul class="navbar-nav mr-auto mt-2 mt-lg-0"></ul>
@@ -24,18 +24,18 @@
               height="25"
               alt=""
           /></a>
-          <a href="#" class="nav-link my-2 my-sm-0 text-dark">
+          <a href="#" class="nav-link my-2 my-sm-0 text-dark" @click="$store.dispatch('logout')">
             <font size="3">
               <b-icon-power></b-icon-power>
             </font>
           </a>
         </template>
         <template v-else>
-          <a href="#" class="nav-link my-2 my-sm-0 text-dark">
+          <router-link to="/auth" class="nav-link my-2 my-sm-0 text-dark">
             <font size="3">
               <b-icon-box-arrow-right />
             </font>
-          </a>
+          </router-link>
         </template>
       </div>
     </div>

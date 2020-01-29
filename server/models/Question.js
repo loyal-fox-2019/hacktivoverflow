@@ -21,7 +21,8 @@ const questionSchema = new Schema({
         type: Schema.Types.ObjectId, ref: 'User'
     }],
     downvote: [{
-        type: Schema.Types.ObjectId, ref: 'User'
+        type: Schema.Types.ObjectId, 
+        ref: 'User',
     }],
     tags: [{
         type: Schema.Types.ObjectId, ref: 'Tag'

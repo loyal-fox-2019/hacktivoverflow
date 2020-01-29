@@ -5,7 +5,12 @@
         {{ title }}
       </h1>
       <div class="col-2" v-if="isButton">
-        <button type="button" class="btn btn-sm btn-primary mt-1">Ask Question</button>
+        <router-link
+          to="/questions/ask"
+          class="btn btn-sm btn-primary mt-1"
+          v-if="$store.state.isLogin"
+          >Ask Question</router-link
+        >
       </div>
     </div>
     <div style="clear:both"></div>
@@ -14,6 +19,8 @@
 </template>
 
 <script>
+import { mapState } from 'vuex';
+
 export default {
   name: 'TitlePage',
   props: ['title', 'button'],
@@ -21,6 +28,7 @@ export default {
     return {};
   },
   computed: {
+    ...mapState('Question', ['question']),
     isButton() {
       if (this.button === false) {
         return false;

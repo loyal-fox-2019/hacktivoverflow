@@ -1,4 +1,5 @@
 const Question = require('../models/Question')
+const Answer = require('../models/Answer')
 
 class QuestionController {
     static create(req, res, next){
@@ -24,11 +25,10 @@ class QuestionController {
             .populate({ path: 'upvote', select: '-password' })
             .populate({ path: 'downvote', select: '-password' })
             .populate('tags')
-            // .populate('answers')
-            // .populate({ 
-            //     path: 'answers',
-            //     populate: { path: 'author' }
-            // })
+            .populate({
+                path: "answers",
+                populate: { path: 'author' }
+            })
             .then(questions => {
                 res.status(200).json(questions)
             })
@@ -43,6 +43,30 @@ class QuestionController {
             .populate({ path: 'author', select: '-password' })
             .populate({ path: 'upvote', select: '-password' })
             .populate({ path: 'downvote', select: '-password' })
+            .populate('tags')
+            .populate({
+                path: "answers",
+                populate: { path: 'author' }
+            })
+            .then(question => {
+                res.status(200).json(question)
+            })
+            .catch(next)
+    }
+
+    static getBySlug(req, res, next){
+        Question
+            .findOne({
+                slug: req.params.slug
+            })
+            .populate({ path: 'author', select: '-password' })
+            .populate({ path: 'upvote', select: '-password' })
+            .populate({ path: 'downvote', select: '-password' })
+            .populate('tags')
+            .populate({
+                path: "answers",
+                populate: { path: 'author' }
+            })
             .then(question => {
                 res.status(200).json(question)
             })
@@ -60,7 +84,7 @@ class QuestionController {
                 slug: QuestionController.generateSlug(title)
             })
             .then(question => {
-                res.status(200).json(question)
+                next()
             })
             .catch(next)
     }
@@ -132,12 +156,12 @@ class QuestionController {
     static updateViews(req, res, next){
         Question
             .findOne({
-                _id: req.params.id
+                slug: req.params.slug
             })
             .then(question => {
                 const views = question.views || 0
                 return Question
-                .updateOne({ _id: req.params.id }, {
+                .updateOne({slug: req.params.slug }, {
                     views: eval(views + 1)
                 })
             })
@@ -148,7 +172,43 @@ class QuestionController {
             
     }
 
+    static delete(req, res, next) {
+        let question;
+        Question
+            .findOne({
+                slug: req.params.slug
+            })
+            .then(nQuestion => {
+                question = nQuestion
+                return Question
+                            .deleteOne({
+                                slug: req.params.slug
+                            })
+            })
+            .then(() => {
+                if (question.answers.length) {
+                    const answers = question.answers
+                    const nPromise = []
+                    answers.forEach(answer => {
+                       nPromise.push(Answer.deleteOne({
+                        _id: answer
+                       })) 
+                    });
+                    return Promise.all(nPromise)
+                }else{
+                    return true
+                }
+            })
+            .then(() => {
+                res.status(200).json({
+                    message: 'deleted a question'
+                })
+            })
+            .catch(next)
+    }
+
     static generateSlug(title){
+        title = title.replace(/[^\w\s]/gi, '')
         return title.split(' ').join('-')
     }
 }
