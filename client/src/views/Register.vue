@@ -93,7 +93,7 @@
 </template>
 
 <script>
-import axios from '../config/api'
+// import axios from '../config/api'
 export default {
   props: {
     source: String
@@ -113,22 +113,23 @@ export default {
       this.$router.push('login')
     },
     register () {
-      axios({
-        method: 'post',
-        // url: '/auth/register',
-        data: {
-          email: this.email,
-          password: this.password
-        }
-      })
-        .then(({ data }) => {
-          // this.email = ''
-          // this.password = ''
-          // this.$router.push('login')
-        })
-        .catch(err => {
-          this.errors = err.response.data.errors
-        })
+      this.$router.push('/')
+      // axios({
+      //   method: 'post',
+      //   // url: '/auth/register',
+      //   data: {
+      //     email: this.email,
+      //     password: this.password
+      //   }
+      // })
+      //   .then(({ data }) => {
+      //     // this.email = ''
+      //     // this.password = ''
+      //     // this.$router.push('login')
+      //   })
+      //   .catch(err => {
+      //     this.errors = err.response.data.errors
+      //   })
     }
   }
 }

@@ -19,7 +19,7 @@ const routes = [
         component: () => import(/* webpackChunkName: "questions" */ '../views/QuestionList.vue')
       },
       {
-        path: '/question/:id',
+        path: '/questions/:id',
         name: 'detail',
         // route level code-splitting
         // this generates a separate chunk (detail.[hash].js) for this route

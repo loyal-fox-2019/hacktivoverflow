@@ -80,7 +80,6 @@ export default {
   name: 'QuestionItem',
   methods: {
     toDetail () {
-      console.log('TRIGGERED GA SIH')
       this.$router.push('/question/123123')
     }
   }
