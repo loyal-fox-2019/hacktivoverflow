@@ -17,6 +17,11 @@
               <p v-html="data.description"></p>
           </b-col>
       </b-row>
+      <b-row>
+        <b-col cols="2  " offset="10" class="answerBy">
+            By: {{data.owner.firstName}}
+        </b-col>
+      </b-row>
       <hr>
   </div>
 </template>
@@ -68,7 +73,7 @@ export default {
   },
   computed: {
     iconDelete () {
-      if (this.data.owner === this.$store.state.userId) {
+      if (this.data.owner._id === this.$store.state.userId) {
         return true
       } else {
         return false
@@ -91,6 +96,10 @@ div.titleAnswer{
   position: absolute;
   z-index: 1;
   right: 0%;
+}
+.answerBy{
+  font-size: 20px;
+  font-weight: 100
 }
 
 </style>

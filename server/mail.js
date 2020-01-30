@@ -7,7 +7,6 @@ async function find (){
     send ()
 }
 
-
 async function sendEmail(params) {
     let configMail, transporter, emailTarget, mail;
     configMail = {
