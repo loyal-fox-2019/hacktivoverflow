@@ -22,15 +22,16 @@ const userSchema = new Schema({
     },
     photo: {
         type: String,
+        default:'https://cdn1.iconfinder.com/data/icons/random-115/24/person-512.png'
     },
     watched_tags: []
 })
 
-userSchema.plugin(UniqVal)
+userSchema.plugin(UniqVal, { message: 'Error, {PATH} sudah terpakai.' })
 
 userSchema.pre('save', function (next) {
     if (this.photo === 'null') {
-        this.photo = 'https://image.freepik.com/free-vector/hand-painted-fox-design_1152-89.jpg'
+        this.photo = 'https://cdn1.iconfinder.com/data/icons/random-115/24/person-512.png'
     }
     this.password = hash(this.password)
     next()

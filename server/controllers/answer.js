@@ -1,4 +1,5 @@
 const Answer = require('../models/answer')
+const Question = require('../models/question')
 
 class Controller {
 
@@ -15,6 +16,8 @@ class Controller {
             const { content } = req.body
             let answer = await Answer.create({ content, question: req.params.id, author: req.decoded.id })
             answer = await answer.populate('author -password').execPopulate()
+
+            let question = await Question.findByIdAndUpdate(req.params.id, { $push: { answer: answer._id } })
 
             res.status(201).json(answer)
         } catch (error) {

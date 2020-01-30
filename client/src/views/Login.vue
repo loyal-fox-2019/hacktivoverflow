@@ -1,5 +1,18 @@
 <template>
-  <div class="about">
-    <h1>This is an about page</h1>
-  </div>
+  <v-layout text-center wrap>
+    <router-view></router-view>
+  </v-layout>
 </template>
+
+<script>
+import LoginPage from '../components/signin/LoginPage.vue';
+export default {
+  name: 'Sign',
+  components:{
+    LoginPage
+  }
+};
+</script>
+
+<style>
+</style>
