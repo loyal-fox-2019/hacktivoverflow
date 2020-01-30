@@ -24,10 +24,10 @@
           <b-button @click='moveTo(`/detail/${question._id}`)' variant='success'>
             Answers
           </b-button>
-          <b-button class='mx-5' @click='moveTo(`/edit/${question._id}`)'>
+          <b-button v-if='username == question.UserId.username' class='mx-5' @click='moveTo(`/edit/${question._id}`)'>
             Edit
           </b-button>
-          <b-button @click='remove(question._id)' variant='danger'>
+          <b-button v-if='username == question.UserId.username' @click='remove(question._id)' variant='danger'>
             Delete
           </b-button>
         </b-card-text>

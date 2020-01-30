@@ -13,7 +13,9 @@
       <div>
         <b-card-text v-html='answer.description' style='text-align: left;'></b-card-text>
         <b-card-text>
-          <b-button class='mx-5' @click='showEditor'>Edit</b-button>
+          <b-button v-if='username == answer.UserId.username' class='mx-5' @click='showEditor'>
+            Edit
+          </b-button>
         </b-card-text>
         <b-card-text>
           Answered by {{answer.UserId.username}} at
