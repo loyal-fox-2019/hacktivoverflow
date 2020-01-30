@@ -3,6 +3,8 @@ const AnswerController = require("../controllers/answerController.js");
 
 const authentication = require("../middlewares/authentication");
 
+answersRouter.get('/:id',AnswerController.getOneAnswer);
+
 answersRouter.use('/',authentication);
 
 answersRouter.post('/',AnswerController.addNewAnswer);

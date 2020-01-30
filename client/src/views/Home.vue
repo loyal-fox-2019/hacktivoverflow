@@ -30,8 +30,8 @@ export default {
   },
   created() {
     this.$store.dispatch('getAllQuestions')
-    this.$store.dispatch('getMyQuestions')
     this.questionsArr = this.$store.state.allQuestions
+    this.$store.dispatch('getMyQuestions')
   },
   methods: {
     toggleShowQn() {

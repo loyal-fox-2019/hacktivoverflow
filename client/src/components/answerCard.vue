@@ -7,7 +7,7 @@
                         <span class="fas fa-caret-up"></span>
                     </button>
                 </div>
-                <div style="margin:auto">
+                <div>
                     <h5>{{answer.upvotes.length - answer.downvotes.length}}</h5>
                 </div>
                 <div>
@@ -22,7 +22,7 @@
                 <div style="float:right">
                     Answer by {{answer.user.username}}
                     <div v-if="answer.user.username==this.$cookies.get('username')">
-                        <button class="btn btn-warning btn-manage">Edit</button>
+                        <button class="btn btn-warning btn-manage" @click="editAnswerForm">Edit</button>
                     </div>
                 </div>
                 
@@ -94,6 +94,9 @@ import axiosReq from "../config/axios";
                     this.answerVote = data.vote
                 })
                 
+            },
+            editAnswerForm() {
+                this.$router.push({path: `/editanswer/${this.answer._id}`})
             }
         }
     }
@@ -121,7 +124,8 @@ import axiosReq from "../config/axios";
 .ans-votes {
     display: flex;
     flex-direction: column;
-    padding: 15px
+    padding: 15px;
+    text-align: center;
 }
 .voted {
     background-color: darkorange

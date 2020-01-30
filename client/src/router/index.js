@@ -28,6 +28,16 @@ const routes = [
     path: '/question/:id',
     name: 'viewquestion',
     component: () => import(/* webpackChunkName: "about" */ '../views/ViewQuestionPage.vue')
+  },
+  {
+    path: '/editquestion/:id',
+    name: 'editquestion',
+    component: () => import(/* webpackChunkName: "about" */ '../views/EditQuestionFormPage.vue')
+  },
+  {
+    path: '/editanswer/:id',
+    name: 'editanswer',
+    component: () => import(/* webpackChunkName: "about" */ '../views/EditAnswerFormPage.vue')
   }
 ]
 

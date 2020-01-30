@@ -3,7 +3,7 @@
         <div class="view-qn-content qn-content">
             <div class="qn-votes">
                 <div>
-                    <button class="btn btn-outline-secondary" :class="questionVote==1 ? 'voted' : ''" @click="voteQn(1)">
+                    <button class="btn btn-outline-secondary" :class="questionVote==1 ? 'voted' : ''" disabled>
                         <span class="fas fa-caret-up"></span>
                     </button>
                 </div>
@@ -11,36 +11,31 @@
                     <h5>{{this.$store.state.currentQuestion.upvotes.length - this.$store.state.currentQuestion.downvotes.length}}</h5>
                 </div>
                 <div>
-                    <button class="btn btn-outline-secondary" :class="questionVote==-1 ? 'voted' : ''" @click="voteQn(-1)">
+                    <button class="btn btn-outline-secondary" :class="questionVote==-1 ? 'voted' : ''" disabled>
                         <span class="fas fa-caret-down"></span>
                     </button>
                 </div>
             </div>
             <div style="width:100%">
                 <h3>{{this.$store.state.currentQuestion.title}}</h3>
-                <div v-html="this.$store.state.currentQuestion.description"></div>
+                <div v-html="question.description"></div>
                 <div>
-                    <button class="btn btn-outline-secondary tag-buttons" v-for="tag in this.$store.state.currentQuestion.tags" :key="tag">{{tag}}</button>
+                    <button class="btn btn-outline-secondary tag-buttons" v-for="tag in question.tags" :key="tag">{{tag}}</button>
                 </div>
                 <div style="float:right">
-                    Asked by {{this.$store.state.currentQuestion.user.username}}
-                    <div v-if="this.$store.state.currentQuestion.user.username==this.$cookies.get('username')">
-                        <button class="btn btn-warning btn-manage" @click="editQuestionForm">Edit</button>
-                        <button class="btn btn-danger btn-manage" @click="deleteQuestion">Delete</button>
-                    </div>
+                    Asked by {{question.user.username}}
+                    
                 </div>
             </div>
             
         </div>
         
-        <answer-card class="answer-card" v-for="ans in this.$store.state.currentQuestion.answers" :key="ans._id" :answer="ans"></answer-card>
-
-        <form id="ans-form" @submit.prevent="addAnswer">
-        <button class="btn btn-primary" id="ans-qn-btn" type="submit">Submit answer</button>
-            <h3>Give an answer</h3>
+        <form id="ans-form" @submit.prevent="updateAnswer">
+        <button class="btn btn-primary" id="ans-qn-btn" type="submit">Save changes</button>
+            <h3>Update answer</h3>
             <div class="form-group">
                 Title*
-                <input type="text" class="form-control" v-model="title" required>
+                <input type="text" class="form-control" v-model="ans_title" required>
             </div>
             <!-- <div class="form-group">
                 Image
@@ -50,7 +45,7 @@
                 Description*
                 <!-- <textarea class="form-control" v-model="description" required></textarea> -->
 
-                <quill-editor v-model="description" ref="myQuillEditor" :options="editorOption" required>
+                <quill-editor v-model="ans_description" ref="myQuillEditor" :options="editorOption" required>
                 </quill-editor>
             </div>
             
@@ -68,17 +63,27 @@
 
 <script>
 import axiosReq from '../config/axios'
-import answerCard from "../components/answerCard.vue";
     export default {
-        name: "viewquestion",
+        name: "editanswer",
         created() {
-            this.$store.dispatch('getOneQuestion',this.$route.params.id);
-            this.checkQuestionVote();
+            axiosReq({
+                url: `/answers/${this.$route.params.id}`,
+                method: 'get'
+            })
+            .then(({data}) => {
+                this.question = data.question;
+                this.ans_title = data.title;
+                this.ans_description = data.description;
+            })
         },
         data(){
             return {
                 questionVote: 0,
+                question: null,
                 modalText: '',
+                ans_title: '',
+                ans_description: '',
+                file: '',
                 editorOption: {
                     modules: {
                         toolbar: [
@@ -101,21 +106,23 @@ import answerCard from "../components/answerCard.vue";
             }
         },
         methods: {
-            addAnswer() {
+            updateAnswer() {
                 axiosReq({
-                    url: "/answers",
-                    method: "post",
+                    url: `/answers/${this.$route.params.id}`,
+                    method: "patch",
                     headers: {
                         token: this.$cookies.get('token')
                     },
                     data: {
-                        title: this.title,
-                        description: this.description,
-                        question: this.$store.state.currentQuestion._id
+                        title: this.ans_title,
+                        description: this.ans_description,
+                        question: this.question._id
                     }
                 })
                 .then(() => {
-                    this.$store.dispatch('getOneQuestion',this.$route.params.id)
+                    this.$store.dispatch('getAllQuestions')
+                    this.$store.dispatch('getOneQuestion',this.question._id)
+                    this.$router.push(`/question/${this.question._id}`)
                 })
             },
             checkQuestionVote() {
@@ -129,44 +136,8 @@ import answerCard from "../components/answerCard.vue";
                 .then(({data}) => {
                     this.questionVote = data.vote
                 })
-            },
-            voteQn(v) {
-                axiosReq({
-                    url: `/questions/${this.$route.params.id}/vote`,
-                    method: "post",
-                    headers: {
-                        token: this.$cookies.get('token')
-                    },
-                    data: {
-                        vote: v // 1 or -1
-                    }
-                })
-                .then(() => {
-                    this.$store.dispatch('getOneQuestion',this.$route.params.id);
-                    this.checkQuestionVote();
-                })
-                .catch((err) => {
-                    if(err.response.status==401)
-                    {
-                        this.modalText = "Please login first."                        
-                    }
-                    else
-                    {
-                        this.modalText = "You cannot vote for your own question."
-                    }
-                    this.$bvModal.show('vote-qn-fail-modal')
-                })
-            },
-            editQuestionForm() {
-                this.$router.push({path:`/editquestion/${this.$route.params.id}`})
-            },
-            deleteQuestion() {
-
             }
         },
-        components: {
-            answerCard
-        }
     }
 </script>
 

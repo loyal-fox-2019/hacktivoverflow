@@ -7,6 +7,13 @@ class AnswerController
     static getOneAnswer(req, res, next)
     {
         Answer.findById(req.params.id)
+        .populate({
+            path: 'question',
+            populate: {
+                path: 'user',
+                select: 'username'
+            }
+        })
         .exec()
         .then((answer) => {
             res.status(200).json(answer)
