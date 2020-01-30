@@ -4,7 +4,7 @@
     <b-col cols="7">
       <b-row>
         <b-col cols="4" class="text-left">
-          <h3>Questions</h3>
+          <h3>My Questions</h3>
         </b-col>
         <b-col cols="8" class="text-right">
           <b-button v-if="$store.state.isLogin" variant="primary" v-b-modal.askQ>Ask Question</b-button>
@@ -12,7 +12,7 @@
         </b-col>
       </b-row>
       <b-row class="justify-content-center mt-4" id="scroll-question">
-        <QuestionList v-for="question in questionList" :key="question._id" :questionDetail="question"></QuestionList>
+        <QuestionList v-for="question in myQuestion" :key="question._id" :questionDetail="question"></QuestionList>
       </b-row>
     </b-col>
     <b-col></b-col>
@@ -39,7 +39,7 @@
 import QuestionList from '../components/QuestionList'
 import { VueEditor } from "vue2-editor"
 export default {
-  name: 'home',
+  name: 'my-question',
   data(){
     return{
       title: '',
@@ -47,8 +47,16 @@ export default {
     }
   },
   computed:{
-    questionList(){
-      return this.$store.state.questionFiltered
+    myQuestion(){
+      let userQuestion = []
+      let userId = this.$store.state.userId
+      let questions = this.$store.state.questionList
+      for(let obj of questions){
+          if(String(obj.userId._id) === userId){
+              userQuestion.push(obj)
+          }
+      }
+      return userQuestion
     }
   },
   methods: {

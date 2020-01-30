@@ -1,8 +1,9 @@
 <template>
     <div>
         <b-navbar type="dark" variant="dark" class="justify-content-between d-flex">
-            <div>
-                <router-link to="/"><b-navbar-brand>HacktivOverflow</b-navbar-brand></router-link>
+            <div class="d-flex">
+                <router-link to="/" class="brand"><b-navbar-brand><img src="https://i.imgur.com/LjuJYk5.gif" id="logo"> HacktivOverflow</b-navbar-brand></router-link>
+                <router-link to="/my-question" class="ml-3 my-question" v-if="$store.state.isLogin"><b-navbar-nav>My Questions</b-navbar-nav></router-link>
             </div>
             <div>
                 <b-nav-form @submit.prevent="filter">
@@ -192,6 +193,19 @@ export default {
 }
 </script>
 
-<style>
-
+<style scoped>
+#logo{
+    max-height: 30px;
+}
+.brand:hover{
+    filter: brightness(80%)
+}
+.my-question{
+    color: white;
+    text-decoration: none;
+    margin-top: 9px;
+}
+.my-question:hover{
+    filter: brightness(80%);
+}
 </style>

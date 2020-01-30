@@ -85,8 +85,10 @@
             required
           ></b-form-input>
       </b-row>
-      <b-row class="mt-3 mb-5">
+      <b-row class="mt-3">
           <h5>Details:</h5>
+      </b-row>
+      <b-row class="mb-5">
           <VueEditor class="mb-3" v-model="answerDescription"></VueEditor>
       </b-row>
     </b-col>

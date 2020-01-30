@@ -92,15 +92,7 @@ class AnswerController {
             questionId: req.params.questionId
         }).sort({created_at: -1}).populate('userId')
         .then(datas=>{
-            if(!datas[0]){
-                throw {
-                    code: 404,
-                    message: 'Question ID not found'
-                }
-            }
-            else {
-                res.status(200).json(datas)
-            }
+            res.status(200).json(datas)
         })
         .catch(err=>{
             res.status(err.code).json({
