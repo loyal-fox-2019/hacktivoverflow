@@ -1,9 +1,226 @@
 <template>
   <div id="app">
-    <router-view/>
+    <Navbar-Item></Navbar-Item>
+    <router-view />
+    <b-modal id="modal-new-question" title="Add New Question" hide-footer size="xl">
+      <form @submit.prevent="addNewQuestion">
+        <div class="alert alert-danger" role="alert" v-if="errorMessageRegister">
+          <span v-for="(error, i) in errorMessageAddQuestion" :key="i">
+            {{errorMessageAddQuestion}}
+            <br />
+          </span>
+        </div>
+        <div class="form-group">
+          <label for="exampleInputQuestionTitle">Title</label>
+          <input
+            type="text"
+            class="form-control"
+            id="exampleInputQuestionTitle"
+            placeholder="Title"
+            v-model="addQuestionTitle"
+            required
+          />
+        </div>
+        <div class="form-group">
+          <label for="exampleInputQuestionContent">Question</label>
+          <wysiwyg v-model="addQuestionContent" />
+        </div>
+        <div class="form-group">
+          <label for="inputQuestionTags">Tags</label>
+          <b-form-tags v-model="addQuestionTags" class="form-control"></b-form-tags>
+        </div>
+        <button type="submit" class="btn btn-primary">Save</button>
+      </form>
+    </b-modal>
+    <b-modal id="login" title="Login To HacktivOverflow Account" hide-footer>
+      <form @submit.prevent="login" v-if="modalLoginForm">
+        <div class="alert alert-danger" role="alert" v-if="errorMessageLogin">
+          <span>{{errorMessageLogin}}</span>
+        </div>
+        <div class="form-group">
+          <label for="exampleInputEmail1">Email address</label>
+          <input
+            type="email"
+            class="form-control"
+            id="exampleInputEmail1"
+            aria-describedby="emailHelp"
+            placeholder="Enter email"
+            v-model="loginEmail"
+            autofocus
+            required
+          />
+        </div>
+        <div class="form-group">
+          <label for="exampleInputPassword1">Password</label>
+          <input
+            type="password"
+            class="form-control"
+            id="exampleInputPassword1"
+            placeholder="Password"
+            v-model="loginPassword"
+            required
+          />
+        </div>
+        <button type="submit" class="btn btn-primary">Login</button>
+        <div class="text-center">
+          <span class="mt-2">
+            Don't have an account ? please
+            <a href="#" @click.prevent="changeModalLoginPage">register</a>
+          </span>
+        </div>
+      </form>
+
+      <form @submit.prevent="register" v-if="!modalLoginForm">
+        <div class="alert alert-danger" role="alert" v-if="errorMessageRegister">
+          <span v-for="(error, i) in errorMessageRegister" :key="i">
+            {{errorMessageRegister}}
+            <br />
+          </span>
+        </div>
+        <div class="form-group">
+          <label for="exampleInputName">Name</label>
+          <input
+            type="text"
+            class="form-control"
+            id="exampleInputName"
+            aria-describedby="nameHelp"
+            placeholder="Enter your name"
+            v-model="registerName"
+            required
+            autofocus
+          />
+        </div>
+        <div class="form-group">
+          <label for="exampleInputEmail1">Email address</label>
+          <input
+            type="email"
+            class="form-control"
+            id="exampleInputEmail1"
+            aria-describedby="emailHelp"
+            placeholder="Enter email"
+            v-model="registerEmail"
+            required
+          />
+        </div>
+        <div class="form-group">
+          <label for="exampleInputPassword1">Password</label>
+          <input
+            type="password"
+            class="form-control"
+            id="exampleInputPassword1"
+            placeholder="Password"
+            v-model="registerPassword"
+            required
+          />
+        </div>
+        <button type="submit" class="btn btn-primary">Register</button>
+        <div class="text-center">
+          <span class="mt-2">
+            Already have an account ? please
+            <a href="#" @click.prevent="changeModalLoginPage">login</a>
+          </span>
+        </div>
+      </form>
+    </b-modal>
   </div>
 </template>
 
-<style>
+<script>
+import axios from "axios";
 
+import NavbarItem from "./components/NavbarItem";
+
+export default {
+  components: {
+    NavbarItem
+  },
+  data() {
+    return {
+      loginEmail: "",
+      loginPassword: "",
+      errorMessageLogin: null,
+      registerName: "",
+      registerEmail: "",
+      registerPassword: "",
+      errorMessageRegister: null,
+      addQuestionTitle: "",
+      addQuestionContent: "",
+      addQuestionTags: [],
+      errorMessageAddQuestion: null,
+      modalLoginForm: true
+    };
+  },
+  methods: {
+    changeModalLoginPage() {
+      this.modalLoginForm = !this.modalLoginForm;
+    },
+    login() {
+      axios({
+        method: "POST",
+        url: "http://localhost:3000/users/login",
+        data: {
+          email: this.loginEmail,
+          password: this.loginPassword
+        }
+      })
+        .then(({ data }) => {
+          localStorage.setItem("access_token", data.access_token);
+          this.$store.commit("SET_LOGIN_TRUE");
+          this.$bvModal.hide("login");
+        })
+        .catch(error => {
+          this.errorMessageLogin = error.response.data.error.message;
+        });
+    },
+    register() {
+      axios({
+        method: "POST",
+        url: "http://localhost:3000/users/register",
+        data: {
+          name: this.registerName,
+          email: this.registerEmail,
+          password: this.registerPassword
+        }
+      })
+        .then(({ data }) => {
+          localStorage.setItem("access_token", data.user.access_token);
+          this.$store.commit("SET_LOGIN_TRUE");
+          this.$bvModal.hide("login");
+        })
+        .catch(error => {
+          this.errorMessageRegister = error.response.data.error.message;
+        });
+    },
+    addNewQuestion() {
+      // alert(this.addQuestionContent)
+      axios({
+        method: "POST",
+        url: "http://localhost:3000/questions",
+        headers: {
+          Authorization: "token " + localStorage.getItem("access_token")
+        },
+        data: {
+          title: this.addQuestionTitle,
+          question: this.addQuestionContent,
+          tags: this.addQuestionTags
+        }
+      })
+        .then(({ data }) => {
+          this.$store.dispatch('fetch_question')
+          this.$bvModal.hide("modal-new-question");
+        })
+        .catch(error => {
+          this.errorMessageAddQuestion = error.response.data.error.message;
+        });
+    }
+  }
+};
+</script>
+
+<style>
+#app {
+  padding-bottom: 5rem;
+}
+
+@import "~vue-wysiwyg/dist/vueWysiwyg.css";
 </style>

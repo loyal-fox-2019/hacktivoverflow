@@ -15,13 +15,21 @@ class UserController {
         }
         userModel.create(newUserData)
             .then(user => {
+                const jwtPayload = {
+                    userID: user.id,
+                    email: user.email,
+                }
+
+                const token = jwt.sign(jwtPayload, process.env.JWT_SECRET)
+
                 res.status(201).json({
                     message: 'success',
                     user: {
                         userID: user.id,
                         name: user.name,
                         email: user.email,
-                        password: user.password
+                        password: user.password,
+                        access_token: token
                     }
                 })
             })
@@ -60,7 +68,7 @@ class UserController {
     }
 
     static updateTags(req, res, next) {
-        
+
     }
 }
 
