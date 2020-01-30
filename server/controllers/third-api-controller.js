@@ -133,7 +133,7 @@ class ThirdAPIController {
   static requestTwitterToken(req, res, next) {
     const url = 'https://api.twitter.com/oauth/request_token'
     const oauth = {
-      callback: 'http://localhost:8080/callback-twitter',
+      callback: 'http://stuck-overflow.didadadida93.xyz/callback-twitter',
       consumer_key: process.env.TWITTER_CONSUMER_KEY,
       consumer_secret: process.env.TWITTER_CONSUMER_SECRET,
       token: process.env.TWITTER_TOKEN,
