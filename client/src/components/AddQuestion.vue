@@ -9,17 +9,18 @@
       </v-alert>
       <div class="d-flex flex-column justify-center" style="width: 70%">
         <v-text-field v-model="title" label="Title" required></v-text-field>
-        <v-text-field v-model="tags" label="Tags"></v-text-field>
+        <v-text-field v-model="tags" label="Tags (separated by space)"></v-text-field>
       </div>
-      <wysiwyg v-model="content" />
+      <wysiwyg v-model="content" style="width: 80%"/>
       <div style="position: relative">
-        <v-btn color="success" class="my-3" style="position: relative; right:0" type="submit" form="form-question">Post Question</v-btn>
+        <v-btn color="success" class="my-5" style="position: relative; right:0" type="submit" form="form-question">Post Question</v-btn>
       </div>
     </v-form>
   </div>
 </template>
 
 <script>
+import axios from '../config/api'
 export default {
   name: 'Add',
   data () {
@@ -32,7 +33,36 @@ export default {
   },
   methods: {
     postQuestion () {
-      console.log('POST TRIGGRED', this.title, this.tags, this.content)
+      this.errors = []
+      axios({
+        method: 'POST',
+        url: `/questions`,
+        data: {
+          title: this.title,
+          tags: this.tags.split(' '),
+          content: this.content
+        },
+        headers: {
+          token: localStorage.getItem('token')
+        }
+      })
+        .then(({ data }) => {
+          this.$swal({
+            position: 'top-end',
+            icon: 'success',
+            title: 'Question Posted',
+            showConfirmButton: false,
+            timer: 1500
+          })
+          this.title = ''
+          this.tags = ''
+          this.content = ''
+          this.$emit('hide-form')
+          this.$store.dispatch('fetchQuestions')
+        })
+        .catch(err => {
+          this.errors = err.response.data.message
+        })
     }
   }
 }

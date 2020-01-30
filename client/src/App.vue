@@ -56,6 +56,10 @@ export default {
 
   data: () => ({
     //
-  })
+  }),
+  created () {
+    this.$store.dispatch('fetchQuestions')
+    this.$store.dispatch('checkLogin')
+  }
 }
 </script>

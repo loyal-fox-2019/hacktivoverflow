@@ -58,6 +58,7 @@
                 </v-form>
               </v-card-text>
               <v-card-actions>
+                <v-btn color="green" @click="toHome">Home</v-btn>
                 <v-spacer />
                 <v-btn color="primary" type="submit" form="login-form">Login</v-btn>
               </v-card-actions>
@@ -70,7 +71,7 @@
 </template>
 
 <script>
-// import axios from '../config/api'
+import axios from '../config/api'
 export default {
   props: {
     source: String
@@ -83,30 +84,41 @@ export default {
     }
   },
   methods: {
+    toHome () {
+      this.$router.push('/')
+    },
     toRegister () {
       this.$router.push('register')
     },
     login () {
-      this.$router.push('/')
-      // axios({
-      //   method: 'post',
-      //   // url: '/auth/login',
-      //   data: {
-      //     email: this.email,
-      //     password: this.password
-      //   }
-      // })
-      //   .then(({ data }) => {
-      //     // localStorage.setItem('token', data.token)
-      //     // this.email = ''
-      //     // this.password = ''
-      //     // this.$store.commit('SET_LOGIN')
-      //     // this.$store.dispatch('fetchPasswords')
-      //     // this.$router.push('/')
-      //   })
-      //   .catch(err => {
-      //     this.errors = err.response.data.errors
-      //   })
+      this.errors = []
+      axios({
+        method: 'POST',
+        url: `/login`,
+        data: {
+          email: this.email,
+          password: this.password
+        }
+      })
+        .then(({ data }) => {
+          localStorage.setItem('token', data.token)
+          localStorage.setItem('username', data.username)
+          this.$swal({
+            position: 'top-end',
+            icon: 'success',
+            title: 'Login success',
+            showConfirmButton: false,
+            timer: 1500
+          })
+          this.password = ''
+          this.email = ''
+          this.$store.commit('SET_LOGIN')
+          this.$store.dispatch('fetchUser')
+          this.$router.push('/')
+        })
+        .catch(err => {
+          this.errors.push(err.response.data.message)
+        })
     }
   }
 }

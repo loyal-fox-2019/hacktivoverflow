@@ -24,6 +24,10 @@ const answerSchema = new Schema({
   }]
 }, { timestamps: true })
 
+answerSchema.virtual('votes').get(function() {
+  return this.upvotes.length - this.downvotes.length
+})
+
 const Answer = mongoose.model('Answer', answerSchema)
 
 module.exports = Answer

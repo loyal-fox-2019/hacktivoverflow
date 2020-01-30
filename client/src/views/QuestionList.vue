@@ -1,8 +1,6 @@
 <template>
-  <v-container class="fill-height" fluid>
-    <question-item/>
-    <question-item/>
-    <question-item/>
+  <v-container>
+    <question-item v-for="question in $store.state.questions" :key="question._id" :question="question"/>
   </v-container>
 </template>
 

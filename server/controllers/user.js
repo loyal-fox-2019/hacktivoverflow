@@ -57,6 +57,15 @@ class UserController {
       })
       .catch(next)
   }
+  static username (req, res, next) {
+    // let username = req.body.username
+    User.findById(req.user.id)
+      .select('-password')
+      .then(user => {
+        res.status(200).json(user)
+      })
+      .catch(next)
+  }
   static login (req, res, next) {
     const { email, password } = req.body
     User.findOne({email})
@@ -73,7 +82,6 @@ class UserController {
   }
   static register (req, res, next) {
     const { username, email, password, profile_pic } = req.body
-    console.log("HASIL GCS",req.body.profile_pic);
     User.create({
       username,
       email,

@@ -2,6 +2,14 @@ const Question = require('../models/question'),
   Answer = require('../models/answer')
 
 class QuestionController {
+  static addView(req, res, next) {
+    let id = req.params.id
+    Question.updateOne({_id: id}, { $addToSet: { views: req.user.id }})
+      .then(updated => {
+        res.send(updated)
+      })
+      .catch(next)
+  }
   static all(req, res, next) {
     Question.find()
       .populate({
@@ -19,7 +27,6 @@ class QuestionController {
       .populate('author')
       .populate({
         path: 'answers',
-        select: '-_id',
         populate: {
           path: 'author',
           select: '-_id -password -tags'

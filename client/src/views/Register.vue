@@ -34,7 +34,7 @@
                     name="username"
                     prepend-icon="mdi-account"
                     type="text"
-                    v-model="email"
+                    v-model="username"
                     required
                   />
                   <v-text-field
@@ -66,7 +66,7 @@
                     label="Retype Password"
                     name="retype"
                     prepend-icon="mdi-lock"
-                    type="retype"
+                    type="password"
                     v-model="retype"
                     required
                   />
@@ -81,6 +81,7 @@
                 </v-form>
               </v-card-text>
               <v-card-actions>
+                <v-btn color="green" @click="toHome">Home</v-btn>
                 <v-spacer />
                 <v-btn color="primary" type="submit" form="register-form">Register</v-btn>
               </v-card-actions>
@@ -93,13 +94,14 @@
 </template>
 
 <script>
-// import axios from '../config/api'
+import axios from '../config/api'
 export default {
   props: {
     source: String
   },
   data () {
     return {
+      username: '',
       email: '',
       password: '',
       retype: '',
@@ -109,27 +111,55 @@ export default {
     }
   },
   methods: {
+    toHome () {
+      this.$router.push('/')
+    },
     toLogin () {
       this.$router.push('login')
     },
     register () {
-      this.$router.push('/')
-      // axios({
-      //   method: 'post',
-      //   // url: '/auth/register',
-      //   data: {
-      //     email: this.email,
-      //     password: this.password
-      //   }
-      // })
-      //   .then(({ data }) => {
-      //     // this.email = ''
-      //     // this.password = ''
-      //     // this.$router.push('login')
-      //   })
-      //   .catch(err => {
-      //     this.errors = err.response.data.errors
-      //   })
+      this.errors = []
+      if (!this.checkbox) {
+        this.errors.push('You have to agree to our terms and services')
+      }
+      if (this.retype !== this.password) {
+        this.errors.push('Retype your correct password')
+      }
+      if (this.errors.length !== 0) {
+        return
+      }
+      const formData = new FormData()
+      formData.set('username', this.username)
+      formData.set('password', this.password)
+      formData.set('email', this.email)
+      formData.set('profile_pic', this.profile_pic)
+      axios({
+        method: 'POST',
+        url: `/register`,
+        data: formData
+      })
+        .then(({ data }) => {
+          localStorage.setItem('token', data.token)
+          localStorage.setItem('username', data.username)
+          this.$swal({
+            position: 'top-end',
+            icon: 'success',
+            title: 'Register success',
+            showConfirmButton: false,
+            timer: 1500
+          })
+          this.username = ''
+          this.password = ''
+          this.profile_pic = null
+          this.retype = ''
+          this.email = ''
+          this.$store.commit('SET_LOGIN')
+          this.$store.dispatch('fetchUser')
+          this.$router.push('/')
+        })
+        .catch(err => {
+          this.errors = err.response.data.message
+        })
     }
   }
 }

@@ -4,6 +4,7 @@ const router = require('express').Router(),
 
 router.get('/', UserController.all)
 router.use(authenticate)
+router.get('/username', UserController.username)
 router.patch('/addTags', UserController.addTags)
 router.patch('/removeTag', UserController.removeTag)
 
