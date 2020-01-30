@@ -52,7 +52,9 @@ export default {
       this.$router.push('/landing').catch(() => {})
     }
     this.$store.dispatch('fetchQuestions')
-  }
+    this.$store.dispatch('fetchWatchedTags')
+  },
+  
 }
 </script>
 
@@ -61,7 +63,7 @@ export default {
 
 #app {
   font-family: 'Noto Sans', sans-serif;
-  font-family: 'Fjalla One', sans-serif;
+  /* font-family: 'Fjalla One', sans-serif; */
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;

@@ -1,25 +1,33 @@
 <template>
-  <div>
-    {{ question.title }}
-    <p v-html="question.content"></p>
-    <div class="flex items-center justify-between">
-      <button @click="editQuestion" class="bg-yellow-400 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="button">
-        Edit
-      </button>
-      <button @click="deleteQuestion" class="bg-yellow-400 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="button">
-        Delete
-      </button>
-      <button @click="voteQuestion('up')" class="bg-yellow-400 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="button">
-        Upvote
-      </button>
-      <button @click="voteQuestion('down')" class="bg-yellow-400 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="button">
-        Downvote
-      </button>
+  <div class="flex flex-col w-11/12 mx-auto mt-6 text-left">
+
+  <div class="flex mb-8 border p-6 rounded-lg border-gray-400 shadow-lg">
+    <div class="w-16 h-20 mr-4">
+      <svg @click="voteQuestion('up', question._id)" class="cursor-pointer" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M0 16.67l2.829 2.83 9.175-9.339 9.167 9.339 2.829-2.83-11.996-12.17z"/></svg>
+      <p class="ml-1">{{ question.upvotes.length - question.downvotes.length }}</p>
+      <svg @click="voteQuestion('down', question._id)" class="cursor-pointer" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M0 7.33l2.829-2.83 9.175 9.339 9.167-9.339 2.829 2.83-11.996 12.17z"/></svg>
     </div>
-    <div class="flex flex-wrap -mx-3 mb-6">
-      <div class="w-full px-3">
-        <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-password">
-          Answer
+    <div class="flex-grow">
+      <h2 class="text-xl mb-2">{{ question.title }}</h2>
+      <h3 v-html="question.content" class="text-base mb-2 container"></h3>
+      <h4 class="text-sm italic">{{ question.poster.name }}</h4>
+    </div>
+    <div class="text-yellow-500 flex-shrink-0 my-auto">
+      <div class="flex items-center justify-between">
+        <button @click="editQuestion(question._id)" class="mr-2 bg-yellow-400 text-gray-800 hover:bg-gray-800 hover:text-yellow-400 font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="button">
+          Edit
+        </button>
+        <button @click="deleteQuestion(question._id)" class="bg-yellow-400 text-gray-800 hover:bg-gray-800 hover:text-yellow-400 font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="button">
+          Delete
+        </button>
+      </div>
+    </div>
+  </div>
+
+    <div class="flex mb-8 border p-6 rounded-lg border-gray-400 shadow-lg bg-gray-200">
+      <div class="w-full px-3 m-4">
+        <label class="mb-4 text-gray-700 text-lg font-bold mb-4">
+          Your Answer
         </label>
         <quill-editor
           ref="myTextEditor"
@@ -31,7 +39,7 @@
     ></quill-editor>
       </div>
       <div class="flex items-center justify-between">
-        <button @click.prevent="submitAnswer" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="button">
+        <button @click.prevent="submitAnswer" class="hover:bg-yellow-400 hover:text-gray-800 bg-gray-800 text-yellow-400 font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="button">
           Submit
         </button>
       </div>
@@ -39,22 +47,28 @@
     
     <div v-for="answer in question.answers" :key="answer._id">
       <div v-if="answer._id != hide">
-        <p>{{ answer.poster.name }}: </p>
-        <p v-html="answer.content"></p>
-        <div class="flex items-center justify-between">
-          <button @click="editAnswer(answer._id)" class="bg-yellow-400 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="button">
-            Edit
-          </button>
-          <button @click="deleteAnswer(answer._id)" class="bg-yellow-400 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="button">
-            Delete
-          </button>
-          <button @click="voteAnswer('up', answer._id)" class="bg-yellow-400 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="button">
-            Upvote
-          </button>
-          <button @click="voteAnswer('down', answer._id)" class="bg-yellow-400 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="button">
-            Downvote
-          </button>
+        <div class="flex mb-8 border p-6 rounded-lg border-gray-400 shadow-lg">
+          <div class="w-16 h-20 mr-4">
+            <svg @click="voteAnswer('up', answer._id)" class="cursor-pointer" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M0 16.67l2.829 2.83 9.175-9.339 9.167 9.339 2.829-2.83-11.996-12.17z"/></svg>
+            <p class="ml-1">{{ answer.upvotes.length - answer.downvotes.length }}</p>
+            <svg @click="voteAnswer('down', answer._id)" class="cursor-pointer" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M0 7.33l2.829-2.83 9.175 9.339 9.167-9.339 2.829 2.83-11.996 12.17z"/></svg>
+          </div>
+          <div class="flex-grow">
+            <h3 v-html="answer.content" class="text-lg mb-2 container"></h3>
+            <h4 class="text-sm italic">{{ answer.poster.name }}</h4>
+          </div>
+          <div class="text-yellow-500 flex-shrink-0 my-auto">
+            <div class="flex items-center justify-between">
+              <button @click="editAnswer(answer._id)" class="mr-2 bg-yellow-400 text-gray-800 hover:bg-gray-800 hover:text-yellow-400 font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="button">
+                Edit
+              </button>
+              <button @click="deleteAnswer(answer._id)" class="bg-yellow-400 text-gray-800 hover:bg-gray-800 hover:text-yellow-400 font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="button">
+                Delete
+              </button>
+            </div>
+          </div>
         </div>
+
       </div>
     </div>
 

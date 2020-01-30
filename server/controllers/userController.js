@@ -94,7 +94,7 @@ module.exports = class UserController {
         if (!data) {
           next(userErr)
         }
-        res.status(200).json(newUser)
+        res.status(200).json(data)
       })
       .catch(next)
   }

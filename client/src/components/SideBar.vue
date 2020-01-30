@@ -30,12 +30,6 @@
                     Statistics
                   </router-link>
                 </li>
-                <li>
-                  <router-link to="/inbox" class="flex items-center justify-between text-left block p-2 pl-4 hover:bg-yellow-400 hover:text-white">
-                    <span>Inbox</span>
-                    <span class="rounded-full px-2 py-0 text-xs font-bold bg-yellow-400">1</span>
-                  </router-link>
-                </li>
               </ul>
             </li>
           </ul>          
@@ -58,6 +52,7 @@ export default {
   methods: {
     fetchQuestions() {
       this.$store.dispatch('fetchQuestions')
+      this.$store.commit('SET_TAG', '')
     }
   }
 }

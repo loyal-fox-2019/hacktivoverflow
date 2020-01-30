@@ -46,12 +46,6 @@ const routes = [
         meta: { requiresAuth: true },
       },
       {
-        path: '/inbox',
-        name: 'inbox',
-        component: () => import(/* webpackChunkName: "about" */ '../views/Inbox.vue'),
-        meta: { requiresAuth: true },
-      },
-      {
         path: '/post',
         name: 'post',
         component: () => import(/* webpackChunkName: "about" */ '../views/Post.vue'),

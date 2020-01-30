@@ -1,61 +1,35 @@
 <template>
-  <article class="px-4">
-    <div style="height:200vh" class="flex flex-col justify-between text-3xl">
-      <div v-if="tag">
-        ini dari {{ tag }}
+    <div class="flex flex-col w-11/12 mx-auto mt-6 justify-between">
+      <div v-if="tag" class="text-left mb-8 border p-6 rounded-lg border-gray-400 shadow-lg">
+        <h3 class="text-lg mb-0">Questions tagged [{{ tag }}]</h3><br>
+        <p class="text-sm">Description here</p>
       </div>
-      <div v-for="question in questions"
+      <QuestionCard
+        v-for="question in questions"
         :key="question._id"
-        class="flex-1 flex justify-center items-start"
-      >
-        <router-link :to="{ name: 'question', params: {id: question._id } }"><h3>{{ question.title }}</h3></router-link>
-        <p v-html="question.content.substring(0,100)"></p>
-
-        <div class="flex items-center justify-between">
-          <button @click="vote('up', question._id)" class="bg-yellow-400 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="button">
-            Upvote
-          </button>
-          <button @click="vote('down', question._id)" class="bg-yellow-400 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="button">
-            Downvote
-          </button>
-        </div>
-
-      </div>
-      
+        :question="question"
+      />
     </div>
-  </article>
 </template>
 
 <script>
+import QuestionCard from '../components/QuestionCard'
+
 export default {
   name: 'Questions',
   data() {
     return {
-      tag: ''
     }
   },
   computed: {
     questions() {
       return this.$store.state.questions
+    },
+    tag() {
+      return this.$store.state.tag
     }
   },
   methods: {
-    vote(type, id) {
-      this.$axios({
-        method: 'PATCH',
-        url: `questions/${id}?vote=${type}`
-      })
-        .then(() => {
-          this.fetchQuestions()
-          this.$store.commit('SEND_SUCCESS', 'Success!')
-        })
-        .catch(err => {
-          this.$store.commit('SEND_ERROR', err.response.data.error)
-        })
-    },
-    fetchQuestions() {
-      this.$store.dispatch('fetchQuestions')
-    },
     filterQuestionByTag() {
       this.$store.dispatch('filterQuestionByTag', this.$route.params.name)
     }
@@ -63,7 +37,11 @@ export default {
   created() {
     if (this.$route.params.name) {
       this.filterQuestionByTag()
+      this.$store.commit('SET_TAG', this.$route.params.name)
     }
+  },
+  components: {
+    QuestionCard
   }
 }
 </script>

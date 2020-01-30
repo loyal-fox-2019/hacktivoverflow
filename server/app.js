@@ -9,6 +9,7 @@ const morgan = require('morgan')
 const cors = require('cors')
 const errorHandler = require('./middlewares/errorHandler')
 const router = require('./routes')
+const sendEmails = require('./cron')
 
 app.use(express.json())
 app.use(express.urlencoded({ extended: false }))
@@ -28,5 +29,6 @@ mongoose.connect(process.env.MONGO_URI, {
 app.use('/', router)
 app.use(errorHandler)
 
+sendEmails()
 
 module.exports = app

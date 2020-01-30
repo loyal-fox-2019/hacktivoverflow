@@ -1,9 +1,11 @@
 'use strict'
 
-const Answer = require('../models/answer')
+const Answer = require('../models/answer'),
+      Question = require('../models/question')
 
 module.exports = class AnswerController {
   static create(req, res, next) {
+    let report;
     const { content, QuestionId } = req.body
     Answer.create({
       content,
@@ -11,7 +13,15 @@ module.exports = class AnswerController {
       poster: req.decoded.id
     })
       .then(answer => {
-        res.status(201).json(answer);
+        report = answer
+        return Question.findByIdAndUpdate(
+          QuestionId,
+          { $inc: { answers: 1} },
+          { new: true, runValidators: true, omitUndefined: true }
+        )
+      })
+      .then(question => {
+        res.status(201).json(report);
       })
       .catch(next);
   }
@@ -94,8 +104,19 @@ module.exports = class AnswerController {
 
   static destroy(req, res, next) {
     Answer.findByIdAndDelete(req.params.id)
+      .then(answer => {
+        if (answer) {
+          return Question.findByIdAndUpdate(
+            answer.QuestionId,
+            { $inc: { answers: -1} },
+            { new: true, runValidators: true, omitUndefined: true }
+          )
+        } else {
+          next({ status: 404, resource: 'Answer' })
+        }
+      })
       .then(() => {
-        res.status(204).json({message: "Answer successfully deleted"});
+        res.status(200).json({message: "Answer successfully deleted"});
       })
       .catch(next);
   }

@@ -22,7 +22,7 @@
 
         <div class="inline-flex ml-12">
           <router-link to="/post" href="#" class="mx-1 no-underline inline-block text-sm px-4 py-2 leading-none border border-gray-800 rounded text-gray-800 border-white hover:border-transparent hover:text-teal hover:bg-white mt-4 sm:mt-0">
-            Post Question
+            Post a question
           </router-link>
           <a @click="logout" href="#" class="mx-1 no-underline inline-block text-sm px-4 py-2 leading-none border border-gray-800 rounded text-gray-800 border-white hover:border-transparent hover:text-teal hover:bg-white mt-4 sm:mt-0">
             Sign Out
@@ -55,6 +55,7 @@ export default {
     },
     fetchQuestions() {
       this.$store.dispatch('fetchQuestions')
+      this.$store.commit('SET_TAG', '')
     }
   }
 }

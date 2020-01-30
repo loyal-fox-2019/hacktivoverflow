@@ -13,8 +13,10 @@ export default new Vuex.Store({
     questions: [],
     question: {},
     tags: [],
+    tag: '',
     errorCount: 0,
-    successCount: 0
+    successCount: 0,
+    watchedTags: []
   },
   mutations: {
     SEND_ERROR(state, payload) {
@@ -33,6 +35,12 @@ export default new Vuex.Store({
     },
     FETCH_TAGS(state, payload) {
       state.tags = payload
+    },
+    SET_TAG(state, payload) {
+      state.tag = payload
+    },
+    FETCH_WATCHED_TAGS(state, payload) {
+      state.watchedTags = payload
     }
   },
   actions: {
@@ -140,13 +148,22 @@ export default new Vuex.Store({
       axios({
         method: 'GET',
         url: `questions/filter/tag/${payload}`,
-        headers: {
-          access_token: localStorage.getItem('access_token')
-        }
       })
         .then(({ data }) => {
           context.commit('FETCH_QUESTIONS', data)
           router.push(`/`).catch(() => {})
+        })
+        .catch(err => {
+          context.commit('SEND_ERROR', err.response.data.error)
+        })
+    },
+    fetchWatchedTags(context) {
+      axios({
+        method: 'GET',
+        url: `users/profile`,
+      })
+        .then(({ data }) => {
+          context.commit('FETCH_WATCHED_TAGS', data.tags)
         })
         .catch(err => {
           context.commit('SEND_ERROR', err.response.data.error)

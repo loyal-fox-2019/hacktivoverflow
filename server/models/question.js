@@ -18,6 +18,10 @@ const QuestionSchema = new mongoose.Schema(
     poster: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User"
+    },
+    answers: {
+      type: Number,
+      default: 0
     }
   },
   {

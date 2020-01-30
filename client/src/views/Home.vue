@@ -3,7 +3,9 @@
   <NavBar />
   <main class="chrome-context -row -fixed z-0">
     <SideBar />
-    <router-view />
+		<div class="px-4">
+	    <router-view />
+		</div>
   </main>
 </div>
 </template>
@@ -34,7 +36,7 @@ summary.hide-disclosure::-webkit-details-marker {
 .hover\:cursor-pointer:hover {
 	cursor: pointer;
 }
-.open\:text-white[open] {
+/* .open\:text-white[open] {
 	color: white;
 }
 .open\:bg-purple-300[open] {
@@ -46,7 +48,7 @@ summary.hide-disclosure::-webkit-details-marker {
 }
 .active\:text-white {
 	color: #fff;
-}
+} */
 .chrome-context {
 	display: flex;
 	margin: 0;

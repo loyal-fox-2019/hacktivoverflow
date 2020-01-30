@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <form class="w-full max-w-lg">
+  <div class="flex flex-col w-11/12 mx-auto mt-6">
+    <form>
 
     <div class="flex flex-wrap -mx-3 mb-6">
       <div class="w-full px-3">
@@ -37,7 +37,7 @@
     </div>
     
     <div class="flex items-center justify-between">
-      <button @click.prevent="submitQuestion" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="button">
+      <button @click.prevent="submitQuestion" class="hover:bg-yellow-400 hover:text-gray-800 bg-gray-800 text-yellow-400 font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="button">
         Submit
       </button>
     </div>
