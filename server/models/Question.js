@@ -18,9 +18,6 @@ const questionSchema = new Schema({
     type: Schema.Types.ObjectId,
     ref: "User",
   }],
-  permalink: {
-    type: String,
-  },
   tags: [String],
   answers: [{
     type: Schema.Types.ObjectId,
