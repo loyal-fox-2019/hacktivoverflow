@@ -7,9 +7,9 @@ const cors = require('cors')
 const CronJob = require('cron').CronJob;
 const mailer = require('./helpers/mailer')
 
-mongoose.connect('mongodb://localhost:27017/hacktiv-overflow', {useNewUrlParser:true, useUnifiedTopology:true})
+mongoose.connect('mongodb+srv://hacktivOverflow:GxJRxVT8PD6MKGir@my-portfolio-x3g0e.gcp.mongodb.net/HacktivOverflow?retryWrites=true&w=majority', {useNewUrlParser:true, useUnifiedTopology:true})
 .then(success => {
-    console.log('connected to hacktiv-overflow on mongoDB')
+    console.log('connected to hacktiv-overflow on Atlas')
 })
 .catch(err => {
     console.log(err)
