@@ -12,7 +12,7 @@ import 'bootstrap-vue/dist/bootstrap-vue.css'
 
 
 const gauthOption = {
-  clientId: '578275232692-tcmpiilorr4q5ur1amvhpriqnghm897g.apps.googleusercontent.com'
+  clientId: '578275232692-jd4dh6dp11322qpstf2rv3q0nmimpn0v.apps.googleusercontent.com'
 }
 
 Vue.use(GAuth, gauthOption)

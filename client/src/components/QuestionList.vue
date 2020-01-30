@@ -72,7 +72,7 @@ export default {
     mounted(){
         axios({
             method: 'get',
-            url: `http://localhost:3000/answer/${this.questionDetail._id}`
+            url: `http://54.169.105.61:3000/answer/${this.questionDetail._id}`
         })
         .then(({data})=>{
             this.answers = data

@@ -53,7 +53,7 @@ export default new Vuex.Store({
     deleteQuestion(context, payload){
       axios({
         method: 'delete',
-        url: `http://localhost:3000/question/${payload}`,
+        url: `http://54.169.105.61:3000/question/${payload}`,
         headers: {
           token: localStorage.getItem('token')
         }
@@ -77,7 +77,7 @@ export default new Vuex.Store({
       let {title, description, questionId} = payload
       axios({
         method: 'post',
-        url: 'http://localhost:3000/answer',
+        url: 'http://54.169.105.61:3000/answer',
         headers: {
           token: localStorage.getItem('token')
         },
@@ -110,7 +110,7 @@ export default new Vuex.Store({
     fetchAnswers(context, payload){
       axios({
         method: 'get',
-        url: `http://localhost:3000/answer/${payload}`
+        url: `http://54.169.105.61:3000/answer/${payload}`
       })
       .then(({data})=>{
         context.commit('SET_SELECTED_ANSWERS', data)
@@ -119,7 +119,7 @@ export default new Vuex.Store({
     viewDetail(context, payload){
       axios({
         method: 'get',
-        url: `http://localhost:3000/question/${payload}`
+        url: `http://54.169.105.61:3000/question/${payload}`
       })
       .then(({data})=>{
         context.commit('SET_SELECTED_QUESTION', data)
@@ -136,7 +136,7 @@ export default new Vuex.Store({
       let {title, description} = payload
       axios({
         method: 'post',
-        url: "http://localhost:3000/question",
+        url: "http://54.169.105.61:3000/question",
         headers: {
           token: localStorage.getItem('token')
         },
@@ -177,7 +177,7 @@ export default new Vuex.Store({
     fetchQuestions(context){
       axios({
         method: 'get',
-        url: "http://localhost:3000/question"
+        url: "http://54.169.105.61:3000/question"
       })
       .then(({data})=>{
         context.commit('SET_QUESTION_LIST', data)
@@ -188,7 +188,7 @@ export default new Vuex.Store({
       context.commit("SET_ISLOADING_TRUE")
       axios({
         method: 'post',
-        url: "http://localhost:3000/user/register",
+        url: "http://54.169.105.61:3000/user/register",
         data: {
           name: registerData.name,
           email: registerData.email,
@@ -227,7 +227,7 @@ export default new Vuex.Store({
       context.commit("SET_ISLOADING_TRUE")
       axios({
         method: 'post',
-        url: 'http://localhost:3000/user/login',
+        url: 'http://54.169.105.61:3000/user/login',
         data: {
           email: loginData.email,
           password: loginData.password

@@ -105,7 +105,7 @@ export default {
         vote(value){
             axios({
                 method: 'patch',
-                url: `http://localhost:3000/answer/editVote/${this.answerData._id}`,
+                url: `http://54.169.105.61:3000/answer/editVote/${this.answerData._id}`,
                 headers: {
                     token: localStorage.getItem('token')
                 },
@@ -133,7 +133,7 @@ export default {
         editAnswer(){
             axios({
                 method: 'patch',
-                url: `http://localhost:3000/answer/editAnswer/${this.answerData._id}`,
+                url: `http://54.169.105.61:3000/answer/editAnswer/${this.answerData._id}`,
                 headers: {
                 token: localStorage.getItem('token')
                 },

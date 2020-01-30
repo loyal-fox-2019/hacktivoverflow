@@ -152,7 +152,7 @@ export default {
         vote(value){
             axios({
                 method: 'patch',
-                url: `http://localhost:3000/question/editVote/${this.$route.params.questionId}`,
+                url: `http://54.169.105.61:3000/question/editVote/${this.$route.params.questionId}`,
                 headers: {
                     token: localStorage.getItem('token')
                 },
@@ -174,7 +174,7 @@ export default {
         editPost(){
             axios({
                 method: 'patch',
-                url: `http://localhost:3000/question/editPost/${this.$route.params.questionId}`,
+                url: `http://54.169.105.61:3000/question/editPost/${this.$route.params.questionId}`,
                 headers: {
                 token: localStorage.getItem('token')
                 },

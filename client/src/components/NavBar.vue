@@ -105,7 +105,7 @@ export default {
             loginPassword: '',
             search: '',
             googleSignInParams: {
-                client_id: '578275232692-tcmpiilorr4q5ur1amvhpriqnghm897g.apps.googleusercontent.com'
+                client_id: '578275232692-jd4dh6dp11322qpstf2rv3q0nmimpn0v.apps.googleusercontent.com'
             }
         }
     },
@@ -154,7 +154,7 @@ export default {
             let id_token = googleUser.getAuthResponse().id_token
             axios({
                 method: 'post',
-                url: `http://localhost:3000/user/glogin/${id_token}`,
+                url: `http://54.169.105.61:3000/user/glogin/${id_token}`,
                 data: {}
             })
             .then(({data})=>{
