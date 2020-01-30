@@ -15,7 +15,7 @@ const task = new CronJob('1 1 * * 1/7', function() {
 task.start();
 
 
-mongoose.connect('mongodb://localhost:27017/hacktiv-overflow', 
+mongoose.connect(process.env.DATABASE, 
 {useCreateIndex:true, useUnifiedTopology:true, useNewUrlParser: true}, function(){
     console.log('connect to Database')
 })
