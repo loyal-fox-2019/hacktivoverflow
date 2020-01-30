@@ -1,6 +1,6 @@
 const jwt = require('../helpers/jwt')
 const User = require('../models/user')
-const Content = require('../models/Content')
+const Content = require('../models/content')
 const mongoose = require('mongoose')
 module.exports = {
   authentication: function(req, res, next) {

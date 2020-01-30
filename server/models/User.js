@@ -19,5 +19,5 @@ const userSchema = new mongoose.Schema({
     required: [true, 'image is required']
   }
 })
-
-module.exports = mongoose.model('User', userSchema)
+const user = mongoose.model('User', userSchema)
+module.exports = user

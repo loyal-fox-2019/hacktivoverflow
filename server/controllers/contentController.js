@@ -1,4 +1,4 @@
-const Content = require('../models/Content')
+const Content = require('../models/content')
 const mongoose = require('mongoose')
 module.exports = class {
   static addContent(req, res, next) {
@@ -36,6 +36,20 @@ module.exports = class {
 
   static findbyId(req, res, next) {
     Content.findById(req.params.id)
+      .then(result => {
+        res.status(200).json(result)
+      })
+      .catch(err => {
+        next(err)
+      })
+  }
+
+  static updateContent(req, res, next) {
+    Content.findByIdAndUpdate(req.params.id, {
+      judul: req.body.judul,
+      keterangan: req.body.keterangan,
+      tags: req.body.tags
+    })
       .then(result => {
         res.status(200).json(result)
       })

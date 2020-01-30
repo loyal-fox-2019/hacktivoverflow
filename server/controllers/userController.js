@@ -38,18 +38,14 @@ module.exports = class {
       })
   }
 
-  static getUser(req, res, next) {
-    try {
-      let user = {
-        _id: req.body.user._id,
-        name: req.body.user.name,
-        email: req.body.user.email,
-        imageUrl: req.body.user.imageUrl
-      }
-      res.status(200).json(user)
-    } catch (err) {
-      next(err)
-    }
+  static getUserLogin(req, res, next) {
+    User.findById(req.body.user._id)
+      .then(result => {
+        res, status(200).json(result)
+      })
+      .catch(err => {
+        next(err)
+      })
   }
 
   static logout(req, res, next) {

@@ -14,6 +14,12 @@ router.delete(
   auth.authorization,
   Content.deleteOne
 )
+router.patch(
+  '/:id',
+  auth.authentication,
+  auth.authorization,
+  Content.updateContent
+)
 router.post('/', auth.authentication, Content.addContent)
 router.post('/like/:id', auth.authentication, Content.likeQuestion)
 router.post('/likeAnswer/:commentId', auth.authentication, Content.likeAnswer)
