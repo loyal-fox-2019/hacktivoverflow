@@ -8,8 +8,8 @@ const errorHandler = require('./middlewares/errorHandler')
 const mongoose = require('mongoose')
 const app = express()
 
-// const cronJob = require('./helpers/cron')
-// cronJob()
+const cronJob = require('./helpers/cron')
+cronJob()
 
 mongoose
   .connect(process.env.DB_URI, {
