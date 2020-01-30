@@ -8,7 +8,10 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   state: {
     isLogin: false,
-    listQuestion: []
+    listQuestion: [],
+    questionDetail: {},
+    answerById: [],
+    allAnswer: []
   },
   mutations: {
     CHANGE_STATE_LOGIN(state, payload) {
@@ -16,6 +19,15 @@ export default new Vuex.Store({
     },
     FETCH_LIST_QUESTION(state, payload) {
       state.listQuestion = payload
+    },
+    GET_QUESTION_DETAIL(state, payload) {
+      state.questionDetail = payload
+    },
+    GET_ANSWER_BYQUESTION(state, paylod) {
+      state.answerById = paylod
+    },
+    GET_ALL_ANSWER(state, payload) {
+      state.allAnswer = payload
     }
   },
   actions: {
@@ -97,6 +109,78 @@ export default new Vuex.Store({
           Swal.fire({
             icon: 'error',
             text: response.data.message
+          })
+        })
+    },
+    question_detail({ commit }, payload) {
+      axios
+        .get('http://localhost:3000/questions/' + payload)
+        .then(({ data }) => {
+          commit('GET_QUESTION_DETAIL', data)
+        })
+        .catch(({ response }) => {
+          Swal.fire({
+            icon: 'error',
+            title: 'Something Wrong',
+            text: response.data.message
+          })
+        })
+    },
+    fetch_answer({ commit }, payload) {
+      axios
+        .get('http://localhost:3000/answers/' + payload)
+        .then(({ data }) => {
+          commit('GET_ANSWER_BYQUESTION', data)
+        })
+        .catch(({ response }) => {
+          Swal.fire({
+            icon: 'error',
+            title: 'Something Wrong',
+            text: response.data.message
+          })
+        })
+    },
+    fetch_allanswer({ commit }, payload) {
+      axios
+        .get('http://localhost:3000/answers/')
+        .then(({ data }) => {
+          commit('GET_ALL_ANSWER', data)
+        })
+        .catch(({ response }) => {
+          Swal.fire({
+            icon: 'error',
+            title: 'Something Wrong',
+            text: response.data.message
+          })
+        })
+    },
+    post_answer({ commit }, payload) {
+      axios
+        .post(
+          'http://localhost:3000/answers/',
+          {
+            description: payload.description,
+            questionId: payload.questionId
+          },
+          {
+            headers: {
+              token: localStorage.getItem('token')
+            }
+          }
+        )
+        .then(() => {
+          Swal.fire({
+            icon: 'success',
+            title: 'Answer Success',
+            text: 'Thankyou for helping by Answer the Question'
+          })
+          this.dispatch('fetch_answer', payload.questionId)
+        })
+        .catch(({ response }) => {
+          Swal.fire({
+            icon: 'error',
+            text: response.data.message,
+            title: 'Something Wrong'
           })
         })
     }

@@ -2,9 +2,7 @@
   <div class="form-question">
     <el-card>
       <h6 class="form-title mb-0">Title</h6>
-      <small>
-        Be specific and imagine you’re asking a question to another person
-      </small>
+      <small>Be specific and imagine you’re asking a question to another person</small>
       <input
         type="text"
         class="form-control mb-3"
@@ -14,10 +12,10 @@
         placeholder="e.g How to loop data from database "
       />
       <h6 class="form-title mb-0">Body</h6>
-      <small
-        >Include all the information someone would need to answer your
-        question</small
-      >
+      <small>
+        Include all the information someone would need to answer your
+        question
+      </small>
       <div>
         <quill-editor
           class="quil-wysywig"
@@ -26,12 +24,7 @@
           :config="editorOption"
         ></quill-editor>
       </div>
-      <button
-        class="btn btn-primary btn-addquestion"
-        @click.prevent="postQuestion"
-      >
-        Post Question
-      </button>
+      <button class="btn btn-primary btn-addquestion" @click.prevent="postQuestion">Post Question</button>
     </el-card>
   </div>
 </template>
@@ -44,7 +37,6 @@ export default {
   },
   data() {
     return {
-      name: 'app',
       content: '',
       editorOption: {},
       title: ''

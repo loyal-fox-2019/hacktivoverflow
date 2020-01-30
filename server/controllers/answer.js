@@ -1,6 +1,13 @@
 const Model = require("../models/answer");
 
 class Answer {
+  static getAllAnswer(req, res, next) {
+    Model.find({})
+      .then(answers => {
+        res.status(200).json(answers);
+      })
+      .catch(next);
+  }
   static createAnswer(req, res, next) {
     Model.create({
       description: req.body.description,
@@ -31,6 +38,7 @@ class Answer {
   static getAnswerByQuestion(req, res, next) {
     Model.find({ questionId: req.params.questionid })
       .populate("questionId", "description")
+      .populate("userId", "username")
       .then(answerList => {
         res.status(200).json(answerList);
       })

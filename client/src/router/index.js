@@ -5,6 +5,7 @@ import Login from '../views/Login.vue'
 import Register from '../views/Register.vue'
 import Question from '../views/Question.vue'
 import PostQuestion from '../views/PostQuestion.vue'
+import QuestionAnswer from '../views/QuestionAnswer'
 
 Vue.use(VueRouter)
 
@@ -33,6 +34,11 @@ const routes = [
     path: '/post-question',
     name: 'post question',
     component: PostQuestion
+  },
+  {
+    path: '/questions/:id',
+    name: 'question answer',
+    component: QuestionAnswer
   }
   // {
   //   path: '/about',

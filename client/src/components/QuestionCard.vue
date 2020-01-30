@@ -4,13 +4,12 @@
       <div class="row">
         <div class="col-md-8">
           <p class="question-title text-primary">
-            {{ substringtitle }}
+            <router-link :to="'/questions/'+ data._id">{{ substringtitle }}</router-link>
           </p>
-          <p class="question-detail">
-            {{ substringdescription }}
-          </p>
+          <p class="question-detail">{{ substringdescription }}</p>
           <p class="user-post">
-            Posted by <strong>{{ data.userId.username }}</strong>
+            Posted by
+            <strong>{{ data.userId.username }}</strong>
           </p>
         </div>
         <div class="col-md list-detail">
@@ -19,7 +18,7 @@
             <p class="votes-text">Votes</p>
           </div>
           <div class="answer">
-            <p class="answer-count">2</p>
+            <p class="answer-count">{{countAnswer.length}}</p>
             <p class="answer-text">Answer</p>
           </div>
         </div>
@@ -41,8 +40,15 @@ export default {
     },
     totalvotes() {
       let upvote = this.data.upvote.length
-      let downvote = this.data.upvote.length
+      let downvote = this.data.downvote.length
       return upvote - downvote
+    },
+    countAnswer() {
+      let listanswer = this.$store.state.allAnswer
+      console.log(listanswer)
+      return listanswer.filter(item => {
+        return item.questionId === this.data._id
+      })
     }
   }
 }
@@ -93,11 +99,11 @@ export default {
   min-height: 130px;
 }
 .question-title {
-  font-size: 16px;
+  font-size: 20px;
   margin-bottom: 5px;
 }
 .question-detail {
-  font-size: 13px;
+  font-size: 16px;
   margin-bottom: 17px;
 }
 .user-post {
