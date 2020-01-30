@@ -90,7 +90,7 @@
                         <i class="fas fa-caret-up"></i>
                       </button>
                       <h4>{{answer.upvote.length - answer.downvote.length}}</h4>
-                      <button @click="downVoteAnswer(answers._id)">
+                      <button @click="downVoteAnswer(answer._id)">
                         <i class="fas fa-caret-down"></i>
                       </button>
                     </div>
@@ -155,9 +155,11 @@ export default {
     },
     upVoteAnswer(id) {
       this.$store.dispatch("upVoteAnswer", id);
+      this.$store.dispatch("getQuestion", this.$route.params.id);
     },
     downVoteAnswer(id) {
       this.$store.dispatch("downVoteAnswer", id);
+      this.$store.dispatch("getQuestion", this.$route.params.id);
     },
     getTotalVote(up, down) {
       if (up && down) {

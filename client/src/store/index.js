@@ -174,14 +174,14 @@ export default new Vuex.Store({
     },
     upVoteAnswer(context, id) {
       axios({
-        url: `${baseUrl}/questions/upVote/${id}`,
+        url: `${baseUrl}/answers/upVote/${id}`,
         method: "PATCH",
         headers: {
           token: localStorage.getItem('token')
         }
       })
         .then(({ data }) => {
-          this.state.question = data
+          console.log(data);
         })
         .catch(err => {
           Swal.fire("Error!", err.message, "error");
@@ -189,14 +189,14 @@ export default new Vuex.Store({
     },
     downVoteAnswer(context, id) {
       axios({
-        url: `${baseUrl}/questions/downVote/${id}`,
+        url: `${baseUrl}/answers/downVote/${id}`,
         method: "PATCH",
         headers: {
           token: localStorage.getItem('token')
         }
       })
         .then(({ data }) => {
-          this.state.question = data
+          console.log(data);
         })
         .catch(err => {
           Swal.fire("Error!", err.message, "error");

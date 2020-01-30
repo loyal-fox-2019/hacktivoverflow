@@ -28,6 +28,14 @@
           </div>
         </div>
       </div>
+      <div class="col ml-5">
+        <button
+          v-if="$store.state.login"
+          @click="dataUser"
+          type="button"
+          class="btn btn-info"
+        >Data User</button>
+      </div>
     </div>
     <form class="form-inline">
       <button v-if="!$store.state.login" @click="account" type="button" class="btn btn-info">account</button>
