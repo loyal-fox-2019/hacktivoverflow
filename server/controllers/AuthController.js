@@ -16,7 +16,7 @@ class AuthController{
         const token = jwt.sign({
           userId: user.id,
           emai: user.email
-        }, process.env.JWT_SECRET)
+        }, 'secretfox')
 
         res.status(200).json({
           id: user.id,
@@ -44,7 +44,7 @@ class AuthController{
             const token = jwt.sign({
               userId: user.id,
               emai: user.email,
-            }, process.env.JWT_SECRET)
+            }, 'secretfox')
 
             res.status(200).json({
               id: user.id,
