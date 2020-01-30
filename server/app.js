@@ -5,6 +5,8 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const routes = require('./routes');
+const kue =require('kue');
+const queue = kue.createQueue();
 const MONGO_URI = process.env.MONGO_URI;
 const errHandler = require('./middlewares/errHandler')
 
@@ -21,6 +23,17 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+app.use('/kue-api', kue.app);
+app.get('/hello', (req, res) => {
+  queue.create('test kue', {
+    title: 'test',
+  })
+  .save();
+  res.status(200).json({ message: 'hello!' })
+})
+queue.process('test kue', (job, done) => {
+  console.log('Welcome');
+})
 app.use(routes);
 app.use(errHandler);
 module.exports = app;

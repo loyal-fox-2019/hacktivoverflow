@@ -2,6 +2,8 @@
 const { User, Question } = require('../models');
 const { sign } = require('../helpers/jwt');
 const { compare } = require('../helpers/bcryptjs');
+const kue = require('kue');
+const queue = kue.createQueue();
 
 class UserController {
 
