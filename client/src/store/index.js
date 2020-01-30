@@ -46,6 +46,7 @@ export default new Vuex.Store({
             text: 'Successfully Registered'
           })
           localStorage.setItem('token', data.token)
+          localStorage.setItem('id', data.id)
           commit('CHANGE_STATE_LOGIN', true)
           router.push('/questions')
         })
@@ -58,6 +59,7 @@ export default new Vuex.Store({
         })
         .then(({ data }) => {
           localStorage.setItem('token', data.token)
+          localStorage.setItem('id', data.id)
           commit('CHANGE_STATE_LOGIN', true)
           router.push('/questions')
         })
@@ -181,6 +183,205 @@ export default new Vuex.Store({
             icon: 'error',
             text: response.data.message,
             title: 'Something Wrong'
+          })
+        })
+    },
+    upvote_question({ commit }, payload) {
+      axios
+        .patch(
+          'http://localhost:3000/questions/upvote/' + payload,
+          {},
+          {
+            headers: {
+              token: localStorage.getItem('token')
+            }
+          }
+        )
+        .then(() => {
+          Swal.fire({
+            icon: 'success',
+            title: 'Success',
+            text: 'Vote Success'
+          })
+          this.dispatch('question_detail', payload)
+        })
+        .catch(({ response }) => {
+          Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: response.data.message
+          })
+        })
+    },
+    downvote_question({ commit }, payload) {
+      axios
+        .patch(
+          'http://localhost:3000/questions/downvote/' + payload,
+          {},
+          {
+            headers: {
+              token: localStorage.getItem('token')
+            }
+          }
+        )
+        .then(() => {
+          Swal.fire({
+            icon: 'success',
+            title: 'Success',
+            text: 'Vote Success'
+          })
+          this.dispatch('question_detail', payload)
+        })
+        .catch(({ response }) => {
+          Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: response.data.message
+          })
+        })
+    },
+    upvote_answer({ commit }, payload) {
+      axios
+        .patch(
+          'http://localhost:3000/answers/upvote/' + payload.id,
+          {},
+          {
+            headers: {
+              token: localStorage.getItem('token')
+            }
+          }
+        )
+        .then(({ data }) => {
+          Swal.fire({
+            icon: 'success',
+            title: 'Success',
+            text: 'Vote Success'
+          })
+          this.dispatch('fetch_answer', payload.questionId)
+        })
+        .catch(({ response }) => {
+          Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: response.data.message
+          })
+        })
+    },
+    downvote_answer({ commit }, payload) {
+      axios
+        .patch(
+          'http://localhost:3000/answers/downvote/' + payload.id,
+          {},
+          {
+            headers: {
+              token: localStorage.getItem('token')
+            }
+          }
+        )
+        .then(() => {
+          Swal.fire({
+            icon: 'success',
+            title: 'Success',
+            text: 'Vote Success'
+          })
+          this.dispatch('fetch_answer', payload.questionId)
+        })
+        .catch(({ response }) => {
+          Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: response.data.message
+          })
+        })
+    },
+    delete_question({ commit }, payload) {
+      Swal.fire({
+        title: 'Are you sure?',
+        text: "You won't be able to revert this!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, delete it!'
+      }).then(result => {
+        if (result.value) {
+          axios
+            .delete('http://localhost:3000/questions/' + payload, {
+              headers: {
+                token: localStorage.getItem('token')
+              }
+            })
+            .then(() => {
+              Swal.fire('Deleted!', 'Question Has Been Deleted', 'success')
+              router.push('/questions')
+            })
+            .catch(({ response }) => {
+              Swal.fire({
+                icon: 'error',
+                title: 'Something Wrong',
+                text: response.data.message
+              })
+            })
+        }
+      })
+    },
+    edit_question({ commit }, payload) {
+      axios
+        .put(
+          'http://localhost:3000/questions/' + payload.id,
+          {
+            title: payload.title,
+            description: payload.description
+          },
+          {
+            headers: {
+              token: localStorage.getItem('token')
+            }
+          }
+        )
+        .then(() => {
+          Swal.fire({
+            icon: 'success',
+            title: 'Edit Success',
+            text: 'Successfully Edited Question'
+          })
+          this.dispatch('question_detail', payload.id)
+        })
+        .catch(({ response }) => {
+          Swal.fire({
+            icon: 'error',
+            title: 'Something Wrong',
+            text: response.data.message
+          })
+        })
+    },
+    edit_answer({ commit }, payload) {
+      axios
+        .put(
+          'http://localhost:3000/answers/' + payload.id,
+          {
+            description: payload.description
+          },
+          {
+            headers: {
+              token: localStorage.getItem('token')
+            }
+          }
+        )
+        .then(() => {
+          Swal.fire({
+            icon: 'success',
+            title: 'Edit Success',
+            text: 'Successfully Edited Question'
+          })
+          console.log(payload.questionid)
+          this.dispatch('fetch_answer', payload.questionId)
+        })
+        .catch(({ response }) => {
+          Swal.fire({
+            icon: 'error',
+            title: 'Something Wrong',
+            text: response.data.message
           })
         })
     }

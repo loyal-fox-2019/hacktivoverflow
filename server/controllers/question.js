@@ -1,6 +1,57 @@
 const Model = require("../models/question");
+const Answer = require("../models/answer");
 
 class Question {
+  static upvote(req, res, next) {
+    Model.findOne({ _id: req.params.id })
+      .then(question => {
+        if (!question.upvote.includes(req.loginData.id)) {
+          return Model.updateOne(
+            { _id: req.params.id },
+            {
+              $push: { upvote: req.loginData.id },
+              $pull: { downvote: req.loginData.id }
+            }
+          );
+        } else {
+          return Model.updateOne(
+            { _id: req.params.id },
+            {
+              $pull: { upvote: req.loginData.id }
+            }
+          );
+        }
+      })
+      .then(data => {
+        res.status(200).json(data);
+      })
+      .catch(next);
+  }
+  static downvote(req, res, next) {
+    Model.findOne({ _id: req.params.id })
+      .then(question => {
+        if (!question.downvote.includes(req.loginData.id)) {
+          return Model.updateOne(
+            { _id: req.params.id },
+            {
+              $push: { downvote: req.loginData.id },
+              $pull: { upvote: req.loginData.id }
+            }
+          );
+        } else {
+          return Model.updateOne(
+            { _id: req.params.id },
+            {
+              $pull: { downvote: req.loginData.id }
+            }
+          );
+        }
+      })
+      .then(data => {
+        res.status(200).json(data);
+      })
+      .catch(next);
+  }
   static createQuestion(req, res, next) {
     Model.create({
       userId: req.loginData.id,
@@ -40,8 +91,11 @@ class Question {
           };
           throw err;
         } else {
-          res.status(200).json({ message: "Question Deleted" });
+          return Answer.deleteMany({ questionId: req.params.id });
         }
+      })
+      .then(() => {
+        res.status(200).json({ message: "Question Deleted" });
       })
       .catch(next);
   }

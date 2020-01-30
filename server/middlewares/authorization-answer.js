@@ -4,7 +4,7 @@ module.exports = (req, res, next) => {
   Model.findById(req.params.id)
     .then(answer => {
       if (answer) {
-        if (req.loginData.id !== answer.userId) {
+        if (req.loginData.id != answer.userId) {
           let err = {
             name: "Unauthorized",
             message: "You're not authorized"

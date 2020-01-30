@@ -15,7 +15,7 @@ class User {
           id: created._id,
           username: created.username
         });
-        res.status(201).json({ token: token });
+        res.status(201).json({ token: token, id: created._id });
       })
       .catch(next);
   }
@@ -33,7 +33,7 @@ class User {
               id: user._id,
               username: user.username
             });
-            res.status(200).json({ token: token });
+            res.status(200).json({ token: token, id: user._id });
           } else {
             throw err;
           }

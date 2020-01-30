@@ -45,7 +45,6 @@ export default {
     },
     countAnswer() {
       let listanswer = this.$store.state.allAnswer
-      console.log(listanswer)
       return listanswer.filter(item => {
         return item.questionId === this.data._id
       })

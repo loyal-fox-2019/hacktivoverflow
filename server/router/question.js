@@ -6,6 +6,8 @@ const authorization = require("../middlewares/authorization-question");
 router.get("/", Controller.getAllQuestion);
 router.get("/:id", Controller.getQuestionById);
 router.use(authent);
+router.patch("/upvote/:id", Controller.upvote);
+router.patch("/downvote/:id", Controller.downvote);
 router.post("/", Controller.createQuestion);
 router.delete("/:id", authorization, Controller.deleteQuestion);
 router.put("/:id", authorization, Controller.editQuestion);
