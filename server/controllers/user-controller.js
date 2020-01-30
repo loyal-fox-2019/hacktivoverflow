@@ -9,7 +9,7 @@ class User {
         .then((data)=>{
             let payload = {userId: data._id}
             let tmp = jwt.sign(payload, process.env.SECRET)
-            res.status(201).json({token: tmp})
+            res.status(201).json({token, id:data._id})
         })
         .catch((err)=>{
             next()
@@ -64,7 +64,7 @@ class User {
                 .then((data)=>{
                     let payload = {userId: data._id}
                     let tmp = jwt.sign(payload, process.env.SECRET)
-                    res.status(201).json({token: tmp})
+                    res.status(201).json({token: tmp, id: data._id})
                 })
                 .catch((err)=>{
                     next()

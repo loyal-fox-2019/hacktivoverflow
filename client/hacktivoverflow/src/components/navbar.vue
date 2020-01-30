@@ -53,7 +53,7 @@ export default {
   data () {
     return {
       googleSignInParams: {
-        client_id: '863009554428-l54nr1bbp4iq85fsvc592rr5u5u2thgi.apps.googleusercontent.com'
+        client_id: '863009554428-273pe01r8qu21pd5eke2mr0ldrm110uj.apps.googleusercontent.com'
       }
 
     }
@@ -71,7 +71,7 @@ export default {
     onSignInSuccess (googleUser) {
       const idToken = googleUser.getAuthResponse().id_token
       axios({
-        url: 'http://localhost:3000/users/google',
+        url: 'http://18.224.251.184:3000/users/google',
         method: 'POST',
         data: { idToken }
       })
@@ -80,8 +80,7 @@ export default {
           this.$store.commit('SET_LOGIN', true)
         })
     },
-    onSignInError (error) {
-      console.log('OH NOES', error)
+    onSignInError (errr) {
     }
   }
 }
