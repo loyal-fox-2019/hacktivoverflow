@@ -27,9 +27,9 @@ export default new Vuex.Store({
     },
   },
   actions: {
-    submitSignup({ commit, state, dispatch }, payload) {
+    submitSignup({ commit }, payload) {
     //   console.log(commit, state, dispatch, 'ignore');
-      axios.post('http://localhost:3000/users/register', payload)
+      axios.post('http://54.255.173.8:3000/users/register', payload)
         .then((user) => {
         //   console.log(user);
           localStorage.setItem('token', user.data.token);
@@ -37,13 +37,13 @@ export default new Vuex.Store({
           commit('SET_USER', user.data.user.username);
           router.push('/');
         })
-        .catch((err) => {
+        .catch(() => {
         //   console.log(err);
         });
     },
     submitLogin({ commit, state, dispatch }, payload) {
       console.log(commit, state, dispatch, 'ignore');
-      axios.post('http://localhost:3000/users/login', payload)
+      axios.post('http://54.255.173.8:3000/users/login', payload)
         .then((user) => {
         //   console.log(user);
           localStorage.setItem('token', user.data.token);
@@ -51,35 +51,39 @@ export default new Vuex.Store({
           commit('SET_USER', user.data.user.username);
           router.push('/');
         })
-        .catch((err) => {
+        .catch(() => {
         //   console.log(err);
         });
+    },
+    signOut() {
+      localStorage.removeItem('user');
+      localStorage.removeItem('token');
     },
     submitQuestion({ commit, state, dispatch }, payload) {
       console.log(commit, state, dispatch, 'ignore');
-      axios.post('http://localhost:3000/questions', payload, {
+      axios.post('http://54.255.173.8:3000/questions', payload, {
         headers: {
           token: localStorage.getItem('token'),
         },
       })
-        .then((question) => {
+        .then(() => {
         //   console.log(question);
           router.push('/');
         })
-        .catch((err) => {
+        .catch(() => {
         //   console.log(err);
         });
     },
-    submitAnswer({ commit, state, dispatch }, payload) {
+    submitAnswer({ commit }, payload) {
     //   console.log(commit, state, dispatch, 'ignore');
-      axios.post('http://localhost:3000/answers', payload, {
+      axios.post('http://54.255.173.8:3000/answers', payload, {
         headers: {
           token: localStorage.getItem('token'),
         },
       })
-        .then((answer) => {
+        .then(() => {
         //   console.log(answer);
-          axios.get('http://localhost:3000/answers', {
+          axios.get('http://54.255.173.8:3000/answers', {
             headers: {
               token: localStorage.getItem('token'),
             },
@@ -89,32 +93,32 @@ export default new Vuex.Store({
               commit('SET_ANSWERS', data);
             });
         })
-        .catch((err) => {
+        .catch(() => {
         //   console.log(err);
         });
     },
     findallQuestions({ commit }) {
-      axios.get('http://localhost:3000/questions')
+      axios.get('http://54.255.173.8:3000/questions')
         .then(({ data }) => {
         //   console.log(data);
           commit('SET_QUESTIONS', data);
         })
-        .catch((err) => {
+        .catch(() => {
         //   console.log(err);
         });
     },
     findoneQuestion({ commit }, payload) {
-      axios.get(`http://localhost:3000/questions/${payload}`)
+      axios.get(`http://54.255.173.8:3000/questions/${payload}`)
         .then(({ data }) => {
         //   console.log(data);
           commit('SET_QUESTION', data);
         })
-        .catch((err) => {
+        .catch(() => {
         //   console.log(err);
         });
     },
     findallAnswers({ commit }, payload) {
-      axios.get(`http://localhost:3000/answers/${payload}`, {
+      axios.get(`http://54.255.173.8:3000/answers/${payload}`, {
         headers: {
           token: localStorage.getItem('token'),
         },
@@ -123,7 +127,7 @@ export default new Vuex.Store({
         //   console.log(data);
           commit('SET_ANSWERS', data);
         })
-        .catch((err) => {
+        .catch(() => {
         //   console.log(err);
         });
     },

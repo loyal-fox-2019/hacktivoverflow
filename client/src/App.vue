@@ -15,6 +15,7 @@
       <div v-show="this.user" class="user-avatar">
         <img src="./assets/user.png" width="32" alt="avatar">
         <span class="username pl-3">{{this.user}}</span>
+        <button @click="signOut" class="btn btn-secondary ml-3">Sign Out</button>
       </div>
       <div v-show="!this.user" class="loginSignup">
         <router-link to="/login" class="btn btn-secondary">Log in</router-link>
@@ -31,6 +32,11 @@ export default {
     return {
       isLogin: false,
     };
+  },
+  methods: {
+    signOut() {
+      this.$store.dispatch('signOut');
+    },
   },
   computed: {
     user() {
