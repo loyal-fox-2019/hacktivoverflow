@@ -120,7 +120,7 @@ export default {
     goRegister () {
       console.log('masuk register')
       const formData = new FormData()
-      formData.append('photo', this.photo)
+      formData.append('file', this.photo)
       formData.set('name', this.name)
       formData.set('email', this.email)
       formData.set('password', this.password)

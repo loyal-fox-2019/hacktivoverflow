@@ -11,6 +11,7 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
+    "@google-cloud/storage": "^4.3.0",
     "bcryptjs": "^2.4.3",
     "cors": "^2.8.5",
     "cron": "^1.8.2",
@@ -20,6 +21,7 @@
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.8.10",
     "mongoose-unique-validator": "^2.0.3",
-    "morgan": "^1.9.1"
+    "morgan": "^1.9.1",
+    "unggah": "^2.1.0"
   }
 }

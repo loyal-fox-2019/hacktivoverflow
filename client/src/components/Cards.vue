@@ -1,5 +1,5 @@
 <template>
-  <v-card class="mx-auto d-flex" :color="watch" outlined @click.prevent="moveTo(data._id)" :disable="$route.path !== '/'">
+  <v-card class="mx-auto d-flex my-3" :color="watch" outlined @click.prevent="moveTo(data._id)" :disable="$route.path !== '/'">
     <div style="width: 10%; text-align: center">
       <b-button v-if="this.$route.name != 'home'" @click.prevent="upVote">^</b-button>
 
@@ -91,7 +91,7 @@ export default {
       }
     }
   },
-  props: ['data'],
+  props: ['data', 'tipe'],
   mounted () {
     console.log(this.data.upVotes)
   },

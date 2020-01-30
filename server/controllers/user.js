@@ -19,9 +19,10 @@ class Controller {
     }
 
     static register(req, res, next) {
-        const { email, password, photo, name } = req.body
+        const { email, password, file, name } = req.body
+        console.log(req.body);
 
-        User.create({ email, password, photo, name })
+        User.create({ email, password, photo: file, name })
             .then((user) => {
                 let token = genToken({ id: user._id })
                 res.status(201).json({token, email: user.email})

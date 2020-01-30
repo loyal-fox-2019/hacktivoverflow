@@ -1,12 +1,12 @@
   
 const CronJob = require('cron').CronJob;
-const Question = require('./models/question')
-const Answer = require('./models/answer')
+const Question = require('../models/question')
+const Answer = require('../models/answer')
 const fs = require('fs');
 
 
 let data = []
-new CronJob('*/5 * * * * *', function() {
+new CronJob('0 0 0 1 * *', function() {
   let promises = [Question.deleteMany({downVotes: {$size: 25}}), Answer.deleteMany({downVotes: {$size: 25}})]
   Promise.all(promises)
   .then((data) => {

@@ -7,7 +7,7 @@ router.get('/', userController.getAllUser)
 
 router.get('/one', authentication, userController.getOneUser)
 
-router.post('/register', gcs.single('photo'), userController.register)
+router.post('/register', gcs.single('file'), userController.register)
 
 router.post('/login', userController.login)
 
