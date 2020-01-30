@@ -43,8 +43,9 @@ export default {
   },
   created() {
     if (!localStorage.getItem('access_token')) {
-      this.$router.push('/landing')
+      this.$router.push('/landing').catch(() => {})
     }
+    this.$store.dispatch('fetchQuestions')
   }
 }
 </script>

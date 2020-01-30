@@ -1,6 +1,6 @@
 module.exports = function errorHandler(err, req, res, next) {
   let status, message;
-
+  console.log(err)
   if(err.name === 'JsonWebTokenError') {
     status = 403;
     message = "Please login first, you are not logged in yet!";

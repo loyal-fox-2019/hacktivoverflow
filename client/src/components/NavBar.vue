@@ -12,7 +12,7 @@
       <div class="w-full block flex-grow lg:flex lg:items-center lg:w-auto">
 
           <div class="none sm:block w-3/4 relative text-gray-100">
-            <input v-model="keyword" class="w-3/4 shadow appearance-none rounded py-2 px-3 leading-tight focus:outline-none focus:shadow-outline bg-gray-800 focus:bg-white focus:text-gray-600" type="search" placeholder="Search questions...">
+            <input @keyup.enter="search" v-model="keyword" class="w-3/4 shadow appearance-none rounded py-2 px-3 leading-tight focus:outline-none focus:shadow-outline bg-gray-800 focus:bg-white focus:text-gray-600" type="search" placeholder="Search questions...">
             <div class="absolute right-0 top-0 mr-32 h-full flex items-center cursor-pointer">
               <svg @click="search" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" id="search" class="w-4 h-4 fill-current">
                 <path d="M9.331 9.331a3.088 3.088 0 1 0-4.368-4.368 3.088 3.088 0 0 0 4.368 4.368zm.655 2.11a5.149 5.149 0 0 1-6.478-7.933 5.147 5.147 0 0 1 7.934 6.478l2.256 2.257a1.03 1.03 0 1 1-1.455 1.455l-2.257-2.256z"/>
@@ -21,10 +21,10 @@
           </div>
 
         <div class="inline-flex ml-12">
-          <router-link to="/post" href="#" class="mx-1 no-underline inline-block text-sm px-4 py-2 leading-none border rounded text-gray-800 border-white hover:border-transparent hover:text-teal hover:bg-white mt-4 sm:mt-0">
+          <router-link to="/post" href="#" class="mx-1 no-underline inline-block text-sm px-4 py-2 leading-none border border-gray-800 rounded text-gray-800 border-white hover:border-transparent hover:text-teal hover:bg-white mt-4 sm:mt-0">
             Post Question
           </router-link>
-          <a @click="logout" href="#" class="mx-1 no-underline inline-block text-sm px-4 py-2 leading-none border rounded text-gray-800 border-white hover:border-transparent hover:text-teal hover:bg-white mt-4 sm:mt-0">
+          <a @click="logout" href="#" class="mx-1 no-underline inline-block text-sm px-4 py-2 leading-none border border-gray-800 rounded text-gray-800 border-white hover:border-transparent hover:text-teal hover:bg-white mt-4 sm:mt-0">
             Sign Out
           </a>
         </div>
@@ -40,20 +40,18 @@ export default {
   name: 'NavBar',
   data() {
     return {
-      keyword
+      keyword: ''
     }
   },
   methods: {
     logout() {
       localStorage.clear()
-      this.$router.push('/landing')
+      this.$router.push('/landing').catch(() => {})
       this.$store.commit('SEND_SUCCESS', 'Successfully signed out')
     },
-    postQuestion() {
-      
-    },
     search() {
-
+      this.$store.dispatch('fetchQuestions', this.keyword)
+      this.keyword = ''
     }
   }
 }

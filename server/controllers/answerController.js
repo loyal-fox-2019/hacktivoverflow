@@ -4,9 +4,8 @@ const Answer = require('../models/answer')
 
 module.exports = class AnswerController {
   static create(req, res, next) {
-    const { title, content, QuestionId } = req.body
+    const { content, QuestionId } = req.body
     Answer.create({
-      title,
       content,
       QuestionId,
       poster: req.decoded.id
@@ -59,10 +58,9 @@ module.exports = class AnswerController {
   }
 
   static update(req, res, next) {
-    let { title, content } = req.body
     Answer.findOneAndUpdate(
       { _id: req.params.id } ,
-      { title, content },
+      { content: req.body.content },
       { new: true, runValidators: true, omitUndefined: true }
     )
       .then(answer => {

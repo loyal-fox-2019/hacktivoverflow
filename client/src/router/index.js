@@ -6,15 +6,26 @@ Vue.use(VueRouter)
 const routes = [
   {
     path: '/',
-    name: 'home',
     component: () => import(/* webpackChunkName: "about" */ '../views/Home.vue'),
     meta: { requiresAuth: true },
     children: [
       {
         path: '',
-        name: 'default',
-        component: () => import(/* webpackChunkName: "about" */ '../views/Default.vue'),
+        name: 'questions',
+        component: () => import(/* webpackChunkName: "about" */ '../views/Questions.vue'),
         meta: { requiresAuth: true },
+      },
+      {
+        path: 'questions/:id',
+        name: 'question',
+        component: () => import(/* webpackChunkName: "about" */ '../views/Question.vue'),
+        meta: { requiresAuth: true }
+      },
+      {
+        path: 'questions/:id/edit',
+        name: 'edit',
+        component: () => import(/* webpackChunkName: "about" */ '../views/Post.vue'),
+        meta: { requiresAuth: true }
       },
       {
         path: '/tags',

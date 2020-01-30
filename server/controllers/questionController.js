@@ -7,9 +7,9 @@ module.exports = class QuestionController {
   static create(req, res, next) {
     const { title, content } = req.body
     let tagsArr = [];
-    req.body.tags.forEach(tag => {
-      if (!tagArr.includes(tag)) {
-        tagArr.push(tag)
+    req.body.tags.split(',').forEach(tag => {
+      if (!tagsArr.includes(tag)) {
+        tagsArr.push(tag)
       }
     })
     Question.create({
@@ -73,34 +73,29 @@ module.exports = class QuestionController {
   }
 
   static vote(req, res, next) {
-    let isUpvoted = 0;
-    Question.findById(req.params.id)
-      .then(question => {
-        question.upvotes.forEach(user => {
-          if (String(user) === String(req.decoded.id)) {
-            isUpvoted++
-          }
+    if (req.query.vote.toLowerCase() === 'up') {
+      return Question.findByIdAndUpdate(
+        req.params.id,
+        { $addToSet: { upvotes: req.decoded.id },
+          $pull: { downvotes: req.decoded.id }
+        }, { new: true })
+        .then(question => {
+          res.status(200).json(question);
         })
-        if (isUpvoted > 0) {
-          return Question.findByIdAndUpdate(
-            req.params.id,
-            { $addToSet: { downvotes: req.decoded.id },
-              $pull: { upvotes: req.decoded.id }
-            }, { new: true }
-          )
-        } else {
-          return Question.findByIdAndUpdate(
-            req.params.id,
-            { $addToSet: { upvotes: req.decoded.id },
-              $pull: { downvotes: req.decoded.id }
-            }, { new: true }
-          )
-        }
-      })
-      .then(question => {
-        res.status(200).json(question);
-      })
-      .catch(next);
+        .catch(next)
+    } else if (req.query.vote.toLowerCase() === 'down') {
+      Question.findByIdAndUpdate(
+        req.params.id,
+        { $addToSet: { downvotes: req.decoded.id },
+          $pull: { upvotes: req.decoded.id }
+        }, { new: true })
+        .then(question => {
+          res.status(200).json(question);
+        })
+        .catch(next)
+    } else {
+      throw next({ status: 400, message: 'Invalid query!'})
+    }
   }
 
   static update(req, res, next) {

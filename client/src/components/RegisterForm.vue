@@ -125,7 +125,7 @@ export default {
           localStorage.setItem('name', data.name)
           localStorage.setItem('email', data.email)
           this.$store.commit('SEND_SUCCESS', 'Successfully registered!')
-          this.$router.push('/')
+          this.$router.push('/').catch(() => {})
         })
         .catch(err => {
           this.$store.commit('SEND_ERROR', err.response.data.error)
