@@ -124,6 +124,7 @@ export default {
           localStorage.setItem('image', data.image)
           localStorage.setItem('name', data.name)
           localStorage.setItem('email', data.email)
+          localStorage.setItem('id', data._id)
           this.$store.commit('SEND_SUCCESS', 'Successfully registered!')
           this.$router.push('/').catch(() => {})
         })

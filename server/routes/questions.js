@@ -7,7 +7,8 @@ const router = require('express').Router(),
 router.post('/', QuestionController.create) //done
 router.get('/', QuestionController.findAll) //done
 router.get('/:id', QuestionController.findOne) //done
-router.get('/filter/:val', QuestionController.filter) //done
+router.get('/filter/title/:keyword', QuestionController.filter) //done
+router.get('/filter/tag/:keyword', QuestionController.filterQuestionByTag) //done
 // http://localhost:3000/questions/5e30ee07b6863f0f52b15eaf?vote=down
 router.patch('/:id', QuestionController.vote) //done
 

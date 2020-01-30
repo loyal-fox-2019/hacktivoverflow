@@ -1,10 +1,10 @@
 <template>
   <aside class="chrome chrome-context -col -fixed min-w-48 bg-gray-200 border-r border-gray-400">
       <div class="chrome">
-        <router-link to="/profile" href="#" class="flex p-2 items-center hover:bg-gray-300">
+        <div class="flex p-2 items-center hover:bg-gray-300">
           <img :src="image" class="rounded-lg border-2 border-gray-800 w-10 h-10 flex items-center justify-center">
           <div class="ml-2">Hi, {{ name.split(' ')[0] }}!</div>
-        </router-link>
+        </div>
       </div>
       <div class="chrome-context border-t border-b border-gray-400">
         <div class="scroll-shadow--"
@@ -15,7 +15,7 @@
                            resize@window->scroll-shadow#observe">
             <li>
               <ul class="">
-                <li class="active">
+                <li class="active" @click="fetchQuestions">
                   <router-link to="/" class="text-left block p-2 pl-4 hover:bg-yellow-400 hover:text-white active:border-yellow-400">
                     Home
                   </router-link>
@@ -53,6 +53,11 @@ export default {
     },
     image() {
       return localStorage.getItem('image')
+    }
+  },
+  methods: {
+    fetchQuestions() {
+      this.$store.dispatch('fetchQuestions')
     }
   }
 }

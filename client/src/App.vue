@@ -13,15 +13,21 @@ export default {
     success() {
       return this.$store.state.success
     },
+    errorCount() {
+      return this.$store.state.errorCount
+    },
+    successCount() {
+      return this.$store.state.successCount
+    },
     user() {
-      return this.$store.state.user
+      return this.$store.state.userCount
     }
   },
   watch: {
-    error() {
+    errorCount() {
       this.alertError()
     },
-    success() {
+    successCount() {
       this.alertSuccess()
     }
   },

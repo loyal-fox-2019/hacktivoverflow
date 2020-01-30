@@ -36,10 +36,10 @@ module.exports = class QuestionController {
   static findOne(req, res, next) {
     let answersArr = []
     Answer.find({ QuestionId: req.params.id })
+      .populate('poster', 'name email')
       .then(answers => {
         answersArr = answers
         return Question.findById(req.params.id)
-          .populate('poster', 'name email')
       })
       .then(question => {
         if (!question) {
@@ -64,7 +64,7 @@ module.exports = class QuestionController {
   }
 
   static filter(req, res, next) {
-    Question.find({ title: new RegExp(req.params.val, "i")})
+    Question.find({ title: new RegExp(req.params.keyword, "i")})
       .populate('poster', 'name email')
       .then(questions => {
         res.status(200).json(questions);
@@ -72,30 +72,67 @@ module.exports = class QuestionController {
       .catch(next);
   }
 
+  static filterQuestionByTag(req, res, next) {
+    Question.find({ tags: req.params.keyword })
+      .populate('poster', 'name, email')
+      .then(questions => {
+        res.status(200).json(questions)
+      })
+      .catch(next)    
+  }
+
   static vote(req, res, next) {
-    if (req.query.vote.toLowerCase() === 'up') {
-      return Question.findByIdAndUpdate(
-        req.params.id,
-        { $addToSet: { upvotes: req.decoded.id },
-          $pull: { downvotes: req.decoded.id }
-        }, { new: true })
-        .then(question => {
-          res.status(200).json(question);
-        })
-        .catch(next)
-    } else if (req.query.vote.toLowerCase() === 'down') {
-      Question.findByIdAndUpdate(
-        req.params.id,
-        { $addToSet: { downvotes: req.decoded.id },
-          $pull: { upvotes: req.decoded.id }
-        }, { new: true })
-        .then(question => {
-          res.status(200).json(question);
-        })
-        .catch(next)
-    } else {
-      throw next({ status: 400, message: 'Invalid query!'})
-    }
+    let duplicate = 0
+    Question.findById(req.params.id)
+      .then(question => {
+        if (question) {
+          if (req.query.vote.toLowerCase() === 'up') {
+            question.upvotes.forEach(user => {
+              if (String(user) === String(req.decoded.id)) {
+                duplicate++
+              }
+            })
+            if (duplicate) {
+              return Question.findByIdAndUpdate(
+                req.params.id,
+                { $pull: { upvotes: req.decoded.id }
+                }, { new: true })
+            } else {
+              return Question.findByIdAndUpdate(
+                req.params.id,
+                { $addToSet: { upvotes: req.decoded.id },
+                  $pull: { downvotes: req.decoded.id }
+                }, { new: true })
+            }
+          } else if (req.query.vote.toLowerCase() === 'down') {
+            question.downvotes.forEach(user => {
+              if (String(user) === String(req.decoded.id)) {
+                duplicate++
+              }
+            })
+            if (duplicate) {
+              return Question.findByIdAndUpdate(
+                req.params.id,
+                { $pull: { downvotes: req.decoded.id }
+                }, { new: true })
+            } else {
+              return Question.findByIdAndUpdate(
+                req.params.id,
+                { $addToSet: { downvotes: req.decoded.id },
+                  $pull: { upvotes: req.decoded.id }
+                }, { new: true })
+            }
+          } else {
+            throw next({ status: 400, message: 'Invalid query!'})
+          }
+        } else {
+          throw next({ status: 404, resource: 'Question'})
+        }
+      })
+      .then(question => {
+        res.status(200).json(question);
+      })
+      .catch(next)
   }
 
   static update(req, res, next) {
@@ -123,6 +160,7 @@ module.exports = class QuestionController {
   }
 
   static findTags(req, res, next) {
+    // console.log('MASUK CONTROLLER')
     let tagsArr = []
     Question.find({})
       .then(questions => {
@@ -138,11 +176,20 @@ module.exports = class QuestionController {
       .catch(next)    
   }
 
-  static filterTag(req, res, next) {
-    Question.find({ tags: req.params.name })
+  static filterTags(req, res, next) {
+    let tagsArr = []
+    Question.find({})
       .then(questions => {
-        res.status(200).json(questions)
+        questions.forEach(question => {
+          question.tags.forEach(tag => {
+            if (!tagsArr.includes(tag) && tag.toLowerCase().includes(req.params.keyword.toLowerCase())) {
+              tagsArr.push(tag)
+            }
+          })
+        })
+        res.status(200).json(tagsArr)
       })
       .catch(next)    
   }
+
 }

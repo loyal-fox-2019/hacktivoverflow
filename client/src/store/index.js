@@ -13,20 +13,26 @@ export default new Vuex.Store({
     questions: [],
     question: {},
     tags: [],
-    tag: ''
+    errorCount: 0,
+    successCount: 0
   },
   mutations: {
     SEND_ERROR(state, payload) {
       state.error = payload
+      state.errorCount++
     },
     SEND_SUCCESS(state, payload) {
       state.success = payload
+      state.successCount++
     },
     FETCH_QUESTIONS(state, payload) {
       state.questions = payload
     },
     FETCH_QUESTION(state, payload) {
       state.question = payload
+    },
+    FETCH_TAGS(state, payload) {
+      state.tags = payload
     }
   },
   actions: {
@@ -34,13 +40,9 @@ export default new Vuex.Store({
       if (payload) {
         axios({
           method: 'GET',
-          url: `questions/filter/${payload}`,
-          headers: {
-            access_token: localStorage.getItem('access_token')
-          }
+          url: `questions/filter/title/${payload}`
         })
           .then(({ data }) => {
-            console.log(data)
             context.commit('FETCH_QUESTIONS', data)
             router.push('/')
           })
@@ -50,10 +52,7 @@ export default new Vuex.Store({
       } else {
         axios({
           method: 'GET',
-          url: `questions`,
-          headers: {
-            access_token: localStorage.getItem('access_token')
-          }
+          url: `questions`
         })
           .then(({ data }) => {
             context.commit('FETCH_QUESTIONS', data)
@@ -87,11 +86,67 @@ export default new Vuex.Store({
           access_token: localStorage.getItem('access_token')
         }
       })
-        .then(({ data }) => {
-          console.log(data)
-          context.commit('FETCH_QUESTIONS')
-          context.commmit('SEND_SUCCESS', 'Question deleted!')
+        .then(() => {
+          context.dispatch('fetchQuestions')
+          context.commit('SEND_SUCCESS', 'Question deleted!')
           router.push('/').catch(() => {})
+        })
+        .catch(err => {
+          context.commit('SEND_ERROR', err.response.data.error)
+        })
+    },
+    deleteAnswer(context, payload) {
+      axios({
+        method: 'DELETE',
+        url: `answers/${payload.answer}`,
+        headers: {
+          access_token: localStorage.getItem('access_token')
+        }
+      })
+        .then(() => {
+          context.commit('SEND_SUCCESS', 'Answer deleted!')
+          router.push(`/questions/${payload.question}`).catch(() => {})
+        })
+        .catch(err => {
+          context.commit('SEND_ERROR', err.response.data.error)
+        })
+    },
+    fetchTags(context, payload) {
+      if (payload) {
+        axios({
+          method: 'GET',
+          url: `tags/filter/${payload}`
+        })
+          .then(({ data }) => {
+            context.commit('FETCH_TAGS', data)
+          })
+          .catch(err => {
+            context.commit('SEND_ERROR', err.response.data.error)
+          })
+      } else {
+        axios({
+          method: 'GET',
+          url: 'tags'
+        })
+          .then(({ data }) => {
+            context.commit('FETCH_TAGS', data)
+          })
+          .catch(err => {
+            context.commit('SEND_ERROR', err.response.data.error)
+          })
+      }
+    },
+    filterQuestionByTag(context, payload) {
+      axios({
+        method: 'GET',
+        url: `questions/filter/tag/${payload}`,
+        headers: {
+          access_token: localStorage.getItem('access_token')
+        }
+      })
+        .then(({ data }) => {
+          context.commit('FETCH_QUESTIONS', data)
+          router.push(`/`).catch(() => {})
         })
         .catch(err => {
           context.commit('SEND_ERROR', err.response.data.error)

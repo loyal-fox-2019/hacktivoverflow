@@ -27,34 +27,57 @@ module.exports = class AnswerController {
   }
 
   static vote(req, res, next) {
-    let isUpvoted = 0;
+    let duplicate = 0
     Answer.findById(req.params.id)
       .then(answer => {
-        answer.upvotes.forEach(user => {
-          if (String(user) === String(req.decoded.id)) {
-            isUpvoted++
+        if (answer) {
+          if (req.query.vote.toLowerCase() === 'up') {
+            answer.upvotes.forEach(user => {
+              if (String(user) === String(req.decoded.id)) {
+                duplicate++
+              }
+            })
+            if (duplicate) {
+              return Answer.findByIdAndUpdate(
+                req.params.id,
+                { $pull: { upvotes: req.decoded.id }
+                }, { new: true })
+            } else {
+              return Answer.findByIdAndUpdate(
+                req.params.id,
+                { $addToSet: { upvotes: req.decoded.id },
+                  $pull: { downvotes: req.decoded.id }
+                }, { new: true })
+            }
+          } else if (req.query.vote.toLowerCase() === 'down') {
+            answer.downvotes.forEach(user => {
+              if (String(user) === String(req.decoded.id)) {
+                duplicate++
+              }
+            })
+            if (duplicate) {
+              return Answer.findByIdAndUpdate(
+                req.params.id,
+                { $pull: { downvotes: req.decoded.id }
+                }, { new: true })
+            } else {
+              return Answer.findByIdAndUpdate(
+                req.params.id,
+                { $addToSet: { downvotes: req.decoded.id },
+                  $pull: { upvotes: req.decoded.id }
+                }, { new: true })
+            }
+          } else {
+            throw next({ status: 400, message: 'Invalid query!'})
           }
-        })
-        if (isUpvoted > 0) {
-          return Answer.findByIdAndUpdate(
-            req.params.id,
-            { $addToSet: { downvotes: req.decoded.id },
-              $pull: { upvotes: req.decoded.id }
-            }, { new: true }
-          )
         } else {
-          return Answer.findByIdAndUpdate(
-            req.params.id,
-            { $addToSet: { upvotes: req.decoded.id },
-              $pull: { downvotes: req.decoded.id }
-            }, { new: true }
-          )
+          throw next({ status: 404, resource: 'Answer'})
         }
       })
       .then(answer => {
         res.status(200).json(answer);
       })
-      .catch(next);
+      .catch(next)
   }
 
   static update(req, res, next) {

@@ -86,9 +86,6 @@ export default {
         this.$axios({
           method: 'PUT',
           url: `questions/${this.id}`,
-          headers: {
-            access_token: localStorage.getItem("access_token")
-          },
           data: {
             title: this.title,
             tags: this.tags,
@@ -111,9 +108,6 @@ export default {
         this.$axios({
           method: 'POST',
           url: 'questions',
-          headers: {
-            access_token: localStorage.getItem("access_token")
-          },
           data: {
             title: this.title,
             tags: this.tags,
@@ -134,7 +128,6 @@ export default {
       }
     },
     editQuestion() {
-      console.log('masuk editq')
       this.title = this.question.title
       this.tags = this.question.tags
       this.content = this.question.content

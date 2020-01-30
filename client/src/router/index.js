@@ -13,7 +13,13 @@ const routes = [
         path: '',
         name: 'questions',
         component: () => import(/* webpackChunkName: "about" */ '../views/Questions.vue'),
-        meta: { requiresAuth: true },
+        meta: { requiresAuth: true }
+      },
+      {
+        path: '/tag/:name',
+        name: 'questions-in-tag',
+        component: () => import(/* webpackChunkName: "about" */ '../views/Questions.vue'),
+        meta: { requiresAuth: true }
       },
       {
         path: 'questions/:id',
@@ -37,12 +43,6 @@ const routes = [
         path: '/statistics',
         name: 'statistics',
         component: () => import(/* webpackChunkName: "about" */ '../views/Statistics.vue'),
-        meta: { requiresAuth: true },
-      },
-      {
-        path: '/profile',
-        name: 'profile',
-        component: () => import(/* webpackChunkName: "about" */ '../views/Profile.vue'),
         meta: { requiresAuth: true },
       },
       {
