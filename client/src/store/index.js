@@ -57,6 +57,18 @@ export default new Vuex.Store({
             variant: "danger"
           });
         });
+    },
+    fetchSingleQuestion(context, payload) {
+      return axios({
+        method: 'get',
+        url: 'questions/' + payload
+      })
+    },
+    fetchTheAnswer(context, payload){
+      return axios({
+        method: 'get',
+        url: 'answers/' + payload 
+      })
     }
   },
   modules: {

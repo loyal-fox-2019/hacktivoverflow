@@ -1,21 +1,21 @@
 <template>
   <v-row align="center" justify="space-around">
-    <div class="my-2 mr-auto ml-9">
-      <v-btn text large to="/" active-class="default-class test">hackbelowflow_v2</v-btn>
+    <div class="my-0 mr-auto ml-9">
+      <v-btn text large to="/" active-class="default-class test" small>hackbelowflow_v2</v-btn>
     </div>
-    <v-btn class="ml-auto" to="/signin">UMPAMANA ini SEARCH</v-btn>
+    <v-btn class="ml-auto mr-12" to="/signin" small>UMPAMANA ini SEARCH</v-btn>
     <div class="mr-12 ml-auto" v-if="!loginOra">
-      <v-btn to="/signin/login" color="primary">
+      <v-btn to="/signin/login" color="primary" small>
         Login
         <v-icon>mdi-login</v-icon>
       </v-btn>
-      <v-btn to="/signin/register" class="ma-2" outlined color="indigo">
+      <v-btn to="/signin/register" class="ma-2" outlined color="indigo" small>
         Register
         <v-icon>mdi-add</v-icon>
       </v-btn>
     </div>
     <div v-else>
-      <v-btn to="/" @click.prevent="logout" class="ma-2" outlined color="indigo">
+      <v-btn to="/" @click.prevent="logout" class="ma-2" outlined color="indigo" small>
         Logout
         <v-icon>mdi-logout</v-icon>
       </v-btn>

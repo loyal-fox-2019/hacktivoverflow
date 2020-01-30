@@ -1,5 +1,5 @@
 <template>
-  <v-card class="mx-auto d-flex" outlined>
+  <v-card class="mx-auto d-flex" outlined @click="moveTo(data._id)">
     <div style="width: 10%; text-align: center">
       <b-button v-if="this.$route.name != 'home'" @click.prevent="upVote">^</b-button>
 
@@ -45,9 +45,7 @@ export default {
       return this.$route.path;
     },
     totalVote() {
-      return this.data.upVotes
-        ? this.data.upVotes.length - this.data.downVotes.length
-        : "";
+      return this.data.upVotes.length - this.data.downVotes.length
     },
     date() {
       return new Date(this.data.createdAt).toLocaleString();
@@ -58,7 +56,12 @@ export default {
   },
   props: ["data"],
   mounted() {
-    console.log(this.data);
+    // console.log(this.data);
+  },
+  methods:{
+    moveTo(id){
+      this.$router.push(`/question/${id}`)
+    }
   }
 };
 </script>

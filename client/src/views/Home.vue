@@ -13,14 +13,10 @@
         />
       </div>
       <div style="width: 250px" class="mr-auto ml-n12" v-show="$store.state.isLogin">
-        <b-card
-      header="watched tags"
-      header-tag="header"
-      title="Title"
-    >
-      <b-card-text>Header and footers using props.</b-card-text>
-      <b-button href="#" variant="primary">Go somewhere</b-button>
-    </b-card>
+        <b-card header="watched tags" header-tag="header" title="Title">
+          <b-card-text>Header and footers using props.</b-card-text>
+          <b-button href="#" variant="primary">Go somewhere</b-button>
+        </b-card>
       </div>
     </div>
   </div>
@@ -39,6 +35,7 @@ export default {
     allQuestions() {
       return this.$store.state.allQuestions;
     }
-  }
+  },
+  methods: {}
 };
 </script>

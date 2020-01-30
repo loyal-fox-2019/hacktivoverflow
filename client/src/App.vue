@@ -3,7 +3,7 @@
     <div style="display: flex; justify-content:center;">
       <NavBar
         class="mt-1 mb-3 grey lighten-3"
-        style="height: 10vh; position: fixed; z-index:100; width: 100vw"
+        style="height: 50px; position: fixed; z-index:100; width: 100vw"
       />
       <b-alert
         style="position: fixed; width: 80%; text-align:center; margin-top: 11vh; z-index:100"
