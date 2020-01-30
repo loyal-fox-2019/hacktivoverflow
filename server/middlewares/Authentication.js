@@ -3,7 +3,7 @@ module.exports = function (req, res, next) {
     if (req.headers.hasOwnProperty('token')) {
         const token = req.headers.token
         try {
-            const user = jwt.verify(token, process.env.JWT_SECRET)
+            const user = jwt.verify(token, 'secretfox')
             req.userId = user.userId
             req.userEmail = user.emai
             next()

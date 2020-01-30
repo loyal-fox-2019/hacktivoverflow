@@ -40,7 +40,6 @@ export default {
   },
   watch: {
     errors(val) {
-      console.log(val);
       if (val) {
         this.$bvToast.toast(JSON.parse(JSON.stringify(val)), {
           title: 'Failed!',

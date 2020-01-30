@@ -26,7 +26,6 @@ export default {
         commit('SET_QUESTIONS', data);
       } catch ({ response }) {
         commit('SET_ERRORS', response.data.errors.join(' '), { root: true });
-        console.log(response.data.errors.join(' '));
       }
     },
     async getQuestion({ commit }, payload) {
@@ -35,7 +34,6 @@ export default {
         commit('SET_QUESTION', data);
       } catch ({ response }) {
         commit('SET_ERRORS', response.data.errors.join(' '), { root: true });
-        console.log(response.data.errors.join(' '));
       }
     },
     async createQuestion({ commit }, payload) {
@@ -48,7 +46,6 @@ export default {
         Router.push({ name: 'QuestionDetail', params: { slug: data.slug } });
       } catch ({ response }) {
         commit('SET_ERRORS', response.data.errors.join(' '), { root: true });
-        console.log(response.data.errors.join(' '));
       }
     },
     async updateQuestion({ commit }, payload) {
@@ -61,7 +58,6 @@ export default {
         Router.push({ name: 'QuestionDetail', params: { slug: data.slug } });
       } catch ({ response }) {
         commit('SET_ERRORS', response.data.errors.join(' '), { root: true });
-        console.log(response.data.errors.join(' '));
       }
     },
     async updateUpVote({ commit, state, dispatch }) {
@@ -74,7 +70,6 @@ export default {
         dispatch('getQuestion', payload._id);
       } catch ({ response }) {
         commit('SET_ERRORS', response.data.errors.join(' '), { root: true });
-        console.log(response.data.errors.join(' '));
       }
     },
     async updateDownVote({ commit, state, dispatch }) {
@@ -87,7 +82,6 @@ export default {
         dispatch('getQuestion', payload._id);
       } catch ({ response }) {
         commit('SET_ERRORS', response.data.errors.join(' '), { root: true });
-        console.log(response.data.errors.join(' '));
       }
     },
     // eslint-disable-next-line
@@ -105,7 +99,6 @@ export default {
         Router.replace('/');
       } catch ({ response }) {
         commit('SET_ERRORS', response.data.errors.join(' '), { root: true });
-        console.log(response.data.errors.join(' '));
       }
     },
   },

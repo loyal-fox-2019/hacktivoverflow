@@ -38,7 +38,6 @@ export default {
         commit('CLEAR_COMMENT');
       } catch ({ response }) {
         commit('SET_ERRORS', response.data.errors.join(' '), { root: true });
-        console.log(response.data.errors.join(' '));
       }
     },
     async getComment({ commit }, payload) {
@@ -52,7 +51,6 @@ export default {
         commit('SET_COMMENT', data);
       } catch ({ response }) {
         commit('SET_ERRORS', response.data.errors.join(' '), { root: true });
-        console.log(response.data.errors.join(' '));
       }
     },
     async updateComment({ commit, dispatch }, payload) {
@@ -68,7 +66,6 @@ export default {
         commit('SET_ISUPDATE', false);
       } catch ({ response }) {
         commit('SET_ERRORS', response.data.errors.join(' '), { root: true });
-        console.log(response.data.errors.join(' '));
       }
     },
   },

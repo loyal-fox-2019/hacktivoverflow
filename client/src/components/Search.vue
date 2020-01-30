@@ -36,7 +36,6 @@ export default {
   },
   watch: {
     isSearch() {
-      console.log('==');
       this.active = true;
     },
   },

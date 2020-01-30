@@ -21,7 +21,6 @@ export default {
         commit('SET_TAGS', data);
       } catch ({ response }) {
         commit('SET_ERRORS', response.data.errors.join(' '), { root: true });
-        console.log(response.data.errors.join(' '));
       }
     },
     async getTag({ commit }, payload) {
@@ -30,7 +29,6 @@ export default {
         commit('SET_TAG', data);
       } catch ({ response }) {
         commit('SET_ERRORS', response.data.errors.join(' '), { root: true });
-        console.log(response.data.errors.join(' '));
       }
     },
   },
