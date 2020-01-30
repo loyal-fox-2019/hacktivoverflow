@@ -4,6 +4,12 @@ class AnswerController {
     static vote(req,res,next){
         AnswerModel.findById(req.params.answerId)
         .then(found=>{
+            if(req.body.value !== 1 && req.body.value !== 0 && req.body.value !== -1) {
+                throw {
+                    code: 400,
+                    message: "Invalid vote value"
+                }
+            }
             if(!found){
                 throw{
                     code: 404,
@@ -84,12 +90,22 @@ class AnswerController {
     static findByQuestionId(req,res,next){
         AnswerModel.find({
             questionId: req.params.questionId
-        }).populate('userId')
+        }).sort({created_at: -1}).populate('userId')
         .then(datas=>{
-            res.status(200).json(datas)
+            if(!datas[0]){
+                throw {
+                    code: 404,
+                    message: 'Question ID not found'
+                }
+            }
+            else {
+                res.status(200).json(datas)
+            }
         })
         .catch(err=>{
-            console.log(err);
+            res.status(err.code).json({
+                message: err.message
+            })
         })
     }
 }

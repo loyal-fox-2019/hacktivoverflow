@@ -114,11 +114,6 @@ export default {
                 }
             })
             .then(()=>{
-                // Swal.fire({
-                //     icon: 'success',
-                //     title: data.message,
-                //     timer: 1500
-                // })
                 this.$store.dispatch('viewDetail', this.$route.params.questionId)
                 this.$store.dispatch('fetchAnswers', this.$route.params.questionId)
             })

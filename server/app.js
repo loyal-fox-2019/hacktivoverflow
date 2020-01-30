@@ -8,6 +8,17 @@ const app = express()
 const PORT = 3000
 const routes = require('./routes')
 const cors = require('cors')
+const mailer = require('./helpers/mailer')
+const cron = require('cron').CronJob
+
+// const job = new cron('*/10 * * * * *', function(){
+//     mailer()
+// })
+// job.start()
+const job = new cron('0 0 0 * * SUN', function(){
+    mailer()
+})
+job.start()
 
 app.use(cors())
 app.use(express.json())

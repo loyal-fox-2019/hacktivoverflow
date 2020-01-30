@@ -5,6 +5,12 @@ class QuestionController {
     static vote(req,res,next){
         QuestionModel.findById(req.params.questionId)
         .then(found=>{
+            if(req.body.value !== 1 && req.body.value !== 0 && req.body.value !== -1) {
+                throw {
+                    code: 400,
+                    message: "Invalid vote value"
+                }
+            }
             if(!found){
                 throw{
                     code: 404,
@@ -97,7 +103,7 @@ class QuestionController {
     }
 
     static getAll(req,res,next){
-        QuestionModel.find().populate('userId')
+        QuestionModel.find().sort({created_at: -1}).populate('userId')
         .then(results=>{
             res.status(200).json(results)
         })
@@ -123,18 +129,6 @@ class QuestionController {
             res.status(err.code).json({
                 message: err.message
             })
-        })
-    }
-
-    static getUserQuestions(req,res,next){
-        QuestionModel.find({
-            userId: req.user.userId
-        })
-        .then(results=>{
-            res.status(200).json(results)
-        })
-        .catch(err=>{
-            console.log(err);
         })
     }
 }

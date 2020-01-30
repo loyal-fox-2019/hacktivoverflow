@@ -3,6 +3,37 @@ const bcrypt = require('bcrypt')
 const { generateJWT, verifyJWT } = require('../helpers/jwt')
 
 class UserController {
+    static glogin(req,res,next){
+        let userData = {
+            name: req.user.name,
+            email: req.user.email,
+            password: process.env.DEFAULT_PASS
+        }
+        UserModel.findOne({
+            email: userData.email
+        })
+        .then(user=>{
+            if(user){
+                return user
+            }
+            else {
+                return UserModel.create(userData)
+            }
+        })
+        .then(result=>{
+            let payload = {
+                userId: result._id,
+                name: result.name,
+                email: result.email
+            }
+            let token = generateJWT(payload)
+            res.status(200).json({token, userId: payload.userId, username: payload.name})
+        })
+        .catch(err=>{
+            console.log(err);
+        })
+    }
+
     static register(req,res,next){
         let {name,email,password} = req.body
         UserModel.create({

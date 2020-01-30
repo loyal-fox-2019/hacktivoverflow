@@ -119,7 +119,7 @@ export default new Vuex.Store({
     viewDetail(context, payload){
       axios({
         method: 'get',
-        url: `http://localhost:3000/question/questionId/${payload}`
+        url: `http://localhost:3000/question/${payload}`
       })
       .then(({data})=>{
         context.commit('SET_SELECTED_QUESTION', data)
