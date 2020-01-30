@@ -14,6 +14,7 @@ class QuestionController
         console.log("TCL: req.decodedUser", req.decodedUser)
 
         const { title, description, TagList } = req.body
+        console.log(`TCL: req.body`, req.body)
 
         Question.create({
             title, description, TagList,
@@ -23,6 +24,7 @@ class QuestionController
             createdAt: new Date()
         })
         .then(result=>{
+            console.log(`TCL: result`, result)
             res.status(200).json(result)
         })
         .catch(err=>{
@@ -90,6 +92,34 @@ class QuestionController
       }
 
 
+    static filterSearch(req,res,next)
+      {
+          const validKey = ['TagList', 'title']
+          let updateQuery = {}
+          
+          validKey.forEach(element => {
+              if(req.body[element])
+                {
+                  if(element === 'title')
+                    updateQuery[element] = new RegExp(req.body[element], 'i')
+                  else
+                    updateQuery[element] = req.body[element]
+                }
+          });
+        
+
+          Question.find(
+              updateQuery
+          )
+          .then(result=>{
+              res.status(200).json(result)
+          })
+          .catch(err=>{
+              next(err)
+          })
+      }
+
+
 
     static putUpdate(req,res,next)
       {
@@ -104,8 +134,7 @@ class QuestionController
                                                   }
                                        }
           }
-          
-          console.log(`TCL: updateScript`, updateScript)
+        //   console.log(`TCL: updateScript`, updateScript)
 
           Question.updateOne(
               { _id: req.params.id},

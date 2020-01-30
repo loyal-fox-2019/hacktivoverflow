@@ -3,7 +3,7 @@
         <!-- <h6>@components/cardSimple.vue</h6> -->
         
         <!-- {{ question }} -->
-        <div class="container shadow-sm p-3 mb-3 bg-white rounded">
+        <div :class="returnClass" >
             <div class="row" style="margin:auto">
                 <div style="width:10%" >
                     <div class="btn-group-vertical">
@@ -25,7 +25,7 @@
                         </div>
                 </div>
                 
-                <div class="text-left" style="width:80%">
+                <div class="text-left" style="width:80%; padding-left:3%">
                     <!-- <button type="button" class="close"  aria-label="Close" v-if=" question.AuthorId.username === loggedUsername">
                         <i class="fas fa-edit"></i>
                     </button> -->
@@ -34,6 +34,18 @@
 
                     <router-link :to="`/thread/${question._id}`"><h5 class="card-title">{{ question.title }}</h5></router-link> 
                     <p class="card-text text-muted" v-html="question.description.slice(0,100) + '...'"></p>
+                    
+                    <div>
+                        <button  
+                            v-for="tag in question.TagList" :key="tag"
+                            type="button" 
+                            class="btn btn-outline-info tagButton"
+                            @click.prevent="$emit('switchToFilterResultPage', { tagList: tag })"
+                            >{{ tag }}
+                        </button>
+                    </div>
+                    <div class="dropdown-divider"></div>
+
                     <footer class="blockquote-footer">Posted @<cite title="Source Title">{{ question.createdAt.split('T')[0] }} ~by {{ question.AuthorId.username }}</cite></footer>
                 </div>
 
@@ -59,7 +71,8 @@ export default {
     ],
     data(){
         return{
-            answers:0
+            answers:0,
+            classDiv1 : 'container shadow-sm p-3 mb-3 bg-white rounded' 
         }
     },
     methods:{
@@ -82,12 +95,22 @@ export default {
           },
     },
     computed:{
+        ...mapGetters([
+            'loggedUsername',
+            'loggedInUserDetail'
+        ]),
         countVotes(){
             return  this.question.upVotes.length - this.question.downVotes.length
         },
-        ...mapGetters([
-            'loggedUsername'
-        ])
+        returnClass(){
+            for(let x = 0; x < this.loggedInUserDetail.watchedTag.length; x++)
+              {
+                  if(this.question.TagList.indexOf( this.loggedInUserDetail.watchedTag[x] ) >= 0)
+                    return 'container shadow-sm p-3 mb-3 bg-white rounded redBorderDiv'
+              }
+            return 'container shadow-sm p-3 mb-3 bg-white rounded'
+        }
+        
         
 
     },
@@ -110,5 +133,18 @@ export default {
     width:100%
 }
 
+.tagButton{
+    border: dashed 1px grey;
+    border-radius: 10px;
+    font-size: 100%;
+    padding: 5px;
+    margin:0.3%;
+}
+
+.redBorderDiv{
+    border: dashed 2px red;
+    box-shadow: 10px 10px 5px grey;
+    
+}
 
 </style>

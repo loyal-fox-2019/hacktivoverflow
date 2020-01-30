@@ -84,11 +84,26 @@ class TagController{
             .catch(err=>{
                 next(err)
             })
+      }
 
-
-
+    
+    static findOne(req,res,next)
+      {
+            Tag.findOne({
+                name : req.params.tagName
+            })
+            .then(result=>{
+                if(!result)
+                    res.status(404).json({ message : 'Tag doesn\'t Exist' })
+                else
+                    res.status(200).json({ message : true })
+            })
+            .catch(err=>{
+                next(err)
+            })
       }
     
+
     static pullQuestionFromTag(req,res,next)
       {
             Tag.findOneAndUpdate(

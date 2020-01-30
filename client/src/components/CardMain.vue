@@ -57,7 +57,7 @@
 
 <script>
 import Votes from './Votes'
-import EditModal from './EditModal'
+// import EditModal from './EditModal'
 import axios from 'axios'
 import Swal from 'sweetalert2'
 import { mapGetters } from 'vuex'
@@ -65,7 +65,7 @@ import { mapGetters } from 'vuex'
 export default {
     components:{
         Votes,
-        EditModal
+        // EditModal
     },
     props:[
         'cardType',

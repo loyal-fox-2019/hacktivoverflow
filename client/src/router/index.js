@@ -12,12 +12,17 @@ const routes = [
   {
     path: '/thread/:id',
     name: 'thread',
-    component: () => import(/* webpackChunkName: "home" */ '../views/Thread.vue')
+    component: () => import(/* webpackChunkName: "thread" */ '../views/Thread.vue')
   },
   {
     path: '/edit/:cardType/:id',
-    name: 'edit',
-    component: () => import(/* webpackChunkName: "home" */ '../views/EditPage.vue')    
+    name: 'editPage',
+    component: () => import(/* webpackChunkName: "editPage" */ '../views/EditPage.vue')    
+  },
+  {
+    path: '/searchResult',
+    name: 'searchResultPage',
+    component: () => import(/* webpackChunkName: "searchResultPage" */ '../views/searchResultPage.vue')    
   }
 
 ]

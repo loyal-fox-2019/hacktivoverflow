@@ -8,8 +8,9 @@ router.delete('/masterDelete', TagController.masterDelete)
 
 
 router.use(authentication)
-router.post('/', TagController.createUpdateTag)
 
+router.post('/', TagController.createUpdateTag)
+router.get('/:tagName', TagController.findOne)
 router.patch('/:tagName', TagController.pullQuestionFromTag)
 
 

@@ -1,19 +1,44 @@
 <template>
     <div>
         <h1>Edit {{ $route.params.cardType }}</h1>
+        {{ postDetail }}
         
         <div style="width:50rem; margin:auto">
-                <form action="" @submit.prevent="editPost">
+            <form action="" @submit.prevent="editPost">
                 <div class="form-group text-sm-left">
                     <label for="title" class="col-form-label"><b>Title</b></label> 
                     <input type="title" class="form-control" id="title" v-model="postDetail.title" required>
                 </div>
+
                 <div class="form-group text-sm-left">
                     <label for="Description" class="col-form-label"><b>Description</b></label> 
+                
+                    <div class="card">
+                        <wysiwyg v-model="postDetail.description" required />
+                    </div>
                 </div>
-                <div class="card">
-                    <wysiwyg v-model="postDetail.description" required />
+
+                <div class="form-group " data-toggle="tooltip" data-placement="top" title="add multiple tags separated with comma, extra space will be ignored">
+                    <label for="Title"><b>Edit Tags</b></label>
+                    <input 
+                        type="text" 
+                        class="form-control" 
+                        id="Title" 
+                        placeholder="add multiple tags separated with comma, extra space will be ignored" 
+                        v-model="tagListString">
                 </div>
+
+                <div  class="form-group" data-toggle="tooltip" data-placement="top" title="click tag to delete" v-if="">
+                    <!-- {{ tagListArrayForm }} -->
+                    <button  
+                        v-for="(tag, index) in tagListArrayFormDisplay" :key="index" 
+                        type="button" 
+                        class="btn btn-outline-info tagButton"
+                        @click.prevent="removeDisplayedTag(tag)">{{ tag }} | x
+                    </button>
+                </div>
+
+
                 <div style="margin:auto; margin-top:1%;">
                     <button type="submit" class="btn btn-primary" style=" margin-right:1%">Edit Post</button>
                     <button type="" class="btn btn-danger" @click.prevent="deletePost">Delete Post</button>
@@ -33,6 +58,7 @@
 <script>
 import Swal from 'sweetalert2'
 import axios from 'axios'
+import { mapGetters } from 'vuex'
 
 export default {
 
@@ -42,12 +68,13 @@ export default {
     data(){
         return{
             postDetail:{},
+            tagListString: '',
+            tagListArrayForm:[]
         }
     },
     methods:{
         getPostDetail()
           {
-              console.log('TCL \n============\n ', 'JALAN NIHHHHHH')
               axios({
                   method: 'get',
                   url: `http://localhost:3000/${this.$route.params.cardType}/editFindOne/${this.$route.params.id}`,
@@ -58,6 +85,8 @@ export default {
               .then(result=>{
                   console.log('TCL \n============\n getPostDetail result', result)
                   this.postDetail = result.data
+                  this.tagListArrayForm = result.data.TagList
+                  this.tagListString = result.data.TagList.join(',')
               })
               .catch(err=>{
                   Swal.fire(
@@ -78,22 +107,42 @@ export default {
             .then(result=>{
                 if(result.value)
                   {
+                    let updateQuery = {
+                        title : this.postDetail.title,
+                        description : this.postDetail.description
+                    }
+
+                    let pushTag = [], pullTag = []
+
+                    this.tagListArrayForm.forEach(element => {
+                        if( this.postDetail.TagList.indexOf( element ) === -1)
+                            pushTag.push(element)
+                    });
+
+                    this.postDetail.TagList.forEach(element => {
+                        if( this.tagListArrayForm.indexOf( element ) === -1)
+                            pullTag.push(element)
+                    });
+
+                    updateQuery.push = pushTag
+                    updateQuery.pull = pullTag
+                    console.log(`TCL: updateQuery`, updateQuery)
+
+
                     axios({
                         method: 'put',
                         url: `http://localhost:3000/${this.$route.params.cardType}/update/${this.$route.params.id}`,
                         headers:{
                             access_token: localStorage.getItem('access_token')
                         },
-                        data:{
-                            title: this.postDetail.title,
-                            description: this.postDetail.description
-                        }
+                        data: updateQuery
                     })
                     .then(result=>{
                         console.log('TCL \n============\n result @views/editpage/editpost()', )
                         Swal.fire(
                             `Success to update your ${this.$route.params.cardType}`
                         )
+                        this.$router.go(-1)
 
                     })
                     .catch(err=>{
@@ -146,9 +195,19 @@ export default {
             })
           }
     },
-    mounted(){
+    created(){
         this.getPostDetail()
+    },
+    mounted(){
+        
+    },
+    computed:{
+        tagListArrayFormDisplay(){
+            this.tagListArrayForm = this.tagListString.replace(/,$/, "").replace(/\s\s+/g, ' ').split(',').map(e=> e.trim()).filter( e=> e != ' ' && e.length !== 0)
+            return  this.tagListArrayForm
+        }
     }
+
 
 
 
@@ -159,8 +218,15 @@ export default {
 
 
 
-<style>
+<style scoped>
 
+.tagButton{
+    border: dashed 1px grey;
+    border-radius: 10px;
+    font-size: 100%;
+    padding: 5px;
+    margin:1%;
+}
 
 
 </style>

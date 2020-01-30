@@ -16,6 +16,7 @@ router.delete('/masterDelete', QuestionController.masterDelete)
 
 router.get('/', QuestionController.findAllQuestion)
 router.get('/:id', authentication, QuestionController.findQuestionById)
+router.post('/filter', QuestionController.filterSearch)
 
 
 router.use(authentication)

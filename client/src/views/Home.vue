@@ -2,25 +2,74 @@
     <div style="padding:2%">
         <!-- <h1>@views/home.vue</h1> -->
 
-            <div  :class="kelas">
+            <!-- <div  :class="kelas">
                 <h1>lalalla</h1>
-            </div>
+                {{ loggedInUserDetail }}
+            </div> -->
         
         <div class="container">
             <div class="row">
-                <div class="col-2">
-                    <div id="userDiv">
-                        <img src="https://www.harmony.gov.au/Documents/resources/hw-web-banner-vertical-orange.jpg" alt="" style="width:100%; height:auto">
-                        <p><b>buat pasang banner iklan nih</b></p>
-                        <p><b>biar dapet banyak duit</b> </p>
+                <div class="col-4">
+                    <div id="watchedTagDiv">
+                        <div class="card">
+                            
+                            <div class="card-header bg-dark text-light" >
+                                Watched Tag
+                            </div>
+
+                            <!-- start of accordion -->
+                            <div class="accordion" id="accordionExample">
+                                <div class="card">
+                                    <div class="card-header" id="headingOne">
+                                    <h2 class="mb-0">
+                                        <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne" @click.prevent="setDeleteButton">
+                                        Edit Tag
+                                        </button>
+                                    </h2>
+                                    </div>
+
+                                    <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordionExample">
+                                    <div class="card-body" >
+                                        <form class="form-inline" @submit.prevent="addWatchedTag" >
+                                            <input 
+                                                type="text" 
+                                                class="form-control mb-2 mr-sm-2" 
+                                                id="inlineFormInputName2" placeholder="add tag" 
+                                                required
+                                                v-model="watchedTagAdded">
+                                            <button type="submit" class="btn btn-primary mb-2">add</button>
+                                        </form>
+                                    </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- end of accordion -->
+                            
+                            <div>
+                                <button  
+                                    v-for="(tag, index) in loggedInUserDetail.watchedTag " :key="index"
+                                    type="button" 
+                                    class="btn btn-outline-info tagButton"
+                                    @click.prevent="$emit('switchToFilterResultPage', { tagList: tag })"
+                                    >{{ tag }}
+                                    <button 
+                                        class="btn btn-light btn-sm" 
+                                        v-if="showDeleteButton"
+                                        @click.prevent="deleteTag(tag)">x
+                                    </button>
+                                </button>
+
+                            </div>
+                            
+                        </div>
 
                     </div>
                 </div>
 
-                <div class="col-10">
+                <div class="col-8">
                     <div id="questionDiv">
                         <!-- console.log("TCL: access_token", {{access_token}}) -->
-                        <div v-for="question in questionData" :key="question">
+                        <div v-for="(question, index) in questionData" :key="index">
                             <CardSimple :question="question"/>
                         </div>
                         
@@ -44,7 +93,7 @@
 <script>
 import CardSimple from '@/components/CardSimple'
 import { mapGetters } from 'vuex'
-import axios from 'axios'
+import axios from '../../config/axios'
 import Swal from 'sweetalert2'
 
 export default {
@@ -54,16 +103,93 @@ export default {
     data(){
         return{
             votes:100,
-            kelas:'blueDiv'
+            kelas:'blueDiv',
+            watchedTagAdded:'',
+            showDeleteButton: false
         }
     },
     methods:{
-        
-        isLoginCheck()
-          {
+        isLoginCheck(){
               Swal.fire('JALAN NIH ISLOGINCHECK')
-          }
+          },
 
+        setDeleteButton(){
+            if(!this.showDeleteButton)
+                this.showDeleteButton = true
+            else
+                this.showDeleteButton = false
+        },
+
+        addWatchedTag(){
+            axios({
+                method: 'get',
+                url: `/tags/${this.watchedTagAdded}`,
+                headers:{
+                    access_token : localStorage.getItem('access_token')
+                }
+            })
+            .then( ({data}) =>{
+                if(data.message)
+                  {
+                      return axios({
+                          method: 'patch',
+                          url: `/users/updateTag`,
+                          headers:{
+                              access_token : localStorage.getItem('access_token')
+                          },
+                          data:{
+                              push: [this.watchedTagAdded]
+                          }
+                      })
+                  }
+            })
+            .then( ({data})=>{
+                Swal.fire('Success Adding Watched Tag')
+                this.watchedTagAdded = ''
+                this.$store.dispatch('fetchUserDetail')
+            })
+            .catch(({response})=>{
+                console.log(' error @addWatchedTag -home \n=========================================\n', response)
+                Swal.fire(
+                    'Error with Adding Watched Tag',
+                    response.data.message
+                )
+            })
+
+        },
+
+        deleteTag(tagName){
+            Swal.fire({
+                title: `Delete Tag "${tagName}"`,
+                showCancelButton: true,
+                confirmButtonText: "Yes delete It"
+            })
+            .then(result=>{
+                if(result.value){
+                    axios({
+                        method: 'patch',
+                        url: '/users/updateTag',
+                        headers:{
+                            access_token : localStorage.getItem("access_token")
+                        },
+                        data:{
+                            pull : tagName
+                        }
+                    })
+                    .then( ({data}) =>{
+                        Swal.fire('Watched Tag Has Been Deleted')
+                        this.$store.dispatch('fetchUserDetail')
+                    })
+                    .catch(({response})=>{
+                        console.log(' error @deleteTag -home \n=========================================\n', response.data)
+                        Swal.fire(
+                            'Error with Deleting Watched Tag',
+                            response.data.message
+                        )
+                    })
+                }
+            })
+        }
     },
     created(){
         this.$store.dispatch('fetchQuestionData')
@@ -72,9 +198,11 @@ export default {
     computed:{
         ...mapGetters([
             'access_token',
-            'questionData'
+            'questionData',
+            'loggedInUserDetail'
         ])
-    }
+    },
+    
 
 
 
@@ -88,12 +216,16 @@ export default {
     margin-top:1%
 }
 
-.redDiv{
-    border: solid red 2px
+#watchedTagDiv{
+    /* border: solid 2px red; */
 }
 
-.blueDiv{
-    border: solid 2px blue;
+.tagButton{
+    border: dashed 1px grey;
+    border-radius: 10px;
+    font-size: 100%;
+    padding: 5px;
+    margin:1%;
 }
 
 

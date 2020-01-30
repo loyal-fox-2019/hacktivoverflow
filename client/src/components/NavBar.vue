@@ -2,7 +2,8 @@
     <div>
         <nav class="navbar navbar-expand-lg navbar-light bg-light">
             
-            <a class="navbar-brand" href="#">HACKTIVoverflow</a>
+            <!-- <a class="navbar-brand" href="">HACKTIVoverflow</a> -->
+            <h4 class="navbar-brand">HACKTIVoverflow</h4>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -18,9 +19,13 @@
 
                 <!-- 'search group' -->
                 <div style="margin-right:1%">
-                <form class="form-inline my-2 my-lg-0">
-                    <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-                    <button class="btn btn-outline-success my-2 my-sm-0" type="submit" @click.prevent="searchByTitle">Search</button>
+                <form class="form-inline my-2 my-lg-0" @submit.prevent="searchByTitle">
+                    <input 
+                        class="form-control mr-sm-2" 
+                        type="search" placeholder="Search by Question Title" 
+                        aria-label="Search" 
+                        v-model="searchString" required>
+                    <button class="btn btn-outline-success my-2 my-sm-0" type="submit" >Search</button>
                 </form>
                 </div>
                 <!-- end of 'search group' -->
@@ -57,7 +62,7 @@
         <!-- modal 'modalUserForm' -->
         <div class="modal fade" id="modalUserForm" tabindex="-1" role="dialog" aria-labelledby="modalUserFormLabel" aria-hidden="true" >
         <div class="modal-dialog " role="document" >
-            <div class="modal-content" style="width:20rem;">
+            <div class="modal-content" :style="userModalStyle">
                 
                 <div class="modal-header">
                     <h5 class="modal-title" id="modalUserFormLabel" v-if="showForm === 'register'">Registration</h5>
@@ -75,12 +80,36 @@
                             <input type="username" class="form-control" id="username" v-model="username" required>
                         </div>
 
-                        <div class="form-group text-sm-left" v-if="showForm === 'newQuestion'">
-                            <label for="title" class="col-form-label"><b>Title</b></label>
-                            <input type="title" class="form-control" id="title" v-model="questionTitle" required>
-                            <div class="form-group">
+                        <div v-if="showForm === 'newQuestion'">
+                            <div class="form-group text-sm-left" >
+                                <label for="title" class="col-form-label"><b>Title</b></label>
+                                <input type="title" class="form-control" id="title" v-model="questionTitle" required>
+                            </div>
+
+                            <div class="form-group text-sm-left">
                                 <label for="description"><b>Description</b></label>
-                                <textarea class="form-control" id="description" rows="5" style="resize:none" v-model="questionDescription" required></textarea>
+                                <!-- <textarea class="form-control" id="description" rows="5" style="resize:none" v-model="questionDescription" required></textarea> -->
+                                <wysiwyg v-model="questionDescription" required />
+                            </div>
+                            
+                            <div class="form-group " data-toggle="tooltip" data-placement="top" title="add multiple tags separated with comma, extra space will be ignored">
+                                <label for="Title"><b>add tags</b></label>
+                                <input 
+                                    type="text" 
+                                    class="form-control" 
+                                    id="Title" 
+                                    placeholder="add multiple tags separated with comma, extra space will be ignored" 
+                                    v-model="tagListString">
+                            </div>
+
+                            <div  class="form-group" data-toggle="tooltip" data-placement="top" title="click tag to delete" v-if="tagListString.length>0">
+                                <!-- {{ tagListArrayForm }} -->
+                                <button  
+                                    v-for="tag in tagListArrayForm" :key="tag" 
+                                    type="button" 
+                                    class="btn btn-outline-info tagButton"
+                                    @click.prevent="removeDisplayedTag(tag)">{{ tag }} | x
+                                </button>
                             </div>
                         </div>
 
@@ -126,23 +155,54 @@ export default {
     data(){
         return{
             showForm:'login',
+            userModalStyle: `width:20rem;`,
+            
+            username: '',
+
             questionTitle:'',
             questionDescription:'',
+            tagListString:'',
+
+            searchString:''
         }
     },
     methods:{
+        setNewPostStyle(){
+            this.userModalStyle = `
+                width:60vw;
+                margin-left: -60%;
+            `
+        },
+        setDefaultModalStyle(){
+            this.userModalStyle = `
+                width: 20rem;
+            `
+        },
+        setDataToDefaultEmpty(){
+            this.username = ''
+            this.questionTitle = ''
+            this.questionDescription = ''
+            this.tagListString = ''
+        },
         changeForm(form)
           {
+              this.setDataToDefaultEmpty()
+
+              if(form === 'newQuestion')
+                this.setNewPostStyle()
+              else  
+                this.setDefaultModalStyle()
+            
+
               this.showForm = form
-              this.username = ''
-              this.questionTitle = ''
-              this. questionDescription = ''
+              
               this.$store.commit('UPDATE_EMAIL', '')
               this.$store.commit('UPDATE_PASSWORD', '')
           },
         searchByTitle()
           {
-              Swal.fire('jalan nih')
+              this.$store.dispatch('searchArticles', {title : this.searchString })
+              this.$router.push('/searchResult')
           },
         submitForm()
           {
@@ -204,19 +264,20 @@ export default {
                       password: this.inputPassword
                   }
               })
-              .then(result=>{
-                  console.log('TCL \n============\n ', result)
+              .then(({data})=>{
+                  console.log(`TCL: data`, data)
                   Swal.fire(
                       'Login Successful',
-                      `Welcome back ${result.data.username}`
+                      `Welcome back ${data.username}`
                   )
 
-                  localStorage.setItem('access_token', result.data.access_token)
-                  localStorage.setItem('username', result.data.username)
+                  localStorage.setItem('access_token', data.access_token)
+                  localStorage.setItem('username', data.username)
                   this.$store.commit('SET_LOGGED_USERNAME')
                   this.$store.commit('SET_IS_LOGIN')
+                  this.$store.commit('SET_LOGGED_IN_USER_DETAIL', data)
+
                   $('#modalUserForm').modal('hide')
-                  
               })
               .catch(err=>{
                   console.log("TCL: err", err.response.data)
@@ -241,6 +302,7 @@ export default {
                         localStorage.clear()
                         this.$store.commit('SET_IS_LOGIN')
                         this.$store.commit('SET_LOGGED_USERNAME')
+                        this.$store.commit('SET_LOGGED_IN_USER_DETAIL', {})
                         Swal.fire(
                             'User Has Logged Out',
                             'See you again next time'
@@ -250,6 +312,7 @@ export default {
           },
         postNewQuestion()
           {
+              console.log(' \n======================\n', this.tagListArrayForm)
               axios({
                   method: 'post',
                   url: '/questions',
@@ -258,33 +321,43 @@ export default {
                   },
                   data:{
                       title: this.questionTitle,
-                      description: this.questionDescription
+                      description: this.questionDescription,
+                      TagList: this.tagListArrayForm
                   }
               })
-              .then(result=>{
+              .then( ({data}) =>{
+
+                return axios({
+                    method: 'post',
+                    url: '/tags',
+                    headers:{
+                        access_token:localStorage.getItem('access_token')
+                    },
+                    data:{
+                        name : this.tagListArrayForm,
+                        QuestionId : data._id
+                    }
+                })
+              })
+              .then( ({data}) =>{
                   Swal.fire({
                       title: "Success to Post New Question",
                       icon: 'success'
                   })
-
-                this.questionTitle = ''  
-                this.questionDescription = ''
-                
-                $('#modalUserForm').modal('hide')
-                this.$store.dispatch('fetchQuestionData')
+                  this.setDataToDefaultEmpty()
+                    
+                  $('#modalUserForm').modal('hide')
+                  this.$store.dispatch('fetchQuestionData')
               })
               .catch(err=>{
-                  console.log('TCL \n============\n ', err.response.data )
+                  console.log('err @postNewQuestion -NavBar \n============\n ', err.response.data )
                   Swal.fire({
-                      title:'Something\'s Wrong ',
+                      title:'Error with Posting New Question',
                       text: `${err.response.data.message}`,
                       icon: 'error'
                   })
               })
-          }
-
-        
-
+        }
     },
     mounted(){
         this.$store.commit('SET_IS_LOGIN')
@@ -297,7 +370,10 @@ export default {
             'inputPassword',
             'isLogin',
             'loggedUsername'
-        ])
+        ]),
+        tagListArrayForm(){
+            return this.tagListString.replace(/,$/, "").replace(/\s\s+/g, ' ').split(',').map(e=> e.trim()).filter( e=> e != ' ' && e.length !== 0)
+        }
     }
 
 
@@ -310,6 +386,12 @@ export default {
 
 
 <style scoped>
-
+.tagButton{
+    border: dashed 1px grey;
+    border-radius: 10px;
+    font-size: 100%;
+    padding: 5px;
+    margin:0.2%;
+}
 
 </style>

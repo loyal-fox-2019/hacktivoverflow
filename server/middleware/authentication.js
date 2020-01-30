@@ -13,7 +13,7 @@ module.exports = (req,res,next)=>{
         if( result )
           { 
               req.decodedUser = result._id
-              console.log("TCL: req.decodedUser", req.decodedUser)
+              req.userDetail = result
               next()
           }
         else

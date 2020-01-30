@@ -13,6 +13,7 @@ router.post('/register', UserController.register)
 router.post('/login', UserController.logIn)
 
 router.use(authentication)
+router.get('/userDetail', UserController.userDetail)
 router.patch('/updateTag', UserController.updateTag)
 
 

@@ -13,6 +13,13 @@ import NavBar from '@/components/NavBar'
 export default {
   components:{
     NavBar
+  },
+  created(){
+      if(localStorage.getItem('access_token')){
+        console.log(' \n======================\n JALAN NEH APP VUE CREATED')
+        this.$store.dispatch('fetchUserDetail')
+
+      }
   }
 
   

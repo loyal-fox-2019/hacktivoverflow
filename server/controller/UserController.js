@@ -27,7 +27,9 @@ class UserController
           const { username, email, password } = req.body
 
           User.create(
-              { username, email, password }
+              { username, email, password,
+                watchedTag: []
+              }
           )
           .then(result=>{
               res.status(201).json(result)
@@ -65,10 +67,16 @@ class UserController
           })
       }
 
+    static userDetail(req,res,next)
+      {
+          res.status(200).json(req.userDetail)
+      }
+
     
     static updateTag(req,res,next)
       {
         const { push, pull } = req.body
+        console.log(`TCL: req.body`, req.body)
 
         let updateScript = {}
         if(push){
@@ -80,13 +88,15 @@ class UserController
         }
       //   console.log(`TCL: updateScript`, updateScript)
 
-        User.updateOne(
+        User.findOneAndUpdate(
             { _id: req.decodedUser._id},
             updateScript
         )
         .then(result=>{
+          console.log(' \n======================\n JALAN NIH RESULT')  
               if(pull){
-                  return User.updateOne(
+                console.log(' \n======================\n JALAN NIH ADA PULL')
+                  return User.findOneAndUpdate(
                       { _id: req.decodedUser._id},
                       {$pull : { 
                               watchedTag : { 
@@ -95,8 +105,12 @@ class UserController
                       }}
                   )
               }
-              else
-                  res.status(200).json(result)
+              else{
+                console.log(' \n======================\n UDAH SAMPE SINI AJA')
+                console.log(`TCL: result`, result)
+                res.status(200).json(result)
+              }
+                
         })
         .then(result=>{
             res.status(200).json(result)

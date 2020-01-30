@@ -10,9 +10,36 @@ export default new Vuex.Store({
     inputPassword:'',
     isLogin:false,
     loggedUsername: '',
-    questionData:[]
+    questionData:[],
+
+    loggedInUserDetail:{},
+    searchResultArray: [],
+    showEditButton: false
 
 
+  },
+  getters:{
+    inputEmail: state=>{
+      return state.inputEmail
+    },
+    inputPassword: state=>{
+      return state.inputPassword
+    },
+    questionData: state=>{
+      return state.questionData
+    },
+    isLogin: state=>{
+      return state.isLogin
+    },
+    loggedUsername: state=>{
+      return state.loggedUsername
+    },
+    loggedInUserDetail: state=>{
+      return state.loggedInUserDetail
+    },
+    searchResultArray: state=>{
+      return state.searchResultArray
+    }
   },
   mutations: {
     UPDATE_EMAIL(state,payload){
@@ -47,12 +74,13 @@ export default new Vuex.Store({
         {
           state.loggedUsername = ''
         }
+    },
+    SET_LOGGED_IN_USER_DETAIL(state,payload){
+      state.loggedInUserDetail = payload
+    },
+    SET_SEARCH_RESULT_ARRAY(state,payload){
+      state.searchResultArray = payload
     }
-      
-
-    
-
-
   },
   actions: {
     fetchQuestionData(commit, payload)
@@ -69,30 +97,46 @@ export default new Vuex.Store({
           console.log("TCL: err @store/index ", err.response.data)
         })
 
-      }
+      },
+    fetchUserDetail(commit){
+        axios({
+          method: 'get',
+          url: '/users/userDetail',
+          headers:{
+             access_token : localStorage.getItem('access_token')
+          }
+        })
+        .then( ({data})=>{
+          console.log(`TCL: fetchUserDetail -> data`, data)
+          this.commit('SET_LOGGED_IN_USER_DETAIL', data)
+        })
+        .catch(({response})=>{
+          console.log(' error @fetchUserDetail -store-index \n=========================================\n', response.data)
+        })
+    },
+    searchArticles({commit}, payload){
+        axios({
+            method: 'post',
+            url: '/questions/filter',
+            data: payload
+        })
+        .then( ({data}) =>{
+            this.commit('SET_SEARCH_RESULT_ARRAY', data)
+        })
+        .catch(({response})=>{
+            console.log(' error @searchArticles -store-index \n=========================================\n', response.data)
+            Swal.fire(
+                'Error with Searching Questions',
+                response.data.message
+            )
+        })
+
+    }
 
   },
   modules: {
 
 
 
-  },
-  getters:{
-    inputEmail: state=>{
-      return state.inputEmail
-    },
-    inputPassword: state=>{
-      return state.inputPassword
-    },
-    questionData: state=>{
-      return state.questionData
-    },
-    isLogin: state=>{
-      return state.isLogin
-    },
-    loggedUsername: state=>{
-      return state.loggedUsername
-    }
   }
-  
 })
