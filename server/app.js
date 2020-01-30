@@ -23,7 +23,8 @@ app.use(errorHandler)
 
 mongoose.connect(mongoDB, {
     useNewUrlParser: true,
-    useUnifiedTopology: true
+    useUnifiedTopology: true,
+    useFindAndModify: false
 })
     .then(() => console.log(`connected to mongoDB : ${mongoDB}`))
     .catch(() => console.log(`Failed connect to MongoDB : ${mongoDB}, ${err}`))
