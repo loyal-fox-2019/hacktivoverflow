@@ -72,8 +72,8 @@ export default new Vuex.Store({
         .catch(err => {
           Swal.fire({
             icon: 'error',
-            title: 'error',
-            text: err
+            title: err.response.data,
+            text: err.response.status
           })
         })
     },
@@ -88,8 +88,8 @@ export default new Vuex.Store({
         .catch(err => {
           Swal.fire({
             icon: 'error',
-            title: 'error',
-            text: err
+            title: err.response.data,
+            text: err.response.status
           })
         })
     },
@@ -109,8 +109,8 @@ export default new Vuex.Store({
         .catch(err => {
           Swal.fire({
             icon: 'error',
-            title: 'error',
-            text: err
+            title: err.response.data,
+            text: err.response.status
           })
         })
     },
@@ -129,8 +129,8 @@ export default new Vuex.Store({
         .catch(err => {
           Swal.fire({
             icon: 'error',
-            title: 'error',
-            text: err
+            title: err.response.data,
+            text: err.response.status
           })
         })
     },
@@ -157,8 +157,8 @@ export default new Vuex.Store({
         .catch(err => {
           Swal.fire({
             icon: 'error',
-            title: 'error',
-            text: err
+            title: err.response.data,
+            text: err.response.status
           })
         })
     },
@@ -176,8 +176,8 @@ export default new Vuex.Store({
         .catch(err => {
           Swal.fire({
             icon: 'error',
-            title: 'error',
-            text: err
+            title: err.response.data,
+            text: err.response.status
           })
         })
     },
@@ -195,8 +195,8 @@ export default new Vuex.Store({
         .catch(err => {
           Swal.fire({
             icon: 'error',
-            title: 'error',
-            text: err
+            title: err.response.data,
+            text: err.response.status
           })
         })
     },
@@ -211,8 +211,8 @@ export default new Vuex.Store({
         .catch(err => {
           Swal.fire({
             icon: 'error',
-            title: 'error',
-            text: err
+            title: err.response.data,
+            text: err.response.status
           })
         })
     },
@@ -230,8 +230,8 @@ export default new Vuex.Store({
         .catch(err => {
           Swal.fire({
             icon: 'error',
-            title: 'error',
-            text: err
+            title: err.response.data,
+            text: err.response.status
           })
         })
     },
@@ -271,8 +271,8 @@ export default new Vuex.Store({
         .catch(err => {
           Swal.fire({
             icon: 'error',
-            title: 'Invalid username or password',
-            text: err
+            title: err.response.data,
+            text: err.response.status
           })
         })
     },
@@ -298,12 +298,13 @@ export default new Vuex.Store({
         .catch(err => {
           Swal.fire({
             icon: 'error',
-            title: 'error',
-            text: err
+            title: err.response.data,
+            text: err.response.status
           })
         })
     },
     editQuestion (state, payload) {
+      // console.log(payload.id)
       axios({
         method: 'put',
         url: 'http://52.14.182.202:3000/question/' + payload.id,
@@ -322,8 +323,8 @@ export default new Vuex.Store({
         .catch(err => {
           Swal.fire({
             icon: 'error',
-            title: 'error',
-            text: err
+            title: err.response.data,
+            text: err.response.status
           })
         })
     },
@@ -343,8 +344,8 @@ export default new Vuex.Store({
         .catch(err => {
           Swal.fire({
             icon: 'error',
-            title: 'error',
-            text: err
+            title: err.response.data,
+            text: err.response.status
           })
         })
     },
@@ -363,8 +364,8 @@ export default new Vuex.Store({
         .catch(err => {
           Swal.fire({
             icon: 'error',
-            title: 'error',
-            text: err
+            title: err.response.data,
+            text: err.response.status
           })
         })
     },
@@ -380,13 +381,13 @@ export default new Vuex.Store({
         .then(({ data }) => {
           this.dispatch('getAllAnswers')
           this.dispatch('findMyAnswers')
-          router.go(-1)
+          // router.go(-1)
         })
         .catch(err => {
           Swal.fire({
             icon: 'error',
-            title: 'error',
-            text: err
+            title: err.response.data,
+            text: err.response.status
           })
         })
     }

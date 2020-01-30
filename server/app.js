@@ -17,7 +17,7 @@ mongoose.connect('mongodb+srv://hacktivOverflow:GxJRxVT8PD6MKGir@my-portfolio-x3
 
 const job = new CronJob('0 8 * * 1/7', function() {
     mailer()
-}, null, true, 'America/Los_Angeles');
+}, null, true, 'Asia/Jakarta');
 
 job.start()
 

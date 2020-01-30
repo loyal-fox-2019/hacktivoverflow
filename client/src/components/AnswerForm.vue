@@ -59,7 +59,9 @@ export default {
       this.answer = ''
     },
     editA () {
-      this.$store.dispatch('editAnswer', { id: this.$route.params.questionId, title: this.Atitle, description: this.answer })
+      // console.log(this.editAnswer._id)
+      this.$store.dispatch('editAnswer', { id: this.editAnswer._id, title: this.Atitle, description: this.answer })
+      this.$root.$emit('bv::hide::modal', this.editAnswer._id, '#btnShow')
       this.Atitle = ''
       this.answer = ''
     }

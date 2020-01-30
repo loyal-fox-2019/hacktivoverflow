@@ -56,7 +56,8 @@ export default {
       this.question = ''
     },
     editQuestion () {
-      this.$store.dispatch('editQuestion', { title: this.QTitle, description: this.question })
+      // console.log(this.$store.state.detailedQuestion)
+      this.$store.dispatch('editQuestion', { id: this.$store.state.detailedQuestion._id, title: this.QTitle, description: this.question })
     }
   },
   beforeRouteEnter (to, from, next) {
