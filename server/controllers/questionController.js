@@ -1,4 +1,5 @@
 const Question = require("../models/question.js");
+const Answer = require("../models/answer.js");
 const _ = require("underscore");
 
 class QuestionController
@@ -129,12 +130,21 @@ class QuestionController
     {
         Question.findByIdAndDelete(req.params.id)
         .exec()
+        .then((deletedQn) => {
+            return Answer.deleteMany({
+                _id: {
+                    $in: deletedQn.answers
+                }
+            })
+        })
         .then(() => {
-            res.sendStatus(204);
+            res.status(201).json({
+                msg: "Question deleted."
+            })
         })
         .catch((err) => {
             res.status(404).json({
-                msg: "Product not found."
+                msg: "Question not found."
             })
         })
     }

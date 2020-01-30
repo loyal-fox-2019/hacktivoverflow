@@ -68,6 +68,7 @@
         },
         methods: {
             addQuestion() {
+                let newQn;
                 axiosReq({
                     url: "/questions",
                     method: "post",
@@ -86,7 +87,10 @@
                     this.description = "";
                     this.$store.dispatch('getAllQuestions')
                     this.$store.dispatch('getMyQuestions')
-                    this.$router.push({path: `/question/${data._id}`})
+                    newQn = data;
+                })
+                .finally(() => {
+                    this.$router.push({path: `/question/${newQn._id}`})
                 })
             },
             handleFile() {

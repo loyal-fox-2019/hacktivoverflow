@@ -10,11 +10,19 @@
             
             <div class="content">
                 <h5 class="card-title">{{question.title}}</h5>
-                <h6 class="card-subtitle mb-2 text-muted"><i>Asked {{(new Date(question.createdAt)).toDateString()}}</i></h6>
+                
                 <p class="card-text">
                     {{strippedDesc}}
                 </p>
-                <div style="float:right">Asked by {{question.user.username}}</div>
+                <div style="float:right">
+                    Asked by {{question.user.username}}
+                    <h6 class="card-subtitle mb-2 text-muted" style="font-size:12px"><br>
+                    <i>
+                        Asked {{(new Date(question.createdAt)).toDateString()}}<br>
+                        Last updated {{(new Date(question.updatedAt)).toDateString()}}
+                    </i>
+                </h6>
+                </div>
             </div>
             
         </div>

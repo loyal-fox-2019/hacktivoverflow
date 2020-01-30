@@ -21,6 +21,12 @@
                 <div v-html="answer.description"></div>
                 <div style="float:right">
                     Answer by {{answer.user.username}}
+                    <div style="font-size:10px">
+                        <i>
+                            Submitted {{(new Date(answer.createdAt)).toDateString()}}<br>
+                            Last updated {{(new Date(answer.updatedAt)).toDateString()}}
+                        </i>
+                    </div>
                     <div v-if="answer.user.username==this.$cookies.get('username')">
                         <button class="btn btn-warning btn-manage" @click="editAnswerForm">Edit</button>
                     </div>

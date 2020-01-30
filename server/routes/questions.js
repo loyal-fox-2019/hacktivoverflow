@@ -2,6 +2,7 @@ const questionsRouter = require("express").Router();
 const QuestionController = require("../controllers/questionController.js");
 
 const authentication = require("../middlewares/authentication");
+const authorisation = require("../middlewares/authorisation").question_authorisation;
 
 questionsRouter.get('/',QuestionController.getAllQuestions);
 
@@ -15,9 +16,9 @@ questionsRouter.post('/',QuestionController.addNewQuestion);
 
 questionsRouter.post('/:id/vote',QuestionController.voteQuestion);
 
-questionsRouter.patch('/:id',QuestionController.updateQuestion);
+questionsRouter.patch('/:id',authorisation,QuestionController.updateQuestion);
 
-questionsRouter.delete('/:id',QuestionController.deleteQuestion);
+questionsRouter.delete('/:id',authorisation,QuestionController.deleteQuestion);
 
 
 module.exports = questionsRouter;

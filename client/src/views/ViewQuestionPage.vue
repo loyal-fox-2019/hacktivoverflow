@@ -23,10 +23,32 @@
                     <button class="btn btn-outline-secondary tag-buttons" v-for="tag in this.$store.state.currentQuestion.tags" :key="tag">{{tag}}</button>
                 </div>
                 <div style="float:right">
-                    Asked by {{this.$store.state.currentQuestion.user.username}}
+                    Asked by {{this.$store.state.currentQuestion.user.username}}<br>
+                    <div style="font-size:10px">
+                        <i>
+                            Asked {{(new Date(this.$store.state.currentQuestion.createdAt)).toDateString()}}<br>
+                            Last updated {{(new Date(this.$store.state.currentQuestion.updatedAt)).toDateString()}}
+                        </i>
+                    </div>
                     <div v-if="this.$store.state.currentQuestion.user.username==this.$cookies.get('username')">
                         <button class="btn btn-warning btn-manage" @click="editQuestionForm">Edit</button>
-                        <button class="btn btn-danger btn-manage" @click="deleteQuestion">Delete</button>
+
+                        <b-button class="btn btn-danger btn-manage" id="popoverdeletebtn" @click="openDeletePopover">Delete</b-button><br>
+                        <div v-if="loading">Loading...</div>
+                        <b-popover target="popoverdeletebtn" triggers="click" :show="showdeletepopover" placement="right">
+                        <template v-slot:title>
+                            <b-button @click="closeDeletePopover" class="close" aria-label="Close" ref="button">
+                            <span class="d-inline-block" aria-hidden="true">&times;</span>
+                            </b-button>
+                            Are you sure?
+                        </template>
+
+                        <div>
+                            Your question could be helpful for other users<br>
+                            <b-button @click="closeDeletePopover" size="sm">Cancel</b-button>
+                            <b-button @click="deleteQuestion" size="sm" variant="primary">Ok</b-button>
+                        </div>
+                        </b-popover>
                     </div>
                 </div>
             </div>
@@ -77,6 +99,10 @@ import answerCard from "../components/answerCard.vue";
         },
         data(){
             return {
+                title: "",
+                description: "",
+                showdeletepopover: false,
+                loading: false,
                 questionVote: 0,
                 modalText: '',
                 editorOption: {
@@ -116,6 +142,8 @@ import answerCard from "../components/answerCard.vue";
                 })
                 .then(() => {
                     this.$store.dispatch('getOneQuestion',this.$route.params.id)
+                    this.title = "";
+                    this.description = ""
                 })
             },
             checkQuestionVote() {
@@ -160,8 +188,29 @@ import answerCard from "../components/answerCard.vue";
             editQuestionForm() {
                 this.$router.push({path:`/editquestion/${this.$route.params.id}`})
             },
+            closeDeletePopover() {
+                this.showdeletepopover = false;
+            },
+            openDeletePopover() {
+                this.showdeletepopover = true;
+            },
             deleteQuestion() {
-
+                axiosReq({
+                    url: `/questions/${this.$route.params.id}`,
+                    method: "delete",
+                    headers: {
+                        token: this.$cookies.get('token')
+                    }
+                })
+                .then(() => {
+                    this.loading = true;
+                    this.$store.dispatch('getAllQuestions');
+                    setTimeout(() => {
+                        this.loading = false;
+                        this.$router.push({path: '/'});
+                    },2000)
+                    
+                })
             }
         },
         components: {

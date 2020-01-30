@@ -2,6 +2,7 @@ const usersRouter = require("express").Router();
 const UserController = require("../controllers/userController.js");
 
 const authentication = require("../middlewares/authentication");
+const authorisation = require("../middlewares/authorisation").user_authorisation;
 
 const generateTokenGoogle = require("../middlewares/generateTokenGoogle");
 const verifyGoogleToken = require("../middlewares/verifyGoogleToken"); 
