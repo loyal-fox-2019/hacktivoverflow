@@ -6,9 +6,8 @@ const bcrypt = require('bcryptjs')
 class userController {
   static login(req, res, next) {
     const { email, password } = req.body
-    User.findOne({
-      email
-    })
+    User
+      .findOne({email})
       .then(user => {
         if (user) {
           let valid = bcrypt.compareSync(password, user.password)

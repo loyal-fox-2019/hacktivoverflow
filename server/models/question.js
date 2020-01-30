@@ -17,13 +17,18 @@ const questionSchema = new Schema({
   upVotes: {
     type: [{ type: Schema.Types.ObjectId, ref: 'User' }]
   },
+  tags: {
+    type: [],
+    required: [true, 'Tag cannot be empty']
+
+  },
   downVotes: {
     type: [{ type: Schema.Types.ObjectId, ref: 'User' }]
   },
   userId: {
     type: Schema.Types.ObjectId, ref: 'User'
   }
-})
+}, { timestamps: { createdAt: 'createdAt', updatedAt: 'updatedAt' } })
 
 const Question = model('Question', questionSchema)
 

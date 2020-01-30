@@ -19,7 +19,7 @@ const answerSchema = new Schema({
   questionId: {
     type: Schema.Types.ObjectId, ref: 'Question'
   }
-})
+}, { timestamps: { createdAt: 'createdAt', updatedAt: 'updatedAt' } })
 
 const Answer = model('Answer', answerSchema)
 

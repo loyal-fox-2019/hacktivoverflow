@@ -9,7 +9,7 @@ const cors = require('cors')
 const router = require('./routes')
 const errorHandler = require('./middlewares/errorHandler')
 
-monggose.connect('mongodb://localhost/hackoverflow', { useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false }, function (err) {
+monggose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false }, function (err) {
   if (err) console.log('database is an error')
   else console.log('data base is an active')
 })

@@ -7,7 +7,8 @@ class answerController {
     const { description } = req.body
     const questionId = req.params.id
     const userId = req.decoded._id
-    Answer.create({ description, questionId, userId })
+    Answer
+      .create({ description, questionId, userId })
       .then((answer) => {
         return Question.findByIdAndUpdate(
           { _id: answer.questionId },
@@ -20,8 +21,10 @@ class answerController {
   }
 
   static read(req, res, next) {
-    Answer.find()
+    Answer
+      .find()
       .populate('userId')
+      .sort({ createdAt: -1 })
       .then((answer) => {
         res.status(200).json(answer)
       })
@@ -30,7 +33,8 @@ class answerController {
 
   static readOne(req, res, next) {
     let _id = req.params.id
-    Answer.find({ _id })
+    Answer
+      .find({ _id })
       .populate('userId')
       .then((answer) => {
         res.status(200).json(answer)
@@ -41,7 +45,8 @@ class answerController {
   static upVotes(req, res, next) {
     const answerId = req.params.id
     const userId = req.decoded._id
-    Answer.findById(answerId)
+    Answer
+      .findById(answerId)
       .then((answer) => {
         if (answer.upVotes.includes(userId)) {
           answer.upVotes.pull(userId)
@@ -61,7 +66,8 @@ class answerController {
   static downVotes(req, res, next) {
     const answerId = req.params.id
     const userId = req.decoded._id
-    Answer.findById(answerId)
+    Answer
+      .findById(answerId)
       .then((answer) => {
         if (answer.downVotes.includes(userId)) {
           answer.downVotes.pull(userId)

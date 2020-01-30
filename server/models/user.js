@@ -30,6 +30,9 @@ const userSchema = new Schema({
     type: String,
     required: [true, 'Password cannot be empty!']
   },
+  tags: {
+    type: []
+  }
 })
 
 userSchema.pre('save', function (next) {

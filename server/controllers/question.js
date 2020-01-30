@@ -5,8 +5,9 @@ const { Question, Answer } = require('../models')
 class questionController {
   static createQuestion(req, res, next) {
     let userId = req.decoded.id
-    const { title, description } = req.body
-    Question.create({ title, description, userId })
+    const { title, description, tags } = req.body
+    Question
+      .create({ title, description, tags, userId })
       .then((question) => {
         res.status(201).json(question)
       })
@@ -15,9 +16,9 @@ class questionController {
 
   static editQuestion(req, res, next) {
     let id = req.params.id
-    let { title, description } = req.body
+    let { title, description, tags } = req.body
     let value = {
-      title, description
+      title, description, tags
     }
 
     Question
@@ -30,7 +31,8 @@ class questionController {
 
   static deleteQuestion(req, res, next) {
     const id = req.params.id
-    Question.findByIdAndDelete(id)
+    Question
+      .findByIdAndDelete(id)
       .then((question) => {
         let value = {
           _id: question.answers
@@ -44,10 +46,11 @@ class questionController {
   }
 
   static readAllQuestion(req, res, next) {
-    console.log('masuk')
-    Question.find()
+    Question
+      .find()
       .populate('answers')
-      .populate('userId')
+      .populate('userId', '-password')
+      .sort({ createdAt: -1 })
       .then((question) => {
         res.status(200).json(question)
       })
@@ -56,9 +59,9 @@ class questionController {
 
   static readMyQuestion(req, res, next) {
     const id = req.decoded._id
-    console.log('asdasdasdasdasdasdd')
-    Question.find({ userId: id })
-      .populate('userId')
+    Question
+      .find({ userId: id })
+      .populate('userId', '-password')
       .populate('answers')
       .then((data) => {
         res.status(200).json(data)
@@ -68,8 +71,9 @@ class questionController {
 
   static readOneQuestion(req, res, next) {
     const id = req.params.id
-    Question.findById(id)
-      .populate('userId')
+    Question
+      .findById(id)
+      .populate('userId', '-password')
       .populate('answers')
       .then((data) => {
         res.status(200).json(data)
@@ -80,7 +84,8 @@ class questionController {
   static upVotes(req, res, next) {
     const questionId = req.params.id
     const userId = req.decoded._id
-    Question.findById(questionId)
+    Question
+      .findById(questionId)
       .then((question) => {
         if (question.upVotes.includes(userId)) {
           question.upVotes.pull(userId)
@@ -102,7 +107,8 @@ class questionController {
   static downVotes(req, res, next) {
     const questionId = req.params.id
     const userId = req.decoded._id
-    Question.findById(questionId)
+    Question
+      .findById(questionId)
       .then((question) => {
         if (question.downVotes.includes(userId)) {
           question.downVotes.pull(userId)
