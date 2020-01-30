@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import axios from 'axios';
+import router from "../router";
 
 Vue.use(Vuex);
 
@@ -14,6 +15,7 @@ const base = axios.create({
 export default new Vuex.Store({
     state: {
         questionsList: "",
+        questionData: {},
         user: {},
         tags: []
     },
@@ -21,9 +23,11 @@ export default new Vuex.Store({
         listOfQuestions(state, payload) {
             state.questionsList = payload
         },
+        setCurrentQuestions(state, payload) {
+            state.questionData = payload
+        },
         setCurrentUser(state, payload) {
-            state.user.name = payload.name;
-            state.user.email = payload.email;
+            state.user = payload;
         },
         setClearCurrentUser(state) {
             state.user = {}
@@ -31,14 +35,26 @@ export default new Vuex.Store({
         setTags(state, payload) {
             state.tags.push(payload)
         },
-        clearTags(state, payload){
+        clearTags(state, payload) {
             state.tags = []
         }
-        // addListQuestions(state, payload) {
-        //     state.questions.unshift(payload)
-        // }
     },
     actions: {
+        postQuestion(context, payload) {
+            console.log(payload);
+            base({
+                method: 'post',
+                url: '/questions/create',
+                data: payload,
+                headers: {
+                    Authorization: "token " + Vue.$cookies.get('token')
+                }
+            }).then(response => {
+                console.log(response.data);
+            }).catch(err => {
+                console.log(err.response.data.error);
+            })
+        },
         listOfQuestions(context, payload) {
             base({
                 method: 'get',
@@ -60,6 +76,66 @@ export default new Vuex.Store({
                 console.log(err.response)
             ])
         },
+        addWatchTags(context, payload) {
+            base({
+                method: 'patch',
+                url: '/users/watchTags',
+                headers: {
+                    Authorization: "token " + Vue.$cookies.get('token')
+                },
+                data: {
+                    watchTags: payload
+                }
+            }).then(response => {
+                // console.log(response.data)
+            }).catch(err => [
+                console.log(err.response)
+            ])
+        },
+        getCurrentUser(context, payload) {
+            base({
+                method: 'get',
+                url: '/users',
+                headers: {
+                    Authorization: "token " + Vue.$cookies.get('token')
+                }
+            }).then(response => {
+                context.commit(
+                    'setCurrentUser',
+                    response.data.data
+                );
+            }).catch(err => [
+                console.log(err.response)
+            ])
+        },
+        getCurrentQuestion(context, payload) {
+            base({
+                method: 'get',
+                url: '/questions/' + payload,
+                headers: {
+                    Authorization: 'token ' + Vue.$cookies.get('token')
+                }
+            }).then(response => {
+                // console.log(response.data);
+                context.commit('setCurrentQuestions', response.data)
+            }).catch(err => {
+                console.log(err.response);
+            })
+        },
+        removeQuestion(context, payload) {
+            base({
+                method: 'delete',
+                url: '/questions/' + payload,
+                headers: {
+                    Authorization: "token " + Vue.$cookies.get('token')
+                }
+            }).then(response => {
+                console.log(response);
+                router.push("/")
+            }).catch(err => [
+                console.log(err.response)
+            ])
+        },
         setCurrentUser(context, payload) {
             context.commit(
                 'setCurrentUser',
@@ -71,20 +147,14 @@ export default new Vuex.Store({
                 'setClearCurrentUser'
             )
         },
-        // addListQuestions(context, payload) {
-        //     context.commit(
-        //         'addListQuestions',
-        //         payload
-        //     )
-        // }
     },
     modules: {},
     getters: {
-        // questionsNumber: state => {
-        //     return state.questions.length
-        // },
         questionsList: state => {
             return state.questionsList
+        },
+        questionData: state => {
+            return state.questionData
         },
         getCurrentUser: state => {
             return state.user

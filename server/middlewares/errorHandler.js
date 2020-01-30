@@ -1,4 +1,6 @@
 const errorHandler = (err, req, res, next) => {
+    // console.log({err})
+
     let errMsg = err.errmsg;
 
     if (err.name === "CastError") {

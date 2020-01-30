@@ -1,23 +1,27 @@
 <template>
     <sui-message id="message">
         <div align="right">
-            <remove v-if="isRemoveable" :questionId="questionData._id"/>
+            <router-link to="/">
+                <sui-icon name="home" class="sui-icon"/>
+            </router-link>
+            |
+            <sui-icon color="red" name="delete" v-if="isRemoveable" class="sui-icon" @click="removeQuestion"/>
         </div>
-        <sui-header color="blue">{{questionData.title}}</sui-header>
-        <small>{{ createdAt}}</small>
+
+        <sui-header color="blue">{{questionData.data.title}}</sui-header>
+        <small>{{ createdAt }}</small>
         <div id="detail">
-            <like-unlike :data-attributes="numOfAttributes"
-                         @click="fetchDataDetail"/>
+            <like-unlike :data-attributes="numOfAttributes"/>
         </div>
         <sui-divider/>
-        <sui-card-description id="question-description" v-html="questionData.description">
-            {{ questionData.description }}
+        <sui-card-description id="question-description" v-html="questionData.data.description">
+            {{ questionData.data.description }}
         </sui-card-description>
         <sui-divider/>
         <sui-list divided relaxed>
-            <answer v-for="answer in questionData.answer" :key="answer._id" :answer="answer"/>
+            <answer v-for="answer in questionData.data.answer" :key="answer._id" :answer="answer"/>
         </sui-list>
-        <add-new-answer :answerId="questionData._id" @updateAnswers="fetchDataDetail"/>
+        <add-new-answer :answerId="questionData.data._id"/>
     </sui-message>
 </template>
 
@@ -25,80 +29,54 @@
     import answer from "../answer/answer";
     import addNewAnswer from "../answer/addNewAnswer";
     import likeUnlike from "./likeUnlikeQuestion";
-    import remove from "./remove";
+    import {mapGetters} from "vuex";
 
     export default {
         name: "detailQuestion",
         data() {
-            return {
-                id: String,
-                questionData: Object,
-                userData: "",
-                user: Object,
-                numOfAttributes: {
-                    numOfAnswers: 0,
-                    numOfUpVotes: 0,
-                    numOfDownVotes: 0,
-                    user: ""
-                }
-            }
+            return {}
         },
         methods: {
-            fetchDataDetail() {
-                this.$axios({
-                    method: 'get',
-                    url: '/questions/' + this.id,
-                    headers: {
-                        Authorization: 'token ' + this.$cookies.get('token')
-                    }
-                }).then(response => {
-                    console.log(response.data);
-                    this.questionData = response.data.data;
-                    this.numOfAttributes.numOfAnswers = response.data.numOfAnswers;
-                    this.numOfAttributes.numOfUpVotes = response.data.numOfUpVotes;
-                    this.numOfAttributes.numOfDownVotes = response.data.numOfDownVotes;
-                    this.numOfAttributes.user = response.data.data.user;
-                    this.user = response.data.data.user;
-                }).catch(err => {
-                    console.log(err.response);
-                })
-            },
-            currentUser() {
-                this.$axios({
-                    method: 'get',
-                    url: '/users/',
-                    headers: {
-                        Authorization: 'token ' + this.$cookies.get('token')
-                    }
-                }).then(response => {
-                    this.userData = response.data.data
-                }).catch(err => {
-                    console.log(err.response)
-                })
+            removeQuestion() {
+                this.$store.dispatch('removeQuestion', this.questionData.data._id)
             }
         },
         mounted() {
-            this.id = this.$route.params.id;
-            this.fetchDataDetail();
-            this.currentUser();
+            this.$store.dispatch('getCurrentQuestion', this.$route.params.id)
         },
         computed: {
+            ...mapGetters([
+                'questionData',
+                'getCurrentUser'
+            ]),
             createdAt() {
-                let date = new Date(this.questionData.created_at);
+                let date = new Date(this.questionData.data.created_at);
                 return date.toLocaleString(
                     "en-US",
                     {timeZone: "Asia/Jakarta"}
                 );
             },
+            numOfAttributes() {
+                return {
+                    numOfAnswers: 0,
+                    numOfUpVotes: 0,
+                    numOfDownVotes: 0,
+                    user: this.questionData.data.user
+                }
+            },
             isRemoveable() {
-                return this.userData._id === this.user._id
+                return this.questionData.data.user._id === this.getCurrentUser._id
+            }
+        },
+        watch: {
+            questionData(a, b) {
+                this.$store.dispatch('getCurrentQuestion', this.$route.params.id)
             }
         },
         components: {
             answer,
             addNewAnswer,
-            likeUnlike,
-            remove
+            likeUnlike
         }
     }
 </script>
@@ -109,7 +87,12 @@
         padding: 15px;
     }
 
-    #detail{
+    #detail {
         float: right;
+    }
+
+    .sui-icon {
+        cursor: pointer;
+        display: inline-block;
     }
 </style>

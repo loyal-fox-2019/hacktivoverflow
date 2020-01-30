@@ -1,32 +1,32 @@
 <template>
     <sui-list-item @click.native="goToDetail">
-        <sui-list-icon name="code" size="large" vertical-align="middle"/>
-        <sui-list-content>
-            <a is="sui-list-header">
-                <sui-list-header>
-                    <sui-label :color="statusColor">{{ questionData.status }}</sui-label>
-                    {{ questionData.title }}
-                </sui-list-header>
-            </a>
-            <a is="sui-list-description">
-                <small>{{ createdAt }}</small>
-                <div v-html="description">
-                    ...
-                </div>
-                <p></p>
-                <sui-label tag :color="red" v-for="(tag, index) in questionData.tags"
-                           :key="index">
-                    {{ tag }}
-                </sui-label>
-            </a>
-            <like-unlike :data-attributes="numOfAttributes" align="right" floating/>
-        </sui-list-content>
+        <div>
+            <sui-card class="fluid" :style="{backgroundColor: color}">
+                <sui-card-content extra>
+                    <sui-card-header>{{ questionData.title }}</sui-card-header>
+                    <sui-card-meta><small>{{ createdAt }}</small></sui-card-meta>
+                </sui-card-content>
+                <sui-card-content>
+                    <div v-html="description">...</div>
+                </sui-card-content>
+                <sui-card-content extra>
+                    <sui-label tag :color="tagColor[index]"
+                               v-for="(tag, index) in questionData.tags"
+                               :key="index">{{ tag }}
+                    </sui-label>
+                    <span slot="right">
+                        <like-unlike :data-attributes="numOfAttributes"/>
+                    </span>
+                </sui-card-content>
+            </sui-card>
+        </div>
     </sui-list-item>
 </template>
 
 <script>
     import router from "../../router";
     import likeUnlike from "./likeUnlikeQuestion";
+    import {mapGetters} from "vuex";
 
     export default {
         name: "question",
@@ -37,20 +37,39 @@
                     numOfUpVotes: 0,
                     numOfDownVotes: 0,
                     user: "",
-                    tagColor: ['red', 'teal', 'orange', 'green', 'blue', 'black', 'olive', 'purple']
                 },
-                description: ""
+                tagColor: ['red', 'teal', 'orange', 'green', 'blue', 'black', 'olive', 'purple'],
+                description: "",
+                color: "#ffffff"
             }
         },
         props: {
-            questionData: Object
+            questionData: Object,
+            dataUser: Object
         },
         methods: {
             goToDetail() {
                 router.push({name: 'detail', params: {id: this.questionData._id}})
+            },
+            isTagged() {
+                for (let i = 0; i <= this.questionData.tags.length; i++) {
+                    this.color = '#ffffff';
+                }
+
+                this.questionData.tags.forEach(tag => {
+                    if (this.dataUser.watchTags.indexOf(tag) > -1) {
+                        this.color = '#ffffe6';
+                        return
+                    }
+                })
             }
         },
         computed: {
+            ...mapGetters([
+                'questionsList',
+                'tags',
+                'getCurrentUser'
+            ]),
             createdAt() {
                 let date = new Date(this.questionData.created_at);
                 return date.toLocaleString(
@@ -77,8 +96,13 @@
             users() {
                 return this.questionData.user
             },
-            tagColorRandom() {
-                return this.tagColor[Math.random() * this.tagColor.length]
+        },
+        watch: {
+            getCurrentUser(a, b) {
+                this.isTagged()
+            },
+            tags(a, b) {
+                this.isTagged()
             }
         },
         mounted() {
@@ -87,6 +111,7 @@
             this.numOfAttributes.numOfDownVotes = this.numOfDownVotes;
             this.numOfAttributes.user = this.users;
             this.description = `${this.questionData.description.slice(0, 30)} ...`
+            this.isTagged();
         },
         components: {
             likeUnlike
@@ -95,5 +120,7 @@
 </script>
 
 <style scoped>
-
+    .sui-image-profil {
+        display: inline-block;
+    }
 </style>

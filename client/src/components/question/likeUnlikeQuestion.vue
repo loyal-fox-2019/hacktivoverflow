@@ -10,10 +10,10 @@
             <sui-icon name="thumbs down outline" @click="fetchDataDetail" class="thumb"/>
             {{ dataAttributes.numOfDownVotes }}
         </sui-label>
-        <sui-label basic>
-            <sui-icon name="user"/>
+        <a is="sui-label" basic image>
+            <img src="https://semantic-ui-vue.github.io/static/images/avatar/large/daniel.jpg">
             {{ dataAttributes.user.name }}
-        </sui-label>
+        </a>
     </a>
 </template>
 

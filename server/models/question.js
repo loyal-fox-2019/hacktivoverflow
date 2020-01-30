@@ -34,7 +34,7 @@ const questionSchema = new mongoose.Schema({
     }],
     tags: [{
         type: String,
-        maxlength: [10, 'tag max 10 char']
+        maxlength: [30, 'tag max 30 char']
     }],
     status: {
         type: String,

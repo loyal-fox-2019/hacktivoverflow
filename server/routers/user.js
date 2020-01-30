@@ -12,5 +12,6 @@ router.use(checkToken);
 // get current user
 router.get('/', controllerUser.currentUser);
 router.get('/:id', controllerUser.viewUser);
+router.patch('/watchTags', controllerUser.addWatchTags);
 
 module.exports = router;

@@ -31,7 +31,6 @@
                 <sui-form-field>
                     <label>Description</label>
                     <vue-editor v-model="content"></vue-editor>
-                    <!--                    <textarea maxlength="500" v-model="description" required class="input" tranparent/>-->
                     <small>Max 500 Character</small>
                 </sui-form-field>
             </sui-modal-content>
@@ -73,29 +72,13 @@
                 this.$emit('click')
             },
             postQuestion() {
-                this.$axios({
-                    method: 'post',
-                    url: '/questions/create',
-                    data: {
-                        title: this.title,
-                        tags: this.tags,
-                        description: this.content
-                    },
-                    headers: {
-                        Authorization: "token " + this.$cookies.get('token')
-                    }
-                }).then(response => {
-                    console.log(response.data);
-                    this.msgVisible = true;
-                    this.msgHeader = "Success";
-                    this.msgMessage = response.data.message;
-                    this.$store.dispatch('addListQuestions', response.data.data);
-                }).catch(err => {
-                    console.log(err.response.data.error);
-                    this.msgVisible = true;
-                    this.msgHeader = "Error";
-                    this.msgMessage = err.response.data.error;
-                })
+                this.$store.dispatch('postQuestion', {
+                    title: this.title,
+                    tags: this.tags,
+                    description: this.content
+                });
+                this.$store.dispatch('listOfQuestions');
+                this.toggle()
             },
             msgDismiss() {
                 this.msgVisible = false

@@ -122,11 +122,7 @@ class controllerUser {
             req._id
         ).then(response => {
             res.status(200).json({
-                data: {
-                    _id: response._id,
-                    name: response.name,
-                    email: response.email
-                }
+                data: response
             })
         }).catch(next)
     }
@@ -137,11 +133,7 @@ class controllerUser {
         ).then(response => {
             if (!response) throw({code: 400, errmsg: "User not found"});
             res.status(200).json({
-                data: {
-                    _id: response._id,
-                    name: response.name,
-                    email: response.email
-                }
+                data: response
             })
         }).catch(next)
     }
@@ -150,7 +142,7 @@ class controllerUser {
         user.updateOne({
             _id: req._id
         }, {
-            watchTags: req.body.tags
+            watchTags: req.body.watchTags
         }).then(response => {
             res.status(200).json({
                 message: "Watch tags successfully added"
