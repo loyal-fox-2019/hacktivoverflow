@@ -10,7 +10,7 @@
               <router-link to="/ask" class="btn btn-primary float-right">Ask Questions</router-link>
             </div>
             <!-- loop question-summary -->
-            <div class="question-summary border-bottom pt-3 pb-3">
+            <div v-for="question in questions" :key="question._id" class="question-summary border-bottom pt-3 pb-3">
               <div class="row">
                 <div class="points col-3">
                   <div class="votes mr-1">
@@ -27,7 +27,7 @@
                   </div>
                 </div>
                 <div class="summary col-9">
-                  <router-link to="/" class="question-hyperlink d-inline-block text-truncate">Maven dependencies are failing with a 501 error</router-link>
+                  <router-link :to="`/questions/${question._id}`" class="question-hyperlink d-inline-block text-truncate">{{ question.title }}</router-link>
                   <div class="tags">
                     <span class="badge badge-secondary">phyton</span>
                     <span class="badge badge-secondary">arrays</span>
@@ -35,7 +35,7 @@
                   </div>
                   <div class="created">
                     <div class="by-user">
-                      <p class="date">Created 29-02-2020<span class="name"> Chrystal</span></p>
+                      <p class="date">Created {{ Date(questions.createdAt).toLocaleString() }} By<span class="name"> {{ question.user_id.username }}</span></p>
                     </div>
                   </div>
                 </div>
@@ -57,16 +57,14 @@
 export default {
   name: 'home',
   components: {
-    // Login,
-    // SignUp,
   },
   computed: {
-    count() {
-      return this.$store.state.count;
+    questions() {
+      return this.$store.state.questions;
     },
   },
   mounted() {
-    this.$store.dispatch('login');
+    this.$store.dispatch('findallQuestions');
   },
 };
 </script>

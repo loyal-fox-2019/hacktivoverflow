@@ -12,11 +12,11 @@
           <input type="text" class="form-control" placeholder="Search...">
         </div>
       </div>
-      <div class="user-avatar d-none">
+      <div v-show="this.user" class="user-avatar">
         <img src="./assets/user.png" width="32" alt="avatar">
-        <span class="username pl-3">John Doe</span>
+        <span class="username pl-3">{{this.user}}</span>
       </div>
-      <div class="loginSignup">
+      <div v-show="!this.user" class="loginSignup">
         <router-link to="/login" class="btn btn-secondary">Log in</router-link>
         <router-link to="/signup" class="btn btn-primary ml-2">Sign up</router-link>
       </div>
@@ -24,6 +24,30 @@
     <router-view/>
   </div>
 </template>
+
+<script>
+export default {
+  data() {
+    return {
+      isLogin: false,
+    };
+  },
+  computed: {
+    user() {
+      console.log(this.$store.state.user);
+      return this.$store.state.user;
+    },
+  },
+  created() {
+    if (localStorage.getItem('token')) {
+      this.isLogin = true;
+      this.$store.commit('SET_USER', localStorage.getItem('user'));
+    } else {
+      this.isLogin = false;
+    }
+  },
+};
+</script>
 
 <style scoped>
 .navbar {

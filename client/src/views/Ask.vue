@@ -4,23 +4,19 @@
       <div class="row justify-content-center mt-5">
         <div class="col-10">
           <div class="form p-4 shadow rounded">
-            <form>
+            <form @submit.prevent="submitQuestion">
                 <div class="form-group">
                     <label>Title</label>
                     <p class="description">Be spesific and imagine you're asking a question to another person</p>
-                    <input type="text" class="form-control" placeholder="e.g. Is there an R function for finding the index of an element in a vector?">
+                    <input v-model="title" class="form-control" placeholder="e.g. Is there an R function for finding the index of an element in a vector?">
                 </div>
                 <div class="form-group">
                     <label>Body</label>
                     <p class="description">Include all the information someone would need to answer your question</p>
-                    <textarea rows="3" class="form-control"></textarea>
+                    <!-- <textarea rows="3" class="form-control"></textarea> -->
+                    <vue-editor v-model="content"></vue-editor>
                 </div>
-                <div class="form-group">
-                    <label>Tags</label>
-                    <p class="description">Add up to 5 tags describe what your question is about</p>
-                    <input type="text" class="form-control" placeholder="e.g. (excel android sql)">
-                </div>
-                <button type="submit" class="btn btn-primary">Reviw your question</button>
+                <button type="submit" class="btn btn-primary">Review your question</button>
             </form>
           </div>
         </div>
@@ -30,7 +26,27 @@
 </template>
 
 <script>
+import { VueEditor } from 'vue2-editor';
+
 export default {
+  components: {
+    VueEditor,
+  },
+  data() {
+    return {
+      title: '',
+      content: '',
+    };
+  },
+  methods: {
+    submitQuestion() {
+      const question = {
+        title: this.title,
+        desc: this.content,
+      };
+      this.$store.dispatch('submitQuestion', question);
+    },
+  },
 };
 </script>
 

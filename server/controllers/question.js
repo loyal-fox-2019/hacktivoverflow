@@ -16,6 +16,7 @@ class QuestionCtr {
     }
     static getQuestions(req,res,next){
         question.find()
+                .populate('user_id')
                 .then(questions => {
                     res.status(200).json(questions)
                 })

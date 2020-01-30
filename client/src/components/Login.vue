@@ -15,7 +15,7 @@
               </div>
               <div class="form-group">
                 <label>Password</label>
-                <input v-model="emailPassword" type="password" class="form-control">
+                <input v-model="loginPassword" type="password" class="form-control">
               </div>
               <button type="submit" class="btn btn-primary btn-block">Log in</button>
             </form>
@@ -33,6 +33,23 @@
 <script>
 export default {
   name: 'Login',
+  data() {
+    return {
+      loginEmail: '',
+      loginPassword: '',
+    };
+  },
+  methods: {
+    submitLogin() {
+      const login = {
+        email: this.loginEmail,
+        password: this.loginPassword,
+      };
+      this.$store.dispatch('submitLogin', login);
+    },
+  },
+  mounted() {
+  },
 };
 </script>
 

@@ -4,8 +4,8 @@
             <div class="row">
                 <div class="col-12">
                     <div class="main-bar border-left p-3">
-                        <div class="grid border-bottom pb-3">
-                            <span class="headline">Maven dependencies are failing with a 501 error</span>
+                        <div class="grid border-bottom pb-5">
+                            <span class="headline">{{ question.title }}</span>
                             <router-link to="/ask" class="btn btn-primary float-right">Ask Questions</router-link>
                         </div>
                         <div class="row post-layout mt-3">
@@ -24,7 +24,7 @@
                             </div>
                             <div class="col-10 post-layout-right pt-2">
                                 <div class="post-text">
-                                    <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.</p>
+                                    <p v-html="question.desc"></p>
                                 </div>
                                 <div class="tags">
                                     <span class="badge badge-secondary">phyton</span>
@@ -34,17 +34,17 @@
                             </div>
                         </div>
                         <div class="answers-headers border-bottom pb-3">
-                            <p class="answer-count">19 Answers</p>
+                            <p class="answer-count">{{ answers.length }} Answers</p>
                         </div>
                         <!-- loop answers -->
-                        <div class="row post-layout mt-3">
+                        <div v-for="answer in answers" :key="answer._id" class="row post-layout mt-3">
                             <div class="col-2 post-layout-left">
                                 <div class="voting-container">
                                     <div class="vote-up">
                                         <i class="fas fa-caret-up"></i>
                                     </div>
                                     <div class="vote-count">
-                                        <span class="total">80</span>
+                                        <span class="total">17</span>
                                     </div>
                                     <div class="vote-down">
                                         <i class="fas fa-caret-down"></i>
@@ -53,7 +53,7 @@
                             </div>
                             <div class="col-10 post-layout-right pt-2">
                                 <div class="post-text">
-                                    <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.</p>
+                                    <p v-html="answer.desc"></p>
                                 </div>
                                 <div class="tags">
                                     <span class="badge badge-secondary">phyton</span>
@@ -62,12 +62,19 @@
                                 </div>
                                 <div class="created">
                                     <div class="by-user">
-                                        <p class="date">Answered by<span class="name"> Johny Bravo</span></p>
+                                        <p class="date">Answered by<span class="name"> {{ answer.idUser.username }}</span></p>
                                     </div>
                                 </div>
                             </div>
                         </div>
                         <!-- end of loop answers -->
+                        <div class="your-answer">
+                            <p class="answer">Your Answer</p>
+                        </div>
+                        <form @submit.prevent="submitAnswer">
+                            <vue-editor v-model="contentAnswer"></vue-editor>
+                            <button type="submit" class="btn btn-primary mt-3 mb-5">Post Your Answer</button>
+                        </form>
                     </div>
                 </div>
             </div>
@@ -76,7 +83,41 @@
 </template>
 
 <script>
+import { VueEditor } from 'vue2-editor';
+
 export default {
+  components: {
+    VueEditor,
+  },
+  data() {
+    return {
+      contentAnswer: '',
+    };
+  },
+  created() {
+    this.$store.dispatch('findoneQuestion', this.$route.params.id);
+  },
+  methods: {
+    submitAnswer() {
+      const answer = {
+        idQuestion: this.$route.params.id,
+        desc: this.contentAnswer,
+      };
+      this.$store.dispatch('submitAnswer', answer);
+      this.contentAnswer = '';
+    },
+  },
+  computed: {
+    question() {
+      return this.$store.state.question;
+    },
+    answers() {
+      return this.$store.state.answers;
+    },
+  },
+  mounted() {
+    this.$store.dispatch('findallAnswers', this.$route.params.id);
+  },
 };
 </script>
 
@@ -86,7 +127,7 @@ export default {
 }
 .headline {
   font-weight: 400;
-  font-size: 2.07692308rem;
+  font-size: 1.2rem;
 }
 .btn-primary {
   background-color: #0095ff;
@@ -149,5 +190,14 @@ export default {
 }
 .by-user .name {
   color: #0077cc;
+}
+.your-answer {
+  margin-top: 1.5rem;
+}
+.your-answer .answer {
+  font-weight: 500;
+  color: #3c4146;
+  font-size: 18px;
+  margin-bottom: 1rem;
 }
 </style>

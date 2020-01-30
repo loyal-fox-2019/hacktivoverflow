@@ -14,6 +14,7 @@ class AnswerCtr {
     }
     static getAnswers(req,res,next){
         answer.find({idQuestion : req.params.id})
+            .populate('idUser')
             .then(answers =>{
                 res.status(200).json(answers)
             })

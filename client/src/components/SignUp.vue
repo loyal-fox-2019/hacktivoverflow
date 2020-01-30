@@ -8,18 +8,18 @@
                 <img src="../assets/so-icon.png" width="64" alt="icon">
             </div>
             <div class="form p-4 shadow rounded">
-                <form>
+                <form @submit.prevent="submitSignup">
                     <div class="form-group">
                         <label>Display username</label>
-                        <input type="text" class="form-control">
+                        <input v-model="signupUsername" type="text" class="form-control">
                     </div>
                     <div class="form-group">
                         <label>Email</label>
-                        <input type="email" class="form-control">
+                        <input v-model="signupEmail" type="email" class="form-control">
                     </div>
                     <div class="form-group">
                         <label>Password</label>
-                        <input type="password" class="form-control">
+                        <input v-model="signupPassword" type="password" class="form-control">
                     </div>
                     <button type="submit" class="btn btn-primary btn-block">Sign up</button>
                 </form>
@@ -38,6 +38,23 @@
 <script>
 export default {
   name: 'SignUp',
+  data() {
+    return {
+      signupUsername: '',
+      signupEmail: '',
+      signupPassword: '',
+    };
+  },
+  methods: {
+    submitSignup() {
+      const signup = {
+        username: this.signupUsername,
+        email: this.signupEmail,
+        password: this.signupPassword,
+      };
+      this.$store.dispatch('submitSignup', signup);
+    },
+  },
 };
 </script>
 
