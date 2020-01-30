@@ -39,6 +39,9 @@ export default new Vuex.Store({
     },
     searchResultArray: state=>{
       return state.searchResultArray
+    },
+    showEditButton: state=>{
+      return state.showEditButton
     }
   },
   mutations: {
@@ -63,7 +66,6 @@ export default new Vuex.Store({
         {
           state.isLogin = false
         }
-      // console.log("TCL: SET_IS_LOGIN -> state.isLogin  @store/index", state.isLogin)
     },
     SET_LOGGED_USERNAME(state,payload){
       if( localStorage.getItem('username') )
@@ -80,6 +82,9 @@ export default new Vuex.Store({
     },
     SET_SEARCH_RESULT_ARRAY(state,payload){
       state.searchResultArray = payload
+    },
+    SET_SHOW_EDIT_BUTTON(state,payload){
+      state.showEditButton = payload
     }
   },
   actions: {
@@ -90,7 +95,7 @@ export default new Vuex.Store({
             url: '/questions'
         })
         .then(result=>{
-          console.log("TCL: result @store/index", result.data)
+          console.log("TCL: result fetchQuestionData @store/index", result.data)
           this.commit('SET_QUESTION_DATA', result.data)
         })
         .catch(err=>{

@@ -1,7 +1,7 @@
 <template>
     <div>
         <h1>Edit {{ $route.params.cardType }}</h1>
-        {{ postDetail }}
+        <!-- {{ postDetail }} -->
         
         <div style="width:50rem; margin:auto">
             <form action="" @submit.prevent="editPost">
@@ -154,9 +154,6 @@ export default {
                     })
                   }
             })
-            
-            
-
           },
         deletePost()
           {
@@ -193,7 +190,10 @@ export default {
                       })
                   }
             })
-          }
+          },
+        removeDisplayedTag(tag){
+            this.tagListString = this.tagListArrayForm.filter( value => value != tag ).join(',')
+        }
     },
     created(){
         this.getPostDetail()

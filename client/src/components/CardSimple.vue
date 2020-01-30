@@ -36,13 +36,14 @@
                     <p class="card-text text-muted" v-html="question.description.slice(0,100) + '...'"></p>
                     
                     <div>
-                        <button  
+                        <!-- <button  
                             v-for="tag in question.TagList" :key="tag"
                             type="button" 
                             class="btn btn-outline-info tagButton"
                             @click.prevent="$emit('switchToFilterResultPage', { tagList: tag })"
                             >{{ tag }}
-                        </button>
+                        </button> -->
+                        <tagButton :tagList="question.TagList"/>
                     </div>
                     <div class="dropdown-divider"></div>
 
@@ -62,9 +63,11 @@
 import { mapGetters } from 'vuex'
 import axios from '../../config/axios'
 
+import tagButton from '../components/tagButton'
+
 export default {
     components:{
-        
+        tagButton
     },
     props:[
         'question'
@@ -87,10 +90,13 @@ export default {
                 url: `/answers/${this.question._id}`
             })
             .then(result=>{
-                console.log('TCL \n============\n ', 'nih jalan')
-                console.log("TCL: result length neh", result.data.length)
+                // console.log('TCL \n============\n ', 'nih jalan')
+                // console.log("TCL: result length neh", result.data.length)
                 // res(result.data.length)
                 this.answers = result.data.length
+            })
+            .catch( ({response})=>{
+                console.log(' error @countAnswers- CardSimple\n======================\n', response.data.message)
             })
           },
     },
@@ -103,12 +109,19 @@ export default {
             return  this.question.upVotes.length - this.question.downVotes.length
         },
         returnClass(){
-            for(let x = 0; x < this.loggedInUserDetail.watchedTag.length; x++)
+            if(this.loggedInUserDetail.username)
               {
-                  if(this.question.TagList.indexOf( this.loggedInUserDetail.watchedTag[x] ) >= 0)
-                    return 'container shadow-sm p-3 mb-3 bg-white rounded redBorderDiv'
+                  for(let x = 0; x < this.loggedInUserDetail.watchedTag.length; x++)
+                    {
+                        if(this.question.TagList.indexOf( this.loggedInUserDetail.watchedTag[x] ) >= 0)
+                            return 'container shadow-sm p-3 mb-3 bg-white rounded redBorderDiv'
+                    }
+                  return 'container shadow-sm p-3 mb-3 bg-white rounded'
               }
-            return 'container shadow-sm p-3 mb-3 bg-white rounded'
+            else
+                return 'container shadow-sm p-3 mb-3 bg-white rounded'
+
+            
         }
         
         

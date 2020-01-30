@@ -276,6 +276,7 @@ export default {
                   this.$store.commit('SET_LOGGED_USERNAME')
                   this.$store.commit('SET_IS_LOGIN')
                   this.$store.commit('SET_LOGGED_IN_USER_DETAIL', data)
+                  this.$router.push('/')
 
                   $('#modalUserForm').modal('hide')
               })
@@ -307,7 +308,9 @@ export default {
                             'User Has Logged Out',
                             'See you again next time'
                         )
+                        this.$router.push('/')
                     }
+
               })
           },
         postNewQuestion()
@@ -357,6 +360,9 @@ export default {
                       icon: 'error'
                   })
               })
+        },
+        removeDisplayedTag(tag){
+            this.tagListString = this.tagListArrayForm.filter( value => value != tag ).join(',')
         }
     },
     mounted(){

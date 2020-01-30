@@ -111,6 +111,7 @@ class QuestionController
           Question.find(
               updateQuery
           )
+          .populate('AuthorId', 'username')
           .then(result=>{
               res.status(200).json(result)
           })

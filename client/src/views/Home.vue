@@ -22,7 +22,7 @@
                                 <div class="card">
                                     <div class="card-header" id="headingOne">
                                     <h2 class="mb-0">
-                                        <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne" @click.prevent="setDeleteButton">
+                                        <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne" @click.prevent="setShowDeleteButton">
                                         Edit Tag
                                         </button>
                                     </h2>
@@ -46,18 +46,21 @@
                             <!-- end of accordion -->
                             
                             <div>
-                                <button  
+                                <!-- <button  
                                     v-for="(tag, index) in loggedInUserDetail.watchedTag " :key="index"
                                     type="button" 
                                     class="btn btn-outline-info tagButton"
-                                    @click.prevent="$emit('switchToFilterResultPage', { tagList: tag })"
+                                    @click.prevent="goToSearchPage(tag)"
                                     >{{ tag }}
                                     <button 
                                         class="btn btn-light btn-sm" 
                                         v-if="showDeleteButton"
                                         @click.prevent="deleteTag(tag)">x
                                     </button>
-                                </button>
+                                </button> -->
+                                <tagButton :tagList="loggedInUserDetail.watchedTag"
+                                           :showDeleteButton="showDeleteButton"
+                                />
 
                             </div>
                             
@@ -91,14 +94,18 @@
 </template>
 
 <script>
-import CardSimple from '@/components/CardSimple'
 import { mapGetters } from 'vuex'
 import axios from '../../config/axios'
 import Swal from 'sweetalert2'
 
+import CardSimple from '../components/CardSimple'
+import tagButton from '../components/tagButton'
+
+
 export default {
     components:{
-        CardSimple
+        CardSimple,
+        tagButton
     },
     data(){
         return{
@@ -112,14 +119,17 @@ export default {
         isLoginCheck(){
               Swal.fire('JALAN NIH ISLOGINCHECK')
           },
-
-        setDeleteButton(){
+        setShowDeleteButton(){
             if(!this.showDeleteButton)
                 this.showDeleteButton = true
             else
                 this.showDeleteButton = false
-        },
 
+            // if(!this.showEditButton)
+            //     this.$store.commit('SET_SHOW_EDIT_BUTTON', true)
+            // else
+            //     this.$store.commit('SET_SHOW_EDIT_BUTTON', false)
+        },
         addWatchedTag(){
             axios({
                 method: 'get',
@@ -147,6 +157,7 @@ export default {
                 Swal.fire('Success Adding Watched Tag')
                 this.watchedTagAdded = ''
                 this.$store.dispatch('fetchUserDetail')
+                this.$store.dispatch('fetchQuestionData')
             })
             .catch(({response})=>{
                 console.log(' error @addWatchedTag -home \n=========================================\n', response)
@@ -157,7 +168,6 @@ export default {
             })
 
         },
-
         deleteTag(tagName){
             Swal.fire({
                 title: `Delete Tag "${tagName}"`,
@@ -189,17 +199,24 @@ export default {
                     })
                 }
             })
+        },
+        goToSearchPage(tag){
+            this.$store.dispatch('searchArticles', {TagList: tag})
+            this.$router.push('/searchResult')
         }
     },
     created(){
         this.$store.dispatch('fetchQuestionData')
+        if(localStorage.getItem('access_token'))
+            this.$store.dispatch('fetchUserDetail')
         // this.isLoginCheck()
     },
     computed:{
         ...mapGetters([
             'access_token',
             'questionData',
-            'loggedInUserDetail'
+            'loggedInUserDetail',
+            'showEditButton'
         ])
     },
     

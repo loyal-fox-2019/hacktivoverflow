@@ -15,11 +15,11 @@ export default {
     NavBar
   },
   created(){
-      if(localStorage.getItem('access_token')){
-        console.log(' \n======================\n JALAN NEH APP VUE CREATED')
-        this.$store.dispatch('fetchUserDetail')
-
-      }
+      // if(localStorage.getItem('access_token')){
+      //   this.$store.dispatch('fetchUserDetail')
+      // }
+      // else
+      //   this.$store.commit('SET_LOGGED_USERNAME')
   }
 
   
