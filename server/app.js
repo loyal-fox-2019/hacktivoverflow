@@ -5,6 +5,9 @@ const app = express();
 const cors = require('cors');
 const router = require('./routers');
 const errorHandler = require('./middlewares/errorHandler');
+const {runCron} = require('./helpers/cron');
+
+runCron();
 
 app.set('view engine', 'ejs');
 app.use(cors());
