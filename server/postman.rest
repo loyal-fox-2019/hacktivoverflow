@@ -29,6 +29,13 @@ Content-Type: application/json
   "password": "12345"
 }
 
+### User by ID
+GET {{baseUrl}}/users/5e315131dc4d1134a3c16494
+
+###
+GET {{baseUrl}}/users/profile
+Authorization: token {{user1token}}
+
 ### Create question
 POST {{baseUrl}}/questions
 Content-Type: application/json
