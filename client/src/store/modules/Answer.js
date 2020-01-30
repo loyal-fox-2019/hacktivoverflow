@@ -18,7 +18,7 @@ export default {
                 .then( () => {
                     rootState.success = true
                     rootState.successMessage = 'Answer submitted'
-                    dispatch('question/getDetail',payload.questionId)
+                    dispatch('question/getDetail',payload.questionId,{root:true})
                 })
                 .catch( err => {
                     rootState.fail = true
@@ -53,6 +53,23 @@ export default {
             })
                 .then( () => {
                     dispatch('question/getDetail',payload.questionId,{root: true})
+                })
+                .catch( err => {
+                    rootState.fail = true
+                    rootState.failMessage = err.response.data.errors
+                })
+        },
+        updateAnswer({dispatch,rootState},payload) {
+            axios({
+                method: 'put',
+                url: `/answer/${payload.answerId}`,
+                headers: {token: localStorage.getItem('token')},
+                data: {description: payload.description}
+            })
+                .then( () => {
+                    rootState.success = true
+                    rootState.successMessage = 'Answer updated'
+                    dispatch('question/getDetail',payload.questionId,{root:true})
                 })
                 .catch( err => {
                     rootState.fail = true

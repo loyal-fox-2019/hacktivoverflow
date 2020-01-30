@@ -3,7 +3,7 @@
     <div id="nav" class="flex w-full bg bg-gray-200 border-b-2 border-gray-300 border-t-2 h-16">
       <router-link to="/" class="my-auto ml-3"><img class="h-10" src="https://www.iconsdb.com/icons/preview/dim-gray/stackoverflow-3-xxl.png" alt=""></router-link>
       <div class="trans border w-24 absolute top-0 right-0 rounded text-center text-gray-700 uppercase font-bold mr-6 mt-4 hover:bg-gray-600 cursor-pointer hover:text-white hover:shadow-lg" v-if="isLogin" @click="logout">logout</div>
-      <img class="trans h-10 rounded-full absolute right-0 mr-32 mt-3 cursor-pointer hover:shadow-lg" src="https://images.pexels.com/photos/414612/pexels-photo-414612.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500" alt="">
+      <!-- <img class="trans h-10 rounded-full absolute right-0 mr-32 mt-3 cursor-pointer hover:shadow-lg" src="https://images.pexels.com/photos/414612/pexels-photo-414612.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500" alt=""> -->
     </div>
     <router-view/>
   </div>
@@ -17,6 +17,7 @@ export default {
     if(localStorage.getItem('token')) {
       this.$router.push({path:'/'})
       this.$store.commit('SET_LOGIN_TRUE')
+      this.$store.dispatch('getUser')
     } else {
       this.$router.push({path:'/auth'})
     }

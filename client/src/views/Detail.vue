@@ -58,9 +58,6 @@ export default {
             return this.$store.state.question.detail
         }
     },
-    created() {
-        console.log(this.question)
-    },
     methods: {
         ...mapActions('question',['upvote','downvote']),
         ...mapActions('answer',['postAnswer']),

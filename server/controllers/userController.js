@@ -12,7 +12,7 @@ class userController {
         })
             .then( user => {
                 let token = generateToken({ id: user._id})
-                res.status(201).json({token}) 
+                res.status(201).json({token,userId:user._id}) 
             })
             .catch( next )
     }
@@ -25,7 +25,7 @@ class userController {
                 if ( user )  {
                     if( checkPassword(req.body.password,user.password) ) {
                         let token = generateToken({id: user._id})
-                        res.status(200).json({token})
+                        res.status(200).json({token,userId:user._id})
                     } else {
                         throw {name: 'Wrong password'}
                     }
@@ -33,6 +33,12 @@ class userController {
                     throw {name:'Wrong email'}
                 }
             })
+            .catch( next )
+    }
+
+    static getUser ( req,res,next ) {
+        User.findOne({_id:req.decoded.id})
+            .then( user => res.status(200).json(user))
             .catch( next )
     }
 

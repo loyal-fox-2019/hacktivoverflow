@@ -14,7 +14,8 @@ export default new Vuex.Store({
     success: '',
     successMessage: '',
     fail: '',
-    failMessage: ''
+    failMessage: '',
+    userId: ''
   },
   mutations: {
     SET_LOGIN_TRUE(state){
@@ -25,6 +26,16 @@ export default new Vuex.Store({
     }
   },
   actions: {
+    getUser({state}) {
+      axios({
+        method: 'get',
+        url: '/user',
+        headers: {token: localStorage.getItem('token')}
+      })
+        .then( ({data}) => {
+          state.userId = data._id
+        })
+    },
     login({state},payload) {
       axios({
         method: 'post',
@@ -39,6 +50,8 @@ export default new Vuex.Store({
           state.success = true
           state.successMessage = 'Login success'
           state.isLogin = true
+          state.userId = data.userId
+          console.log(state.userId)
           router.push({path:'/'})
         })
         .catch( err => {
@@ -49,7 +62,7 @@ export default new Vuex.Store({
     register({state},payload) {
       axios({
         method: 'post',
-        url: '/user/login',
+        url: '/user/register',
         data: {
           name: payload.name,
           email: payload.email,
@@ -61,6 +74,7 @@ export default new Vuex.Store({
           state.success = true
           state.successMessage = 'Register Success'
           state.isLogin = true
+          state.userId = data.userId
           router.push({path:'/'})
         })
         .catch( err => {
