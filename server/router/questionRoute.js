@@ -11,5 +11,8 @@ routes.get("/answers/:id", controlQuestion.getAllAnswerOfThisQuestion)
 routes.patch("/upvote/:id", authentication, controlQuestion.upvoteQuestion)
 routes.patch("/downvote/:id", authentication, controlQuestion.downvoteQuestion)
 routes.get("/oneQuestion/:id", controlQuestion.getQuestionById)
+routes.get("/searchByTitle/:title", controlQuestion.findByTitle)
+routes.get("/searchByTag/:tag", controlQuestion.searchByTag)
+
 
 module.exports = routes

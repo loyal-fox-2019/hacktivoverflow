@@ -10,6 +10,9 @@
           <b-form-group id="input-group-1" label-for="input-1">
             <b-form-input id="input-1" v-model="title" type="text" required></b-form-input>
           </b-form-group>
+          <b-form-group id="input-group-2" label-for="input-2">
+            <b-form-input id="input-2" v-model="tag" type="text" placeholder="Tag"></b-form-input>
+          </b-form-group>
         </b-form>
       </div>
     </div>
@@ -40,14 +43,16 @@ export default {
       editorOption: {
         /* quill options */
       },
-      title: ""
+      title: "",
+      tag: ""
     };
   },
   methods: {
     postQuestion() {
       let question = {
         description: this.description,
-        title: this.title
+        title: this.title,
+        tag: this.tag
       };
       this.$store.dispatch("postQuestion", question);
     }

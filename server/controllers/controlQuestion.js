@@ -8,7 +8,8 @@ class ControlQuestion {
             description: req.body.description,
             upvote: [],
             downvote: [],
-            userId: req.payload.id
+            userId: req.payload.id,
+            tag: req.body.tag
         })
             .then(questionPosted => {
                 res.status(200).json(questionPosted)
@@ -19,11 +20,14 @@ class ControlQuestion {
     }
 
     static editQuestion(req, res) {
+        // console.log("masuk sini kok")
         modelQuestion.findByIdAndUpdate(req.params.id, req.body)
             .then(updated => {
                 res.status(200).json(updated)
             })
             .catch(err => {
+
+                // console.log(err, "ini kegagalan")
                 res.status(500).json({ err, message: "Internal server error" })
             })
 
@@ -129,6 +133,26 @@ class ControlQuestion {
                 res.status(500).json({ err, message: "internal server error" })
             })
     }
+
+    static findByTitle(req, res) {
+        modelQuestion.find({ title: new RegExp(req.params.title, "i") })
+            .then(allFound => {
+                res.status(200).json(allFound)
+            })
+            .catch(err => {
+                res.status(500).json(err)
+            })
+    }
+    static searchByTag(req, res) {
+        modelQuestion.find({ tag: new RegExp(req.params.tag, "i") })
+            .then(dataTags => {
+                res.status(200).json(dataTags)
+            })
+            .catch(err => {
+                res.status(500).json(err)
+            })
+    }
+
 }
 
 module.exports = ControlQuestion

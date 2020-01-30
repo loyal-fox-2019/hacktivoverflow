@@ -22,6 +22,9 @@ const questionSchema = new Schema({
         type: Schema.Types.ObjectId,
         required: [true, "userid is required"],
         ref: "User"
+    },
+    tag: {
+        type: String
     }
 })
 

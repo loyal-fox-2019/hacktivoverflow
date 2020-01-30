@@ -21,9 +21,14 @@
             class="col titleQuestion"
             v-on:click="setCurrentQuestion(dataQuestion._id)"
           >{{dataQuestion.title}}</div>
-          <div class="col" v-html="dataQuestion.description"></div>
+          <div class="col descriptionQ" v-html="dataQuestion.description"></div>
           <div class="col no-gutters d-flex">
-            <div class="col-6"></div>
+            <div
+              class="col-6 font-weight-bold tag"
+              v-if="dataQuestion.tag"
+              v-on:click="searchTag"
+            >Tag: {{dataQuestion.tag}}</div>
+            <div class="col-6" v-else></div>
             <div class="col-6 askedBy">Asked by: {{dataQuestion.userId.username}}</div>
           </div>
         </div>
@@ -48,6 +53,9 @@ export default {
       // console.log(id, "halo dari id di question list");
       this.$store.dispatch("setCurrentQuestion", id);
       this.$router.push(`/perQuestion/${id}`);
+    },
+    searchTag() {
+      this.$store.dispatch("searchTag", this.dataQuestion.tag);
     }
   },
   computed: {
@@ -108,11 +116,22 @@ export default {
   cursor: pointer;
 }
 
+.tag:hover {
+  color: lightslategray;
+  cursor: pointer;
+}
+
 .askedBy {
   text-align: end;
 }
 
 .deleteBTN {
   width: 30px;
+}
+
+.descriptionQ {
+  height: 11vh;
+  overflow: hidden;
+  margin-bottom: 10px;
 }
 </style>

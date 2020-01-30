@@ -55,6 +55,6 @@ export default {
 
 <style scoped>
 .isiUtama {
-  height: 100vh;
+  height: 90vh;
 }
 </style>

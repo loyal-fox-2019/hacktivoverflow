@@ -14,6 +14,7 @@ export default {
       if (this.$route.path !== "/") {
         this.$router.push("/");
       }
+      this.$store.dispatch("getAllQuestion");
     }
   }
 };
@@ -21,7 +22,7 @@ export default {
 
 <style scoped>
 .dashboard {
-  height: 100vh;
+  height: 90vh;
   border-right: 1px solid lightgray;
 }
 

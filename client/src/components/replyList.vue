@@ -21,7 +21,7 @@
             <div class="btn btn-primary" v-on:click="editYa">Edit</div>
           </div>
         </div>
-        <h5 v-html="dataReplies.description"></h5>
+        <p v-html="dataReplies.description"></p>
         <div class="d-flex mx-auto justify-content-end">
           <p>Answered by: {{dataReplies.userId.username}}</p>
         </div>
@@ -53,6 +53,7 @@
 </template>
 
 <script>
+import Swal from "sweetalert2";
 import axios from "axios";
 import "quill/dist/quill.core.css";
 import "quill/dist/quill.snow.css";
@@ -78,9 +79,11 @@ export default {
     },
     editYa() {
       this.editThis = true;
+      this.$store.commit("editAnswerStatus", true);
     },
     cancelEdit() {
       this.editThis = false;
+      this.$store.commit("editAnswerStatus", false);
     },
     saveEdit(id) {
       let dataBaru = {
@@ -97,12 +100,19 @@ export default {
         },
         data: dataBaru
       })
-        .then(({ data }) => {
-          this.dataReplies = data;
+        .then(() => {
+          // this.dataReplies = data;
           this.editThis = false;
+          // console.log("berhasil");
+          // this.$store.commit("editAnswerStatus", false);
+          // this.$store.dispatch("getRepliesUlang", id);
         })
         .catch(err => {
-          console.log(err.response);
+          Swal.fire({
+            icon: "error",
+            title: "Oops..",
+            text: err.response.data.message
+          });
         });
     }
   }

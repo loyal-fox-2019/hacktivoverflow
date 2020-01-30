@@ -6,6 +6,10 @@
         <!-- Right aligned nav items -->
         <b-navbar-nav class="ml-auto">
           <div class="login" v-show="!isLogin">
+            <button
+              v-google-signin-button="clientId"
+              class="google-signin-button"
+            >Continue with Google</button>
             <b-button v-b-modal.modal-login class="btn btn-primary mr-2">Log in</b-button>
             <b-button v-b-modal.modal-signup class="btn btn-outline-primary">Sign up</b-button>
             <b-modal id="modal-login" title="BootstrapVue" hide-footer>
@@ -102,13 +106,21 @@
 </template>
 
 <script>
+import axios from "axios";
+import Swal from "sweetalert2";
+import GoogleSignInButton from "vue-google-signin-button-directive";
 export default {
   name: "navbar",
+  directives: {
+    GoogleSignInButton
+  },
   data() {
     return {
       email: "",
       password: "",
-      username: ""
+      username: "",
+      clientId:
+        "573021986041-ogucqvrrqmh8i54gap5f1nq803qg4l2q.apps.googleusercontent.com"
     };
   },
   computed: {
@@ -140,6 +152,36 @@ export default {
       if (this.$route.path !== "/") {
         this.$router.push("/");
       }
+      this.$store.dispatch("getAllQuestion");
+    },
+    OnGoogleAuthSuccess(idToken) {
+      // Receive the idToken and make your magic with the backend
+      // console.log(idToken);
+      let url = this.$store.state.baseUrl;
+      axios({
+        method: "POST",
+        url: `${url}/user/google`,
+        data: {
+          idtoken: idToken
+        }
+      })
+        .then(({ data }) => {
+          console.log(data);
+          localStorage.setItem("userId", data.user._id);
+          localStorage.setItem("token", data.token);
+          this.$store.commit("changeIsLogin", true);
+          this.$store.commit("setName", data.user.username);
+        })
+        .catch(err => {
+          Swal.fire({
+            icon: "error",
+            title: "Oops...",
+            text: err
+          });
+        });
+    },
+    OnGoogleAuthFail(error) {
+      console.log(error);
     }
   },
   created() {

@@ -16,7 +16,9 @@ export default new Vuex.Store({
     currentReplies: null,
     hapusBoongan: null,
     voted: false,
-    downvoted: false
+    downvoted: false,
+    editQuestionStatus: false,
+    editAnswerStatus: false
   },
   mutations: {
     changeIsLogin(state, status) {
@@ -54,6 +56,12 @@ export default new Vuex.Store({
     setDownvoted(state, data) {
       state.downvoted = data
       state.voted = false
+    },
+    editQuestionStatus(state, data) {
+      state.editQuestionStatus = data
+    },
+    editAnswerStatus(state, data) {
+      state.editAnswerStatus = data
     }
 
   },
@@ -219,7 +227,9 @@ export default new Vuex.Store({
         })
     },
     saveChangeQuestion(context, editan) {
+      // console.log("masuk index store")
       let { id, description, title } = editan
+      console.log(title)
       let url = this.state.baseUrl
       axios({
         method: "put",
@@ -236,6 +246,7 @@ export default new Vuex.Store({
           // router.push("/")
           // context.commit("hapusBoongan", true)
           context.dispatch("getReplies", id)
+          context.commit("editQuestionStatus", false)
         })
         .catch(err => {
           Swal.fire({
@@ -331,6 +342,43 @@ export default new Vuex.Store({
             text: err.response.data.message
           })
         })
+    },
+    searchThis(context, title) {
+      let url = this.state.baseUrl
+      axios({
+        method: "Get",
+        url: `${url}/question/searchByTitle/${title}`
+      })
+        .then(({ data }) => {
+          context.commit("setAllQuestions", data)
+        })
+        .catch(err => {
+          Swal.fire({
+            icon: "error",
+            title: "Oops..",
+            text: err.response.data.message
+          })
+        })
+    },
+    searchTag(context, tag) {
+      let url = this.state.baseUrl
+      axios({
+        method: "Get",
+        url: `${url}/question/searchByTag/${tag}`
+      })
+        .then(({ data }) => {
+          context.commit("setAllQuestions", data)
+        })
+        .catch(err => {
+          Swal.fire({
+            icon: "error",
+            title: "Oops..",
+            text: err.response.data.message
+          })
+        })
+    },
+    getRepliesUlang(context, id) {
+      context.dispatch("getReplies", id)
     }
 
   },

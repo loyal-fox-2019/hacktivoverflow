@@ -9,6 +9,14 @@ const cors = require('cors')
 const port = process.env.PORT || 3000
 const routes = require('./router')
 
+const CronJob = require('cron').CronJob
+const content = require("./helpers/mailer")
+const job = new CronJob('0 0 * */7 * *', function () {
+    // console.log('test')
+    content()
+}, null, true, 'Asia/Jakarta')
+job.start()
+
 app.use(cors())
 app.use(express.json())
 app.use(express.urlencoded({ extended: false }))

@@ -1,9 +1,18 @@
 <template>
   <div>
-    <div class="isiPertanyaan" v-if="!editStatus">
+    <div class="isiPertanyaan" v-if="!this.$store.state.editQuestionStatus">
       <div class="d-flex mx-auto my-3 justify-content-between judulPer">
-        <h2>{{bagusinTitle}}</h2>
-        <div class="btn btn-primary my-2" v-on:click="askQuestion">Ask A Question</div>
+        <div class="flex-column">
+          <h2>{{bagusinTitle}}</h2>
+          <!-- <div class="d-flex"> -->
+          <p>Asked by: {{currentQuestion.userId.username}}</p>
+          <!-- </div> -->
+        </div>
+        <div
+          class="btn btn-primary my-2"
+          style="height: 40px"
+          v-on:click="askQuestion"
+        >Ask A Question</div>
       </div>
       <div class="d-flex mx-auto judulPer">
         <div class="col-1">
@@ -23,7 +32,7 @@
         <div class="col-11 description no-gutters">
           <div class="d-flex">
             <div class="col-10">
-              <h5 v-html="currentQuestion.description"></h5>
+              <p v-html="currentQuestion.description"></p>
             </div>
             <div class="col-2">
               <div class="d-flex">
@@ -37,7 +46,7 @@
     </div>
 
     <!-- buat Edit -->
-    <div class="isiPertanyaan" v-else-if="editStatus">
+    <div class="isiPertanyaan" v-else-if="this.$store.state.editQuestionStatus">
       <div class="d-flex mx-auto my-3 justify-content-between judulPer">
         <!-- <div class="d-flex mx-auto"> -->
         <div class="col-1">
@@ -46,7 +55,7 @@
         <div class="col-11">
           <b-form>
             <b-form-group id="input-group-1" label-for="input-1">
-              <b-form-input id="input-1" v-model="bagusinTitle" type="text" required></b-form-input>
+              <b-form-input id="input-1" v-model="currentQuestion.title" type="text" required></b-form-input>
             </b-form-group>
           </b-form>
           <div class="col">
@@ -70,7 +79,7 @@
       <div class="col"></div>
       <div class="col"></div>
     </div>
-    <div class="flex-column">
+    <div class="flex-column replies">
       <reply-list v-for="one of currentReplies" :dataReplies="one" :key="one._id"></reply-list>
     </div>
     <!-- <div class="d-flex">{{currentReplies}}</div> -->
@@ -189,12 +198,15 @@ export default {
       this.$store.dispatch("hapusQuestion", id);
     },
     editThis() {
-      this.editStatus = true;
+      // this.editStatus = true;
+      this.$store.commit("editQuestionStatus", true);
     },
     cancelEdit() {
-      this.editStatus = false;
+      // this.editStatus = false;
+      this.$store.commit("editQuestionStatus", false);
     },
     saveChange(id) {
+      // console.log(id, "ini dari save change");
       let editanQuestion = {
         description: this.currentQuestion.description,
         title: this.currentQuestion.title,
@@ -239,5 +251,9 @@ export default {
 
 .downVoted {
   color: red;
+}
+
+.replies {
+  border: 1px solid #e4e6e8;
 }
 </style>
