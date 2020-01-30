@@ -28,7 +28,7 @@
           class="mb-2"
         ></b-form-tags>
         <b-button @click.prevent="tambahkanKonten" class="mt-3" variant="info"
-          >Button</b-button
+          >Add Content</b-button
         >
       </div>
     </div>
@@ -52,6 +52,9 @@ export default {
     ...mapActions(['addContent']),
     tambahkanKonten() {
       this.addContent(this.data)
+      this.$router.push({
+        path: '/'
+      })
     }
   }
 }

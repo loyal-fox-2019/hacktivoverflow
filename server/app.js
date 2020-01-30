@@ -8,12 +8,20 @@ const errorHandler = require('./middlewares/errorHandler')
 const mongoose = require('mongoose')
 const app = express()
 
-mongoose.connect(process.env.DB_URI, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-  useCreateIndex: true,
-  useFindAndModify: false
-})
+mongoose
+  .connect(process.env.DB_URI, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+    useCreateIndex: true,
+    useFindAndModify: false
+  })
+  .then(() => {
+    console.log('mongo has connected')
+  })
+  .catch(err => {
+    console.log('error in mongo connection')
+    console.log(err)
+  })
 
 app.use(cors())
 app.use(logger('dev'))
