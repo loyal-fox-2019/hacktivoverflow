@@ -91,17 +91,26 @@ export default new Vuex.Store({
           context.commit("SET_COMMENTS", err);
         });
     },
-    saveVote(context, data) {
+    saveVote(context, sendData) {
       axios({
         method: "POST",
         url: `${this.state.API}/votes`,
         headers: {
           token: localStorage.token
         },
-        data
+        data: sendData
       })
         .then(({ data }) => {
-          console.log(data);
+          if (sendData.from === "list") {
+            context.dispatch("fetchQuestions");
+          } else {
+            if (data.questionId) {
+              context.dispatch("fetchQuestionDetail", data.questionId);
+              context.dispatch("fetchComments", data.questionId);
+            } else {
+              context.dispatch("fetchQuestionDetail", data.result._id);
+            }
+          }
         })
         .catch(err => {
           console.log(err);

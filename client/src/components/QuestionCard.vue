@@ -5,16 +5,18 @@
         class="m-0 p-0 text-decoration-none"
         variant="link"
         title="This try is challenging"
+        @click.prevent="vote('up')"
       >
         <b-icon icon="chevron-up" font-scale="3"></b-icon>
       </b-button>
-      <b-button size="sm" variant="outline-dark" title="Neutralize vote">
+      <div style="font-size:15px;">
         {{ data.upvotes.length - data.downvotes.length }}
-      </b-button>
+      </div>
       <b-button
         class="m-0 p-0 text-decoration-none"
         variant="link"
         title="This try does not show any effort"
+        @click.prevent="vote('down')"
       >
         <b-icon icon="chevron-down" font-scale="3"></b-icon>
       </b-button>
@@ -39,6 +41,16 @@ export default {
   props: ["data"],
   components: {
     TagList
+  },
+  methods: {
+    vote(voteState) {
+      this.$store.dispatch("saveVote", {
+        voteState,
+        type: "question",
+        _id: this.data._id,
+        from: "list"
+      });
+    }
   },
   computed: {
     previewBody() {

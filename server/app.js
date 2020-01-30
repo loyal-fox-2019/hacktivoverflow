@@ -16,7 +16,8 @@ app.use(express.urlencoded({
 })); // for parsing application/x-www-form-urlencoded
 mongoose.connect(`mongodb://localhost:27017/errorhandler_${process.env.NODE_ENV}`, {
     useNewUrlParser: true,
-    useUnifiedTopology: true
+    useUnifiedTopology: true,
+    useFindAndModify: false
 });
 
 app.use('/', routes)

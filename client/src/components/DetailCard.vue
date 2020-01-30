@@ -10,14 +10,7 @@
         >
           <b-icon icon="chevron-up" font-scale="3"></b-icon>
         </b-button>
-        <b-button
-          size="sm"
-          variant="outline-dark"
-          title="Neutralize vote"
-          @click.prevent="vote('neutral')"
-        >
-          {{ data.upvotes.length - data.downvotes.length }}
-        </b-button>
+        {{ data.upvotes.length - data.downvotes.length }}
         <b-button
           class="m-0 p-0 text-decoration-none"
           variant="link"
@@ -30,8 +23,12 @@
       <b-col cols="11" class="text-left" v-if="isEdit">
         <vue-editor v-model="$store.state.editedContent.body" />
       </b-col>
-      <b-col cols="11" v-html="data.body" class="text-left" v-if="!isEdit">
-      </b-col>
+      <b-col
+        cols="11"
+        v-html="data.body"
+        class="text-left"
+        v-if="!isEdit"
+      ></b-col>
     </b-row>
     <b-row class="justify-content-end" v-if="data" style="font-size:12px;">
       <b-col cols="3" class="text-right text-muted" v-if="data.user">
@@ -89,7 +86,8 @@ export default {
       this.$store.dispatch("saveVote", {
         voteState,
         type,
-        _id: this.data._id
+        _id: this.data._id,
+        from: "detail"
       });
     }
   },
