@@ -374,7 +374,6 @@ export default new Vuex.Store({
             title: 'Edit Success',
             text: 'Successfully Edited Question'
           })
-          console.log(payload.questionid)
           this.dispatch('fetch_answer', payload.questionId)
         })
         .catch(({ response }) => {

@@ -36,6 +36,7 @@ export default {
   methods: {
     logout() {
       localStorage.removeItem('token')
+      localStorage.removeItem('id')
       this.$store.commit('CHANGE_STATE_LOGIN', false)
     }
   }
