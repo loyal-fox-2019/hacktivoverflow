@@ -4,7 +4,7 @@ const Answer = require('../models/Answer')
 class QuestionController {
   static async getAll(req, res, next) {
     try {
-      filter = {}
+      let filter = {}
       if (req.query) {
         for (const key in req.query) {
           filter[key] = req.query.key
@@ -27,8 +27,7 @@ class QuestionController {
         .findById(req.params.id)
         .populate('author')
         .populate('replies')
-      if (question) res.status(200).json(question)
-      else next({status:404, message: 'Question not found!'})
+      res.status(200).json(question)
     } catch (error) {
       next(error)
     }
