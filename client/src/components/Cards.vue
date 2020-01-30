@@ -84,7 +84,11 @@ export default {
       return this.$store.getters.tagu
     },
     watch () {
-      return this.data.tags.some(tag => this.diliatin.includes(tag)) ? 'yellow' : 'white'
+      if (this.data.tags) {
+        return this.data.tags.some(tag => this.diliatin.includes(tag)) ? '#FAEBD7' : 'white'
+      } else {
+        return 'white'
+      }
     }
   },
   props: ['data'],

@@ -34,11 +34,10 @@
     :key="index"
     @loadUlangAnswer="refreshAnswers"
     :data="jawab"
-    :tipe="'answers'"
     style="width: 60vw"
   class="ml-auto"/>
 
-  <FormQ :formType="'asnwers'" />
+  <FormQ :formType="'answers'" />
 </div>
 
 </template>

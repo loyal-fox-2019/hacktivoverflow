@@ -6,18 +6,18 @@
 </template>
 
 <script>
-import FormNya from './FormNya';
+import FormNya from './FormNya'
 export default {
-  name: "RegisterPage",
-  components:{
+  name: 'RegisterPage',
+  components: {
     FormNya
   },
-  data(){
-    return{
+  data () {
+    return {
       statusForm: 'Register'
     }
   }
-};
+}
 </script>
 
 <style>

@@ -1,6 +1,6 @@
 require('dotenv').config()
 require('./helpers/mongoose')
-
+require('./helpers/cron')
 const express = require('express'),
     app = express(),
     cors = require('cors'),
@@ -8,6 +8,7 @@ const express = require('express'),
     port = process.env.PORT || 3000,
     errorHandler = require('./middlewares/errorHandler'),
     morgan = require('morgan')
+
 
 app.use(express.json())
 app.use(express.urlencoded({ extended: false }))
