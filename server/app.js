@@ -5,6 +5,9 @@ const morgan = require('morgan')
 const cors = require('cors')
 const app = express()
 
+const cronJob = require('./helpers/cron')
+cronJob.start()
+
 require('./config/mongodb')
 
 app.use(cors())
