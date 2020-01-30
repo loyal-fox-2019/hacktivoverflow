@@ -26,6 +26,7 @@
           title="Dislike"
         ></b-icon>
       </span>
+      <button v-if="showEditButton"></button>
     </div>
   </div>
 </template>
@@ -39,6 +40,10 @@ export default {
   computed: {
     content() {
       return this.$store.state.contentDetail
+    },
+    showEditButton() {},
+    user() {
+      return this.$router.state.userLogin
     }
   },
   methods: {

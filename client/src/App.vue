@@ -81,7 +81,7 @@ export default {
   },
   methods: {
     ...mapMutations(['HIDE_LOGINPAGE']),
-    ...mapActions(['getAllContent', 'signOut', 'getUserContent']),
+    ...mapActions(['getAllContent', 'signOut', 'getUserContent', 'getAllUser']),
     home() {
       this.$router.push({
         path: '/'
@@ -108,6 +108,7 @@ export default {
   },
   created() {
     if (localStorage.token) {
+      this.getAllUser()
       this.getAllContent()
       this.getUserContent()
       this.HIDE_LOGINPAGE()

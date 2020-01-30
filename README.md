@@ -182,7 +182,7 @@ Downvote/Dislike pertanyaan
 
 ## Get User Question
 
-Mendapatkan seluruh transaksi user
+Mendapatkan seluruh question milik user yang sedang login
 
 **URL** : `/userContent`
 

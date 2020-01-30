@@ -10,9 +10,13 @@ export default new Vuex.Store({
     allContent: null,
     contentByTag: null,
     contentDetail: null,
-    userContent: null
+    userContent: null,
+    content2update: null
   },
   mutations: {
+    SET_CONTENT2UPDATE(state, payload) {
+      state.content2update = payload
+    },
     SET_USERLOGIN(state, payload) {
       state.userLogin = payload
     },
@@ -45,7 +49,7 @@ export default new Vuex.Store({
         }
       })
         .then(({ data }) => {
-          // console.log(data)
+          console.log(data)
           commit('SET_USERLOGIN', data)
         })
         .catch(err => {

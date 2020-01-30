@@ -1,5 +1,6 @@
 <template>
   <div>
+    <router-view />
     <UserContent
       v-for="(content, key) in userContent"
       :key="key"

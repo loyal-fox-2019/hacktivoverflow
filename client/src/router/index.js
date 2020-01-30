@@ -32,7 +32,13 @@ const routes = [
     path: '/usercontent',
     name: 'usercontent',
     component: () =>
-      import(/* webpackChunkName: "about" */ '../views/UserPage.vue')
+      import(/* webpackChunkName: "about" */ '../views/UserPage.vue'),
+    children: [
+      {
+        path: 'update',
+        component: () => import('../components/updateQuestion.vue')
+      }
+    ]
   }
 ]
 

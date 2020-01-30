@@ -17,7 +17,11 @@
           </p>
           <p>{{ content._id }}</p>
         </div>
-        <button type="button" class="btn btn-secondary btn-lg mr-3">
+        <button
+          @click="showUpdate"
+          type="button"
+          class="btn btn-secondary btn-lg mr-3"
+        >
           UPDATE
         </button>
         <button
@@ -33,13 +37,14 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex'
+import { mapActions, mapMutations } from 'vuex'
 import axios from 'axios'
 export default {
   name: 'userContent',
   props: ['content'],
   created() {},
   methods: {
+    ...mapMutations(['SET_CONTENT2UPDATE']),
     ...mapActions(['getAllContent']),
     deleteContent() {
       axios({
@@ -57,6 +62,16 @@ export default {
         .catch(err => {
           console.log(err)
         })
+    },
+    showUpdate() {
+      this.SET_CONTENT2UPDATE(this.content)
+
+      setTimeout(() => {
+        this.$router.push({
+          path: '/usercontent/update'
+        })
+        window.scrollTo(0, 0)
+      }, 3000)
     }
   }
 }
