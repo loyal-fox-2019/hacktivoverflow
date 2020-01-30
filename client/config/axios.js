@@ -1,7 +1,21 @@
 import axios from 'axios'
 
-const instance = axios.create({
-    baseURL: 'http://localhost:3000'
-})
+console.log(' \n======================\n', process.env.NODE_ENV)
+let instance 
+if(process.env.NODE_ENV==='production')
+{
+    instance = axios.create({
+        baseURL: 'http://allh8project.japhendywijaya.xyz:3000'
+    })
+}
+else if(process.env.NODE_ENV==='development')
+{
+    instance = axios.create({
+        baseURL: 'http://localhost:3000'
+    })
+}
+
+
+
 
 export default instance
