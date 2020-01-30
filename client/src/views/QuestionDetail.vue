@@ -2,18 +2,18 @@
   <div class="container">
     <b-card no-body class="overflow-hidden">
         <b-row no-gutters>
-        <b-col md="2" class="row">
-            <div class="col-md">
-                <b-icon icon="arrow-up" style="width: 50px; height: 50px;" v-on:click="upvoteQuestion(question._id)"></b-icon>
-                {{ question.upvotes.length }}
+        <b-col md="2" class="flex-column">
+            <div class="col-md mt-4">
+                <i class="fas fa-chevron-up fa-2x upvote" v-on:click="upvoteQuestion(question._id)"></i>
             </div>
             <div class="col-md">
-                <b-icon icon="arrow-down" style="width: 50px; height: 50px;" v-on:click="downvoteQuestion(question._id)"></b-icon>
-                {{ question.downvotes.length }}
+                {{ question.upvotes.length - question.downvotes.length }}
             </div>
-            
+            <div class="col-md">
+                <i class="fas fa-chevron-down fa-2x downvote" v-on:click="downvoteQuestion(question._id)"></i>
+            </div> 
         </b-col>
-        <b-col md="10" class="text-left">
+        <b-col md="10" class="text-left  mt-3">
             <b-card-body :title="question.title">
             <b-card-text>
                 {{ question.description }}
@@ -37,10 +37,10 @@
         </b-col>
         </b-row>
     </b-card>
-    <div class="text-left">
+    <!-- <div class="text-left"> -->
         <div class="row justify-content-center" style="margin-top: 15px; margin-bottom: 15px;">
             <h3 v-if="answers.length>0" class="col-md-2">Answers: </h3>
-            <b-button variant="light" class="col-md-4" v-b-modal.modal-xl.modal-center v-on:click="$bvModal.show(question._id)">Answer Question</b-button>
+            <b-button variant="dark" class="col-md-3" v-b-modal.modal-xl.modal-center v-on:click="$bvModal.show(question._id)">Answer Question</b-button>
                 <b-modal size="xl" hide-footer :id="question._id" centered title="Answer">
                     <p>Title</p>
                     <input type="text" v-model="title">
@@ -51,20 +51,21 @@
                     <b-button variant="dark" v-on:click="createAnswer(question._id)" @click="$bvModal.hide(question._id)">Submit</b-button>
                 </b-modal>
         </div>
-        <div v-for="item in answers" :key="item._id">
+        <div v-for="item in answers" :key="item._id" class="text-left">
             <b-card no-body class="overflow-hidden">
-                <b-row no-gutters>
-                <b-col md="2" class="row justify-content-center">
-                    <div class="col-md">
-                        <b-icon icon="arrow-up" style="width: 50px; height: 50px;" v-on:click="upvoteAnswer(item._id)"></b-icon>
-                        {{ item.upvotes.length }}
+                <b-row no-gutters >
+                <b-col md="2" class="flex-column">
+                    <div class="col-md  mt-4 ml-5">
+                        <i class="fas fa-chevron-up fa-2x upvote" v-on:click="upvoteAnswer(item._id)"></i>
                     </div>
-                    <div class="col-md">
-                        <b-icon icon="arrow-down" style="width: 50px; height: 50px;" v-on:click="downvoteAnswer(item._id)"></b-icon>
-                        {{ item.downvotes.length }}
+                    <div class="col-md-1 ml-5" style="padding-left: 25px;">
+                        {{ item.upvotes.length - item.downvotes.length }}
                     </div>
+                    <div class="col-md ml-5">
+                        <i class="fas fa-chevron-down fa-2x downvote" v-on:click="downvoteAnswer(item._id)"></i>
+                    </div> 
                 </b-col>
-                <b-col md="8">
+                <b-col md="8" class="mt-4">
                     <b-card-body :title="item.title">
                     <b-card-text v-html="item.description">
                     </b-card-text>
@@ -88,7 +89,7 @@
                 </div>
             </b-card>
         </div>
-    </div>
+    <!-- </div> -->
   </div>
 </template>
 
@@ -178,6 +179,14 @@ export default {
 .container{
     height: 100vh;
     margin-top: 5vh;
+}
+.upvote:hover{
+    cursor: pointer;
+    color: darkorange
+}
+.downvote:hover{
+    cursor: pointer;
+    color: red;
 }
 
 </style>

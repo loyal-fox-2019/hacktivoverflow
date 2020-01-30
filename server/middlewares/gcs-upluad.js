@@ -5,7 +5,7 @@ const upload = gcsUpload({
       fileSize: 1e6 // in bytes
     },
     gcsConfig: {
-      keyFilename: 'ecommerce-a0a68546cbdc.json',//bikin baru aja atau yg lama juga gapapa
+      keyFilename: 'ecommerce-a0a68546cbdc.json',
       bucketName: 'ecommerce-upload'
     }
   })

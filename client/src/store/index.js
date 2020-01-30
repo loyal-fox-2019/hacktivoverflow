@@ -11,9 +11,13 @@ export default new Vuex.Store({
     allQuestions: [],
     question: {},
     answers: [],
-    userquestions: []
+    userquestions: [],
+    filtered:[]
   },
   mutations: {
+    SET_FILTERED(state,payload){
+      state.filtered=payload
+    },
     SET_USER_QUESTIONS(state,payload){
       state.userquestions = payload
     },
@@ -31,13 +35,35 @@ export default new Vuex.Store({
     },
     SET_LOGIN(state, payload){
       state.user = payload
+    },
+    SET_USER(state, payload){
+      state.user = payload
     }
   },
   actions: {
+    updatePicture(context,payload){
+      axios({
+        method: 'patch',
+        url: `http://localhost:3000/user/profile`,
+        headers: {
+          token: localStorage.getItem('token')
+        },
+        data:{
+          picture: payload.picture,
+          _id: payload._id
+        }
+      })
+      .then(({data})=>{
+        context.commit('SET_USER', data)
+      })
+      .catch(err=>{
+        console.log(err)
+      })
+    },
     updateAnswer(context,payload){
       axios({
         method: 'put',
-        url: `http://localhost:3000/question/${payload._id}`,
+        url: `http://localhost:3000/answer/${payload._id}`,
         headers: {
           token: localStorage.getItem('token')
         },
@@ -47,6 +73,7 @@ export default new Vuex.Store({
         }
       })
       .then(({data})=>{
+        console.log(data, '=======updated')
         context.dispatch('getAnswers', data.question)
       })
     },
@@ -111,8 +138,9 @@ export default new Vuex.Store({
         },
         data:payload
       })
-      .then(()=>{
-        // context.dispatch('getOneQuestion', data._id)
+      .then(({data})=>{
+        // context.dispatch('getOneQuestion', data)
+        console.log(data)
         context.dispatch('getAllQuestions')
         context.dispatch('getUserQuestions')
       })
@@ -202,6 +230,7 @@ export default new Vuex.Store({
       })
     },
     getAnswers(context, payload){
+      console.log('masuk getanswers')
       axios({
         method: 'get',
         url: `http://localhost:3000/answer/${payload}`,
@@ -238,6 +267,7 @@ export default new Vuex.Store({
       .then(({data})=>{
         console.log(data, 'all questions')
         context.commit('SET_ALL_QUESTIONS', data)
+        context.commit('SET_FILTERED', data)
       })
       .catch(err=>{
         console.log(err)

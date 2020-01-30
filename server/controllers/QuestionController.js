@@ -7,6 +7,7 @@ class QuestionController{
             description: req.body.description,
             user: req.payload._id,
             tags: req.body.tags,
+            picture: req.body.picture,
             upvotes: [],
             downvotes: []
         })
@@ -20,7 +21,7 @@ class QuestionController{
         })
     }
     static findAll(req,res){
-        Question.find().populate('user', '-password')
+        Question.find().populate('user', '-password').sort( { createdAt: -1 } )
         .then(data=>{
             res.status(200).json(data)
         })

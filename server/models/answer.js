@@ -16,6 +16,9 @@ const answerSchema = new Schema({
         ref: 'User',
         required: true
     },
+    picture:{
+        type: String
+    },
     question:{
         type: Schema.Types.ObjectId,
         ref: 'Question',

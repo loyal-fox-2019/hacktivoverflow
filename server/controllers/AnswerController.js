@@ -2,7 +2,7 @@ const Answer = require('../models/answer')
 
 class AnswerController{
     static create(req,res){
-        // console.log('controller create answer', req.body)
+        console.log('controller create answer', req.body)
         Answer.create({
             title: req.body.title,
             description: req.body.description,
@@ -21,7 +21,7 @@ class AnswerController{
         })
     }
     static findAll(req,res){
-        Answer.find({question: req.params.questionId}).populate('user', '-password')
+        Answer.find({question: req.params.questionId}).populate('user', '-password').sort( { createdAt: -1 } )
         .then(data=>{
             res.status(200).json(data)
         })
@@ -43,7 +43,11 @@ class AnswerController{
         })
     }
     static update(req,res){
-        Answer.findByIdAndUpdate({_id: req.params.answerId}).populate('user', '-password')
+        // console.log('masuk update', req.body)
+        Answer.findByIdAndUpdate({_id: req.params.answerId},{
+            title: req.body.title,
+            description: req.body.description
+        }).populate('user', '-password')
         .then(data=>{
             res.status(200).json(data)
         })

@@ -1,7 +1,56 @@
 const User = require('../models/user')
 const {generateToken} = require('../helpers/jwt')
 const {compare} = require('../helpers/encryption')
+const verifyGoogle = require('../helpers/verifyGoogle')
+
 class UserController{
+    static gsignin(req,res,next){
+        // console.log('masuk gsignin', req.body)
+        let email=null
+        let name=null
+        const token = req.body.id_token
+        const payload = verifyGoogle(token)
+        // console.log(payload,'google sign in')
+        payload.then(data=>{
+            // console.log(data, 'payloaaaaaaaaaaaad')
+            email = data.email
+            name = data.name
+            return User.findOne({
+                email
+            })
+        })
+        .then(result=>{
+            // console.log(result,'=============')
+            if(result){
+                return result
+            }else{
+                // console.log(process.env.DEFAULT_PASSWORD,'env')
+                return User.create({
+                    username: name,
+                    email,
+                    password: process.env.DEFAULT_PASSWORD
+                })
+            }
+        })
+        .then(user=>{
+            // console.log(user, )
+            // console.log(user, '{{{{{{')
+            let payload={
+                _id: user._id,
+                username: user.username,
+                email: user.email
+            }
+            const token = generateToken(payload)
+            res.status(200).json({
+                message: 'User Signed In',
+                token,
+                payload
+            })
+        })
+        .catch(err=>{
+            next(err)
+        })
+    }
     static register(req,res,next){
         console.log('masuk register', req.body)
         const {username, email, password} = req.body

@@ -18,6 +18,9 @@ const questionSchema = new Schema({
         ref: 'User',
         required: true
     },
+    picture:{
+        type: String
+    },
     upvotes: [{type: Schema.Types.ObjectId, ref: 'User'}],
     downvotes:[{type: Schema.Types.ObjectId, ref: 'User'}]
 },{timestamps: true})
