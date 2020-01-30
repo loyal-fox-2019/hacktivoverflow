@@ -7,6 +7,7 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   state: {
     allQuestions: [],
+    myQuestions: [],
     isLogin: false,
     searchStr: "",
     currentQuestion: {}
@@ -14,6 +15,9 @@ export default new Vuex.Store({
   mutations: {
     SET_ALL_QUESTIONS(state,payload) {
       state.allQuestions = payload;
+    },
+    SET_MY_QUESTIONS(state,payload) {
+      state.myQuestions = payload;
     },
     SET_LOGIN_STATE(state,payload) {
       state.isLogin = payload;
@@ -33,6 +37,19 @@ export default new Vuex.Store({
       })
       .then(({data}) => {
         context.commit('SET_ALL_QUESTIONS',data);
+      })
+
+    },
+    getMyQuestions(context,token) {
+      axiosReq({
+        url: `/users/myquestions`,
+        method: "get",
+        headers: {
+          token: token
+        }
+      })
+      .then(({data}) => {
+        context.commit('SET_MY_QUESTIONS',data);
       })
 
     },

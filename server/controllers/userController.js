@@ -65,11 +65,12 @@ class UserController
         Question.find({
             user: req.userInfo.id
         })
+        .populate("user","username")
         .exec()
-        .catch((questions) => {
+        .then((questions) => {
             res.status(200).json(questions)
         })
-        .then((err) => {
+        .catch((err) => {
 
             console.log(err);
             

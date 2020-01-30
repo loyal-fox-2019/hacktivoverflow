@@ -82,7 +82,7 @@ li {
 }
 
 .form-control {
-  width: 50vw;
+  width: 50vw!important;
   margin: auto;
 }
 </style>

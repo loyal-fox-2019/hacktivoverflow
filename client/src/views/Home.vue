@@ -1,17 +1,17 @@
 <template>
   <div class="home">
     <router-link to="/newquestion">
-      <button class="btn btn-primary" id="ask-qn" v-if="this.$store.state.isLogin">Ask a question!</button>
+      <button class="btn btn-primary ask-qn" v-if="this.$store.state.isLogin">Ask a question!</button>
     </router-link>
-    <router-link to="/myquestions">
-      <button class="btn btn-primary" id="ask-qn" v-if="this.$store.state.isLogin">My questions</button>
-    </router-link>
+    
+    <button class="btn btn-primary ask-qn" v-if="this.$store.state.isLogin && showAll" @click="toggleShowQn">My questions</button>
+    <button class="btn btn-primary ask-qn" v-if="this.$store.state.isLogin && !showAll" @click="toggleShowQn">All questions</button>
 
     <router-link to="/login">
-      <button class="btn btn-primary" id="ask-qn" v-if="!this.$store.state.isLogin">Login to ask a question!</button>
+      <button class="btn btn-primary ask-qn" v-if="!this.$store.state.isLogin">Login to ask a question!</button>
     </router-link>
     <h1>Questions</h1>
-    <questionSummary v-for="qn in this.$store.state.allQuestions" :key="qn._id" :question="qn"></questionSummary>
+    <questionSummary v-for="qn in questionsArr" :key="qn._id" :question="qn"></questionSummary>
   </div>
 </template>
 
@@ -22,8 +22,29 @@ export default {
   components: {
     questionSummary
   },
+  data() {
+    return {
+      questionsArr: this.$store.state.allQuestions,
+      showAll: true
+    }
+  },
   created() {
     this.$store.dispatch('getAllQuestions')
+    this.$store.dispatch('getMyQuestions')
+    this.questionsArr = this.$store.state.allQuestions
+  },
+  methods: {
+    toggleShowQn() {
+      this.showAll = !this.showAll;
+      if(this.showAll) {
+        this.$store.dispatch('getAllQuestions')
+        this.questionsArr = this.$store.state.allQuestions
+      }
+      else {
+        this.$store.dispatch('getMyQuestions',this.$cookies.get('token'))
+        this.questionsArr = this.$store.state.myQuestions
+      }
+    }
   }
 }
 </script>
@@ -34,7 +55,7 @@ export default {
   padding: 15px;
   margin-left: 20%;
 }
-#ask-qn {
+.ask-qn {
   float: right;
 }
 button {

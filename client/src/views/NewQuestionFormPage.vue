@@ -84,6 +84,8 @@
                     this.title = "";
                     this.tags = [];
                     this.description = "";
+                    this.$store.dispatch('getAllQuestions')
+                    this.$store.dispatch('getMyQuestions')
                     this.$router.push({path: `/question/${data._id}`})
                 })
             },

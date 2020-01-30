@@ -11,6 +11,9 @@ Vue.config.productionTip = false
 Vue.use(BootstrapVue)
 Vue.use(GSignInButton)
 
+import 'bootstrap/dist/css/bootstrap.css'
+import 'bootstrap-vue/dist/bootstrap-vue.css'
+
 Vue.use(VueCookies)
 Vue.$cookies.config('7d')
 

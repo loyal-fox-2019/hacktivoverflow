@@ -31,7 +31,7 @@
         },
         data() {
             return {
-                strippedDesc: this.question.description.replace(/<\/?[^>]+>/ig, " ")
+                strippedDesc: this.question.description.replace(/<\/?[^>]+>/ig, " ").substr(0,200)+(this.question.description.replace(/<\/?[^>]+>/ig, " ").length > 200 ? "..." : "")
             }
         },
         methods: {
@@ -57,7 +57,7 @@
 .stats {
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
+    justify-content: flex-start;
     text-align: center;
 }
 .stats > div {

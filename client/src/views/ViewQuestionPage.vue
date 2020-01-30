@@ -7,7 +7,7 @@
                         <span class="fas fa-caret-up"></span>
                     </button>
                 </div>
-                <div style="margin:auto">
+                <div>
                     <h5>{{this.$store.state.currentQuestion.upvotes.length - this.$store.state.currentQuestion.downvotes.length}}</h5>
                 </div>
                 <div>
@@ -22,7 +22,13 @@
                 <div>
                     <button class="btn btn-outline-secondary tag-buttons" v-for="tag in this.$store.state.currentQuestion.tags" :key="tag">{{tag}}</button>
                 </div>
-                <div style="float:right">Asked by {{this.$store.state.currentQuestion.user.username}}</div>
+                <div style="float:right">
+                    Asked by {{this.$store.state.currentQuestion.user.username}}
+                    <div v-if="this.$store.state.currentQuestion.user.username==this.$cookies.get('username')">
+                        <button class="btn btn-warning btn-manage">Edit</button>
+                        <button class="btn btn-danger btn-manage">Delete</button>
+                    </div>
+                </div>
             </div>
             
         </div>
@@ -50,6 +56,13 @@
             
             
         </form>
+
+        <b-modal id="vote-qn-fail-modal" hide-footer hide-header>
+            
+            <div class="d-block text-center">
+            {{modalText}}
+            </div>
+        </b-modal>
     </div>
 </template>
 
@@ -65,6 +78,7 @@ import answerCard from "../components/answerCard.vue";
         data(){
             return {
                 questionVote: 0,
+                modalText: '',
                 editorOption: {
                     modules: {
                         toolbar: [
@@ -131,6 +145,17 @@ import answerCard from "../components/answerCard.vue";
                     this.$store.dispatch('getOneQuestion',this.$route.params.id);
                     this.checkQuestionVote();
                 })
+                .catch((err) => {
+                    if(err.response.status==401)
+                    {
+                        this.modalText = "Please login first."                        
+                    }
+                    else
+                    {
+                        this.modalText = "You cannot vote for your own question."
+                    }
+                    this.$bvModal.show('vote-qn-fail-modal')
+                })
             },
         },
         components: {
@@ -165,6 +190,8 @@ import answerCard from "../components/answerCard.vue";
 .qn-votes {
     display: flex;
     flex-direction: column;
+    justify-content: flex-start;
+    text-align: center;
     padding: 15px
 }
 
@@ -181,5 +208,10 @@ import answerCard from "../components/answerCard.vue";
 
 .voted {
     background-color: darkorange
+}
+
+.btn-manage {
+    padding: 5px;
+    margin: 3px
 }
 </style>
