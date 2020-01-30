@@ -43,10 +43,11 @@ class AnswerController{
         })
     }
     static update(req,res){
-        // console.log('masuk update', req.body)
+        console.log('masuk update', req.body)
         Answer.findByIdAndUpdate({_id: req.params.answerId},{
             title: req.body.title,
-            description: req.body.description
+            description: req.body.description,
+            picture: req.body.picture
         }).populate('user', '-password')
         .then(data=>{
             res.status(200).json(data)

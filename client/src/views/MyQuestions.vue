@@ -30,13 +30,16 @@
                 <h6>downvotes</h6>
                 <h6>{{ item.downvotes.length }}</h6>
                 </b-col>
-                <b-col md="10">
+                <b-col md="6">
                     <b-card-body :title="item.title" v-on:click="detail(item._id)">
                     <b-card-text>
                         <p>{{ item.description }}</p>
                         <p>Asked by: {{ item.user.username }}</p>
                     </b-card-text>
                     </b-card-body>
+                </b-col>
+                <b-col md="4" >
+                    <img :src="item.picture" alt="" style="max-width: 100%; max-height: 100%;padding-right: 10px;">
                 </b-col>
             </b-row>
             </b-card>

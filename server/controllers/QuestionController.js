@@ -57,7 +57,8 @@ class QuestionController{
         console.log('masuk update question', req.params, req.body)
         Question.findByIdAndUpdate({_id: req.params.questionId},{
             title: req.body.title,
-            description: req.body.description
+            description: req.body.description,
+            picture: req.body.picture
         }).populate('user', '-password')
         .then(data=>{
             res.status(200).json(data)

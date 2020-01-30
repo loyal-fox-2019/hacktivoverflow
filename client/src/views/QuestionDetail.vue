@@ -13,27 +13,33 @@
                 <i class="fas fa-chevron-down fa-2x downvote" v-on:click="downvoteQuestion(question._id)"></i>
             </div> 
         </b-col>
-        <b-col md="10" class="text-left  mt-3">
+        <b-col md="6" class="text-left  mt-3">
             <b-card-body :title="question.title">
             <b-card-text>
                 {{ question.description }}
             </b-card-text>
+            </b-card-body>
+            <b-col md="4" >
+                <img :src="question.picture" alt="" style="max-width: 100%; max-height: 100%;padding-right: 10px;">
+            </b-col>
             <div class="text-right">
                 <div v-if="userEmail==question.user.email">
                     <b-button variant="danger" v-on:click="deleteQuestion(question._id)">Delete</b-button>
                     <b-button variant="success" v-b-modal.modal-xl.modal-center v-on:click="$bvModal.show('update'+question._id)">Edit</b-button>
                 </div>
                     <b-modal size="xl" hide-footer :id="'update'+question._id" centered title="Update Your Question">
-                    <p>Title</p>
-                    <input type="text" v-model="title" :placeholder="question.title">
-                    <p>Content</p>
-                    <div class="fr-view" >
-                        <wysiwyg v-model="description" :placeholder="question.description"/>
-                    </div>
+                    <form enctype="multipart/form-data">
+                      <p>Title</p>
+                      <input type="text" v-model="title">
+                      <p>Content</p>
+                      <div class="fr-view" >
+                          <wysiwyg v-model="description"/>
+                      </div>
+                      <p><input type="file" name="file" v-on:change="uploadPicture"/></p>
+                    </form>
                     <b-button variant="dark" v-on:click="editQuestion(question._id)" @click="$bvModal.hide('update'+question._id)">Submit</b-button>
                 </b-modal>
             </div>
-            </b-card-body>
         </b-col>
         </b-row>
     </b-card>
@@ -99,10 +105,14 @@ export default {
     data(){
         return{
             title: '',
-            description: ''
+            description: '',
+            picture: ''
         }
     },
     methods:{
+        uploadPicture(){
+            this.picture = event.target.files[0]
+        },
         updateAnswer(id){
             let payload={
                 title:this.title,
@@ -112,14 +122,15 @@ export default {
             this.$store.dispatch('updateAnswer', payload)
         },
         editQuestion(id){
+           const formData = new FormData()
+            formData.append('title', this.title)
+            formData.append('description', this.description)
+            formData.append('picture', this.picture)
             let payload={
-                title: this.title,
-                description: this.description,
+                data: formData,
                 _id: id
             }
             this.$store.dispatch('updateQuestion', payload)
-            this.title=''
-            this.description=''
         },
         deleteQuestion(id){
             this.$store.dispatch('deleteQuestion', id)

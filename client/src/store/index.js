@@ -61,6 +61,7 @@ export default new Vuex.Store({
       })
     },
     updateAnswer(context,payload){
+      console.log('answer=========', payload)
       axios({
         method: 'put',
         url: `http://localhost:3000/answer/${payload._id}`,
@@ -78,16 +79,14 @@ export default new Vuex.Store({
       })
     },
     updateQuestion(context, payload){
+      console.log(payload,'update quest', payload.data.title)
       axios({
         method: 'put',
         url: `http://localhost:3000/question/${payload._id}`,
         headers:{
           token: localStorage.getItem('token')
         },
-        data: {
-          title: payload.title,
-          description: payload.description
-        }
+        data: payload.data
       })
       .then(({data})=>{
         context.dispatch('getUserQuestions')

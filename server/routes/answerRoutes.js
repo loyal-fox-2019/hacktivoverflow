@@ -2,6 +2,7 @@ const router = require('express').Router()
 const AnswerController = require('../controllers/AnswerController')
 const authenticate = require('../middlewares/authentication')
 const authorization = require('../middlewares/authorization')
+const upload = require('../middlewares/gcs-upluad')
 
 router.post('/', authenticate, AnswerController.create)
 router.get('/:questionId', authenticate, AnswerController.findAll)

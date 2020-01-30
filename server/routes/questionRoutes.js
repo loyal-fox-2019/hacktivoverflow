@@ -8,7 +8,7 @@ router.post('/', authenticate, upload.single('picture'), QuestionController.crea
 router.get('/', authenticate, QuestionController.findAll)
 router.get('/user', authenticate, QuestionController.findAllUser)
 router.get('/:questionId', authenticate, QuestionController.findOne)
-router.put('/:questionId', authenticate, authorization, QuestionController.update)
+router.put('/:questionId', authenticate, authorization,  upload.single('picture'), QuestionController.update)
 router.delete('/:questionId', authenticate, authorization, QuestionController.delete)
 router.patch('/upvote/:questionId', authenticate, QuestionController.upvote)
 router.patch('/downvote/:questionId', authenticate, QuestionController.downvote)
