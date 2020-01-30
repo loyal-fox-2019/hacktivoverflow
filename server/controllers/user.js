@@ -135,7 +135,8 @@ class User {
                 $or: [
                     {username: req.body.username},
                     {email: req.body.username}
-                ]
+                ],
+                isConfirm: true
             })
             .then((user) => {
                 if (!user) {

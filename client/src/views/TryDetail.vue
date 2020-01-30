@@ -144,8 +144,7 @@ export default {
               token: localStorage.token
             }
           })
-            .then(({ data }) => {
-              console.log(data);
+            .then(() => {
               this.$router.replace({ name: "try list" });
               Toast.fire({
                 icon: "success",
