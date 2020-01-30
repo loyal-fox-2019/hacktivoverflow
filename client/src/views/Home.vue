@@ -17,7 +17,7 @@
           :tipe="'questions'"
           :key="quest._id"
           :data="quest"
-          :style="setColor(quest)"
+          style="width: 60vw; height: 150px"
         />
       </div>
       <div style="width: 250px" class="mr-auto ml-n12" v-show="$store.state.isLogin">
@@ -46,14 +46,6 @@ export default {
     }
   },
   computed: {
-    setColor (tags) {
-      console.log(tags, 'INI TAGSSSSSSSSSSSSSSSS')
-      if (tags.some(tag => this.diliatin.includes(tag))) {
-        return 'width: 60vw; height: 150px; background-color=yellow;'
-      } else {
-        return 'width: 60vw; height: 150px; background-color=white;'
-      }
-    },
     allQuestions () {
       return this.$store.state.allQuestions
     },

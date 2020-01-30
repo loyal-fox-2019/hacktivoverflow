@@ -1,5 +1,5 @@
 <template>
-  <v-card class="mx-auto d-flex" outlined @click.prevent="moveTo(data._id)" :disable="$route.path !== '/'">
+  <v-card class="mx-auto d-flex" :color="watch" outlined @click.prevent="moveTo(data._id)" :disable="$route.path !== '/'">
     <div style="width: 10%; text-align: center">
       <b-button v-if="this.$route.name != 'home'" @click.prevent="upVote">^</b-button>
 
@@ -79,6 +79,12 @@ export default {
     },
     namaku () {
       return this.data.author ? this.data.author.name : ''
+    },
+    diliatin () {
+      return this.$store.getters.tagu
+    },
+    watch () {
+      return this.data.tags.some(tag => this.diliatin.includes(tag)) ? 'yellow' : 'white'
     }
   },
   props: ['data'],
