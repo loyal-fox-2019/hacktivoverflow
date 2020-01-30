@@ -3,6 +3,7 @@ import VueRouter from 'vue-router'
 import Home from '../views/Home.vue'
 import Account from '../views/account.vue'
 import AskQuestion from '../views/askQuestion.vue'
+import Question from '../views/question.vue';
 
 Vue.use(VueRouter)
 
@@ -29,6 +30,11 @@ const routes = [
     path: '/askQuestion',
     name: 'askQuestion',
     component: AskQuestion
+  },
+  {
+    path: '/question/:id',
+    name: 'question',
+    component: Question
   }
 ]
 

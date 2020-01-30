@@ -12,7 +12,9 @@ export default new Vuex.Store({
     login: false,
     description: "",
     title: "",
-    questions: []
+    questions: [],
+    question: [],
+    user: null
   },
   mutations: {
     successRegister(state, payload) {
@@ -32,7 +34,7 @@ export default new Vuex.Store({
     },
     setQuestions(state, payload) {
       state.questions = payload
-    }
+    },
   },
   actions: {
     goRegister(context, payload) {
@@ -94,7 +96,6 @@ export default new Vuex.Store({
     postQuestion() {
       let title = this.state.title
       let description = this.state.description
-      console.log(description);
       axios({
         url: `${baseUrl}/questions`,
         method: "POST",
@@ -107,12 +108,10 @@ export default new Vuex.Store({
         }
       })
         .then(({ data }) => {
-          console.log(data);
           Swal.fire("Success!", 'Create Question Success', "success");
           router.push('/')
         })
         .catch(err => {
-          console.log(err);
           Swal.fire("Error!", err.message, "error");
         })
     },
@@ -128,6 +127,81 @@ export default new Vuex.Store({
           Swal.fire("Error!", err.message, "error");
         })
     },
+    getQuestion(context, payload) {
+      axios({
+        url: `${baseUrl}/questions/${payload}`,
+        method: "GET",
+        headers: {
+          token: localStorage.getItem('token')
+        }
+      })
+        .then(({ data }) => {
+          this.state.question = data
+        })
+        .catch(err => {
+          Swal.fire("Error!", err.message, "error");
+        })
+    },
+    upVoteQuestion(context, id) {
+      axios({
+        url: `${baseUrl}/questions/upVote/${id}`,
+        method: "PATCH",
+        headers: {
+          token: localStorage.getItem('token')
+        }
+      })
+        .then(({ data }) => {
+          this.state.question = data
+        })
+        .catch(err => {
+          Swal.fire("Error!", err.message, "error");
+        })
+    },
+    downVoteQuestion(context, id) {
+      axios({
+        url: `${baseUrl}/questions/downVote/${id}`,
+        method: "PATCH",
+        headers: {
+          token: localStorage.getItem('token')
+        }
+      })
+        .then(({ data }) => {
+          this.state.question = data
+        })
+        .catch(err => {
+          Swal.fire("Error!", err.message, "error");
+        })
+    },
+    upVoteAnswer(context, id) {
+      axios({
+        url: `${baseUrl}/questions/upVote/${id}`,
+        method: "PATCH",
+        headers: {
+          token: localStorage.getItem('token')
+        }
+      })
+        .then(({ data }) => {
+          this.state.question = data
+        })
+        .catch(err => {
+          Swal.fire("Error!", err.message, "error");
+        })
+    },
+    downVoteAnswer(context, id) {
+      axios({
+        url: `${baseUrl}/questions/downVote/${id}`,
+        method: "PATCH",
+        headers: {
+          token: localStorage.getItem('token')
+        }
+      })
+        .then(({ data }) => {
+          this.state.question = data
+        })
+        .catch(err => {
+          Swal.fire("Error!", err.message, "error");
+        })
+    }
   },
   modules: {
   }

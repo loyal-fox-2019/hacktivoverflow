@@ -13,7 +13,7 @@ class answersControllers {
             .then(question => {
                 questionData = question
                 return Answer.create({
-                    description, user: req.user._id, question: questionData._id
+                    description, user: req.user._id, username: req.user.username, question: questionData._id
                 })
             })
             .then(answer => {

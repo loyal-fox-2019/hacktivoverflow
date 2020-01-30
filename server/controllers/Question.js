@@ -48,17 +48,39 @@ class questionControllers {
             _id: req.params.id
         }, { $pull: { dow: req.user._id } }, { new: true })
             .then((question) => {
-                if (!question.upvote.includes(req.user._id)) {
-                    question.upvote.push(req.user._id)
-                    return Questions.findOneAndUpdate({
-                        _id: req.params.id
-                    }, {
-                        upvote: question.upvote
-                    }, { new: true }).populate('answers').populate('user')
+                if (!question.downvote.includes(req.user._id)) {
+                    if (!question.upvote.includes(req.user._id)) {
+                        question.upvote.push(req.user._id)
+                        return Questions.findOneAndUpdate({
+                            _id: req.params.id
+                        }, {
+                            upvote: question.upvote
+                        }, { new: true }).populate('answers').populate('user')
+                    } else {
+                        return Questions.findOneAndUpdate({
+                            _id: req.params.id
+                        }, { $pull: { upvote: req.user._id } }, { new: true }).populate('answers').populate('user')
+                    }
                 } else {
-                    return Questions.findOneAndUpdate({
-                        _id: req.params.id
-                    }, { $pull: { upvote: req.user._id } }, { new: true }).populate('answers').populate('user')
+                    if (!question.upvote.includes(req.user._id)) {
+                        question.upvote.push(req.user._id)
+                        return Questions.findOneAndUpdate({
+                            _id: req.params.id
+                        }, {
+                            upvote: question.upvote
+                        }, { new: true }).populate('answers').populate('user')
+                            .then((question) => {
+                                return Questions.findOneAndUpdate({
+                                    _id: req.params.id
+                                }, { $pull: { downvote: req.user._id } }, { new: true }).populate('answers').populate('user')
+                            }).catch((err) => {
+                                next(err)
+                            });
+                    } else {
+                        return Questions.findOneAndUpdate({
+                            _id: req.params.id
+                        }, { $pull: { upvote: req.user._id } }, { new: true }).populate('answers').populate('user')
+                    }
                 }
             })
             .then(question => {
@@ -72,17 +94,39 @@ class questionControllers {
             _id: req.params.id
         }, { $pull: { dow: req.user._id } }, { new: true })
             .then((question) => {
-                if (!question.downvote.includes(req.user._id)) {
-                    question.downvote.push(req.user._id)
-                    return Questions.findOneAndUpdate({
-                        _id: req.params.id
-                    }, {
-                        downvote: question.downvote
-                    }, { new: true }).populate('answers').populate('user')
+                if (!question.upvote.includes(req.user._id)) {
+                    if (!question.downvote.includes(req.user._id)) {
+                        question.downvote.push(req.user._id)
+                        return Questions.findOneAndUpdate({
+                            _id: req.params.id
+                        }, {
+                            downvote: question.downvote
+                        }, { new: true }).populate('answers').populate('user')
+                    } else {
+                        return Questions.findOneAndUpdate({
+                            _id: req.params.id
+                        }, { $pull: { downvote: req.user._id } }, { new: true }).populate('answers').populate('user')
+                    }
                 } else {
-                    return Questions.findOneAndUpdate({
-                        _id: req.params.id
-                    }, { $pull: { downvote: req.user._id } }, { new: true }).populate('answers').populate('user')
+                    if (!question.downvote.includes(req.user._id)) {
+                        question.downvote.push(req.user._id)
+                        return Questions.findOneAndUpdate({
+                            _id: req.params.id
+                        }, {
+                            downvote: question.downvote
+                        }, { new: true }).populate('answers').populate('user')
+                            .then((question) => {
+                                return Questions.findOneAndUpdate({
+                                    _id: req.params.id
+                                }, { $pull: { upvote: req.user._id } }, { new: true }).populate('answers').populate('user')
+                            }).catch((err) => {
+                                next(err)
+                            });
+                    } else {
+                        return Questions.findOneAndUpdate({
+                            _id: req.params.id
+                        }, { $pull: { downvote: req.user._id } }, { new: true }).populate('answers').populate('user')
+                    }
                 }
             })
             .then(question => {

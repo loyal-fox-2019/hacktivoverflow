@@ -38,7 +38,7 @@
                 >
                   <div class="list-group-item section-header is-compact">
                     <div class="sectionHeaderLabel">
-                      <span>Ask Question</span>
+                      <h3>{{question.title}}</h3>
                     </div>
                     <div class="button sectionHeaderAction">
                       <router-link to="/askQuestion">
@@ -46,28 +46,23 @@
                       </router-link>
                     </div>
                   </div>
-                  <div
-                    v-for="(question, index) in this.$store.state.questions"
-                    :key="index"
-                    class="card post is-compact justify-content-between"
-                  >
+
+                  <div class="card post is-compact justify-content-between">
                     <div style="margin:0 !important;">
-                      <h4>{{question.upvote.length - question.downvote.length}}</h4>
-                      <p>votes</p>
-                      <h4>{{question.answers.length}}</h4>
-                      <p>answers</p>
+                      <button @click="upVote">
+                        <i class="fas fa-caret-up"></i>
+                      </button>
+                      <h4>{{getTotalVote(question.upvote,question.downvote)}}</h4>
+                      <button @click="downVote">
+                        <i class="fas fa-caret-down"></i>
+                      </button>
                     </div>
                     <div
                       class="postMain d-flex ml-4"
                       style="height: auto;
                       text-align: left;"
                     >
-                      <a class="postTitle" @click.prevent="goQuestion(question)">{{question.title}}</a>
-                      <p
-                        class="text-truncate"
-                        style="font-size: 12px; max-width: 600px; max-height: 20px"
-                        v-html="question.description"
-                      ></p>
+                      <p style="font-size: 12px; max-width: 600px;" v-html="question.description"></p>
                       <div class="postCardInfo">
                         <span class="postInfoItem">
                           <img
@@ -78,9 +73,56 @@
                           <span>{{question.createdAt}}</span>
                         </span>
                       </div>
-                      <div style="text-align: end;">created by: {{question.user.username}}</div>
+                      <div style="text-align: end;">Asked: {{username(question.user)}}</div>
                     </div>
                   </div>
+                  <p>===================================================================================================</p>
+                  <div style="text-align: left; padding: 15px 50px 15px">
+                    <h5>{{getLengthAnswers(question.answers)}} Answers</h5>
+                  </div>
+                  <div
+                    v-for="(answer,index) in answers"
+                    :key="index"
+                    class="card post is-compact justify-content-between"
+                  >
+                    <div style="margin:0 !important;">
+                      <button @click="upVoteAnswer(answer._id)">
+                        <i class="fas fa-caret-up"></i>
+                      </button>
+                      <h4>{{answer.upvote.length - answer.downvote.length}}</h4>
+                      <button @click="downVoteAnswer(answers._id)">
+                        <i class="fas fa-caret-down"></i>
+                      </button>
+                    </div>
+                    <div
+                      class="postMain d-flex ml-4"
+                      style="height: auto;
+                      text-align: left;"
+                    >
+                      <p style="font-size: 12px; max-width: 600px;" v-html="answer.description"></p>
+                      <div class="postCardInfo">
+                        <span class="postInfoItem">
+                          <img
+                            src="https://image.flaticon.com/icons/png/512/37/37663.png"
+                            alt="..."
+                            class="rounded-circle"
+                          />
+                          <span>{{answer.createdAt}}</span>
+                        </span>
+                      </div>
+                      <div style="text-align: end;">Answered: {{answer.username}}</div>
+                    </div>
+                  </div>
+                  <p>------------------------------------------------------------------------------------------------------------------------------------------------------------------------------</p>
+                  <div style="text-align: left; padding: 0px 50px 10px">
+                    <h5>Your Answers</h5>
+                  </div>
+                  <vue-editor v-model="description"></vue-editor>
+                  <button
+                    type="submit"
+                    style="text-align:left"
+                    class="btn btn-info"
+                  >Post Your Answer</button>
                 </div>
               </div>
             </div>
@@ -92,11 +134,56 @@
 </template>
 
 <script>
+import { VueEditor } from "vue2-editor";
 export default {
+  data() {
+    return {
+      description: ""
+    };
+  },
+  components: {
+    VueEditor
+  },
   methods: {
-    goQuestion(payload) {
-      this.$router.push(`/question/${payload._id}`);
-      this.$store.dispatch("getQuestion", payload._id);
+    upVote() {
+      let id = this.$store.state.question._id;
+      this.$store.dispatch("upVoteQuestion", id);
+    },
+    downVote() {
+      let id = this.$store.state.question._id;
+      this.$store.dispatch("downVoteQuestion", id);
+    },
+    upVoteAnswer(id) {
+      this.$store.dispatch("upVoteAnswer", id);
+    },
+    downVoteAnswer(id) {
+      this.$store.dispatch("downVoteAnswer", id);
+    },
+    getTotalVote(up, down) {
+      if (up && down) {
+        return up.length - down.length;
+      }
+    },
+    getLengthAnswers(answers) {
+      if (answers) {
+        return answers.length;
+      }
+    },
+    username(user) {
+      if (user) {
+        return user.username;
+      }
+    }
+  },
+  created() {
+    this.$store.dispatch("getQuestion", this.$route.params.id);
+  },
+  computed: {
+    answers() {
+      return this.$store.state.question.answers;
+    },
+    question() {
+      return this.$store.state.question;
     }
   }
 };
