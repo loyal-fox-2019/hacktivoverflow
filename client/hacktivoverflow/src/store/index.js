@@ -38,8 +38,10 @@ export default new Vuex.Store({
         data: payload
       })
         .then((data) => {
+          console.log(data.data.id)
           localStorage.setItem('token', data.data.token)
           action.commit('SET_LOGIN', true)
+          action.commit('SET_USERID', data.data.id)
           Swal.fire({
             icon: 'success',
             title: 'Yeay',

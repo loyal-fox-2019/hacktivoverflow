@@ -78,6 +78,7 @@ export default {
         .then((data) => {
           localStorage.setItem('token', data.data.token)
           this.$store.commit('SET_LOGIN', true)
+          this.$store.commit('SET_USERID', data.data.id)
         })
     },
     onSignInError (errr) {
