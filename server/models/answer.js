@@ -7,16 +7,25 @@ const answerSchema = new Schema({
   },
   user_id: {
     type: Schema.Types.ObjectId,
+    ref: 'User',
+    required: true
+  },
+  question: {
+    type: Schema.Types.ObjectId,
+    ref: 'Question',
     required: true
   },
   upvote: {
-    type: Number
+    type: [Schema.Types.ObjectId],
+    ref: 'User'
   },
   downvote: {
-    type: Number
+    type: [Schema.Types.ObjectId],
+    ref: 'User'
   },
   clicks: {
-    type: Number
+    type: Number,
+    default: 0
   }
 })
 

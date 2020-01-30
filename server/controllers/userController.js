@@ -9,7 +9,6 @@ class UserController {
       email: req.body.email,
       password: req.body.password
     }
-
     User.create(data)
       .then(result => {
         const token = jwt.sign(
@@ -22,11 +21,14 @@ class UserController {
         )
         res.status(201).json({
           message: 'User created',
-          result: result,
+          id: result._id,
           token: token
         })
       })
       .catch(err => {
+        console.log(err)
+        err.code = 500
+        err.message = 'Internal Server Error'
         res.status(500).json(err)
       })
   }
@@ -49,17 +51,26 @@ class UserController {
             message: 'Wrong email/password!'
           })
         } else {
-          const token = {
-            id: result._id,
-            name: result.name,
-            email: result.email
-          }
+          const token = jwt.sign(
+            {
+              id: result._id,
+              name: result.name,
+              email: result.email
+            },
+            process.env.JWT_SECRET
+          )
           res.status(200).json({
             message: 'Login success',
+            id: result._id,
             token: token
           })
         }
       }
+    })
+    .catch(err => {
+      err.code = 404
+      err.message = 'User not found! Please check your email/password'
+      res.status(404).json(err)
     })
   }
 }

@@ -19,13 +19,18 @@ const questionSchema = new Schema({
     ref: 'Answer'
   },
   upvote: {
-    type: Number
+    type: [Schema.Types.ObjectId],
+    ref: 'User'
   },
   downvote: {
-    type: Number
+    type: [Schema.Types.ObjectId],
+    ref: 'User'
   },
   clicks: {
     type: Number
+  },
+  createdAt: {
+    type: Date
   }
 })
 

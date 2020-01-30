@@ -1,16 +1,56 @@
 const Question = require('../models/question')
 
 class QuestionController {
+  static findAll(req, res, next) {
+    Question.find()
+      .populate('user_id')
+      .then(results => {
+        res.status(200).json(results)
+      })
+      .catch(err => {
+        res.status(500).json(err)
+      })
+  }
+
+  static findOne(req, res, next) {
+    Question.findById(req.params.id)
+      .populate('user_id')
+      .then(result => {
+        res.status(200).json(result)
+      })
+      .catch(err => {
+        res.status(500).json(err)
+      })
+  }
+
+  static addView(req, res, next) {
+    Question.updateOne({_id: req.params.id}, {$inc: {clicks: 1}})
+      .then(result => {
+        res.status(200).json(result)
+      })
+      .catch(err => {
+        res.status(500).json(err)
+      })
+  }
+
+  static findUserQuestion(req, res, next) {
+    Question.find({ user_id: req.loggedIn.id })
+      .then(results => {
+        res.status(200).json(results)
+      })
+      .catch(err => {
+        res.status(500).json(err)
+      })
+  }
+
   static addQuestion(req, res, next) {
     const data = {
       title: req.body.title,
       content: req.body.content,
       user_id: req.loggedIn.id,
-      upvote: 0,
-      downvote: 0,
-      clicks: 0
+      clicks: 0,
+      createdAt: new Date() + 7
     }
-
     Question.create(data)
       .then(result => {
         res.status(201).json({
@@ -54,21 +94,32 @@ class QuestionController {
   }
 
   static updateVote(req, res, next) {
-    let vote = req.params.vote
-    let newVal = {}
-    Question.findById(req.params.id)
+    let questionId = req.params.id
+    let id = req.loggedIn.id
+    let data = null
+
+    Question.findById(questionId)
       .then(result => {
-        if (vote == 'upvote') {
-          newVal[vote] = result.upvote + 1
+        data = result
+        if (result.downvote.includes(id)) {
           return Question.updateOne(
-            { _id: req.params.id },
-            { $set: { newVal } }
+            { _id: questionId },
+            { $pull: { downvote: id } }
           )
-        } else if (vote == 'downvote') {
-          newVal[vote] = result.upvote - 1
+        } else {
+          return
+        }
+      })
+      .then(() => {
+        if (data.upvote.includes(id)) {
           return Question.updateOne(
-            { _id: req.params.id },
-            { $set: { newVal } }
+            { _id: questionId },
+            { $pull: { upvote: id } }
+          )
+        } else {
+          return Question.updateOne(
+            { _id: questionId },
+            { $push: { upvote: id } }
           )
         }
       })
@@ -79,6 +130,7 @@ class QuestionController {
         })
       })
       .catch(err => {
+        console.log(err)
         res.status(500).json({
           message: 'Internal server error'
         })
@@ -86,14 +138,34 @@ class QuestionController {
   }
 
   static downvote(req, res, next) {
-    let newVal = null
-    Question.findById(req.params.id)
+    let questionId = req.params.id
+    let id = req.loggedIn.id
+    let data = null
+
+    Question.findById(questionId)
       .then(result => {
-        newVal = result.downvote + 1
-        return Question.updateOne(
-          { _id: req.params.id },
-          { $set: { downvote: newVal } }
-        )
+        data = result
+        if (result.upvote.includes(id)) {
+          return Question.updateOne(
+            { _id: questionId },
+            { $pull: { upvote: id } }
+          )
+        } else {
+          return
+        }
+      })
+      .then(() => {
+        if (data.downvote.includes(id)) {
+          return Question.updateOne(
+            { _id: questionId },
+            { $pull: { downvote: id } }
+          )
+        } else {
+          return Question.updateOne(
+            { _id: questionId },
+            { $push: { downvote: id } }
+          )
+        }
       })
       .then(result => {
         res.status(200).json({
@@ -102,9 +174,26 @@ class QuestionController {
         })
       })
       .catch(err => {
+        console.log(err)
         res.status(500).json({
           message: 'Internal server error'
         })
       })
   }
+
+  static deleteOne(req, res, next) {
+    const id = req.params.id
+    Question.findByIdAndDelete(id)
+      .then(result => {
+        res.status(200).json({
+          message: 'Question Deleted',
+          result
+        })
+      })
+      .catch(err => {
+        res.status(404).json(err)
+      })
+  }
 }
+
+module.exports = QuestionController

@@ -1,9 +1,12 @@
-const Question = require('../models/user')
+const Question = require('../models/question')
 
 module.exports = (req, res, next) => {
+  const id = req.loggedIn.id
+  console.log(id)
   try {
-    const id = req.loggedIn.id
+    console.log('masuk try')
     Question.findOne({ user_id: id }).then(result => {
+      console.log(result)
       if (result) {
         next()
       } else {
