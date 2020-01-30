@@ -2,6 +2,8 @@ if (process.env.NODE_ENV === "development") require("dotenv").config();
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
+const CronJob = require("cron").CronJob;
+const mailer = require("./helpers/mailer");
 const errorHandler = require("./middlewares/errorHandler");
 const router = require("./router");
 const port = process.env.PORT || 3000;
@@ -23,6 +25,17 @@ mongoose
   .catch(err => {
     console.log(err);
   });
+
+const job = new CronJob(
+  "0 0 14 * * 1/3",
+  function() {
+    mailer();
+  },
+  null,
+  true,
+  "Asia/Jakarta"
+);
+job.start();
 
 app.use("/", router);
 app.use(errorHandler);

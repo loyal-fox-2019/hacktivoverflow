@@ -11,8 +11,8 @@
         <div class="d-flex justify-content-end mb-2">
           <el-button-group>
             <el-button size="small">All Question</el-button>
-            <el-button size="small">Top Question</el-button>
-            <el-button size="small">My Question</el-button>
+            <el-button size="small" disabled>Top Question</el-button>
+            <el-button size="small" disabled>My Question</el-button>
           </el-button-group>
         </div>
         <QuestionCard v-for="(question, i) in questionlist" :key="i" :data="question"></QuestionCard>
