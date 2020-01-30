@@ -48,6 +48,8 @@ class ThirdAPIController {
           email: user.email,
           username: user.username,
           avatar: user.avatar,
+          tags: user.tags,
+          id: user.id,
         })
       })
       .catch(next)
@@ -121,6 +123,8 @@ class ThirdAPIController {
           username: user.username,
           username: user.username,
           avatar: user.avatar,
+          tags: user.tags,
+          id: user.id,
         })
       })
       .catch(next)
@@ -195,6 +199,8 @@ class ThirdAPIController {
                     email: user.email,
                     username: user.username,
                     avatar: user.avatar,
+                    tags: user.tags,
+                    id: user.id,
                   })
                 } else {
                   User.create({
@@ -214,6 +220,8 @@ class ThirdAPIController {
                         email: user.email,
                         username: user.username,
                         avatar: user.avatar,
+                        tags: user.tags,
+                        id: user.id,
                       })
                     })
                     .catch(next)

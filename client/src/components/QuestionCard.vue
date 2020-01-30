@@ -1,6 +1,7 @@
 <template>
   <div
-    class="w-full border-t border-b border-grey-200 flex rounded-sm hover:bg-orange-100"
+    class="w-full border-t border-b border-grey-200 flex rounded-sm hover:bg-orange-200"
+    :class="{ 'bg-orange-100': watched }"
     style="cursor: pointer;"
     @click="getDetail"
   >
@@ -24,8 +25,17 @@
       </div>
       <small class="italic text-gray-600">Asked at {{ localeTime }}</small>
       <p class="mt-8 truncate">
-        {{ question.description }}
+        <span v-html="question.description"></span>
       </p>
+      <div class="flex mt-2">
+        <p
+          class="text-xs bg-gray-500 mr-1 px-2 py-1 rounded-full"
+          v-for="(tag, i) in question.tags"
+          :key="i"
+        >
+          {{ tag }}
+        </p>
+      </div>
     </div>
   </div>
 </template>
@@ -51,6 +61,12 @@ export default {
       return this.question.votes.reduce((a, q) => {
         return (a += q.value)
       }, 0)
+    },
+    userTags() {
+      return this.$store.state.tags
+    },
+    watched() {
+      return this.question.tags.some(tag => this.userTags.includes(tag))
     },
   },
   methods: {

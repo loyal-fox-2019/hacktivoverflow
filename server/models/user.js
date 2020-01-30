@@ -39,6 +39,9 @@ const userSchema = new Schema({
   avatar: {
     type: String,
   },
+  tags: {
+    type: [String],
+  },
 })
 
 userSchema.post('validate', function(user) {

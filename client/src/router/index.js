@@ -65,6 +65,14 @@ const routes = [
     component: () =>
       import(/* webpackChunkName: "ask-question" */ '@/views/AskQuestion.vue'),
   },
+  {
+    path: '/edit/:questionId',
+    name: 'edit-question',
+    component: () =>
+      import(
+        /* webpackChunkName: "edit-question" */ '@/views/EditQuestion.vue'
+      ),
+  },
 ]
 
 const router = new VueRouter({

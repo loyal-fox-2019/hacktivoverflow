@@ -15,7 +15,14 @@ class UserController {
         }
 
         const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET)
-        res.json({ token, email: user.email, username: user.username })
+        res.json({
+          token,
+          email: user.email,
+          username: user.username,
+          avatar: user.avatar,
+          tags: user.tags,
+          id: user.id,
+        })
       })
       .catch(next)
   }
@@ -26,12 +33,46 @@ class UserController {
       email: req.body.email,
       password: req.body.password,
       platform: req.body.platform,
+      avatar: 'https://placekitten.com/200/200',
     })
       .then(user => {
         const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET)
-        res
-          .status(201)
-          .json({ token, email: user.email, username: user.username })
+        res.status(201).json({
+          token,
+          email: user.email,
+          username: user.username,
+          avatar: user.avatar,
+          tags: user.tags,
+          id: user.id,
+        })
+      })
+      .catch(next)
+  }
+
+  static getUserDetail(req, res, next) {
+    User.findOne({ _id: req.payload.id })
+      .then(user => {
+        res.json({
+          username: user.username,
+          email: user.email,
+          avatar: user.avatar,
+          tags: user.tags,
+          id: user.id,
+        })
+      })
+      .catch(next)
+  }
+
+  static addTag(req, res, next) {
+    User.findOne({ _id: req.payload.id })
+      .then(user => {
+        if (!user.tags.includes(req.body.tag)) {
+          user.tags.push(req.body.tag)
+        }
+        return user.save({ validateBeforeSave: false })
+      })
+      .then(() => {
+        res.json({ message: 'Tag added' })
       })
       .catch(next)
   }

@@ -1,8 +1,8 @@
 <template>
   <nav class="flex">
-    <div class="flex items-center justify-between bg-orange-400 w-screen px-4">
+    <div class="flex items-center justify-between bg-orange-500 w-screen px-4">
       <div
-        class="flex items-center hover:text-white hover:bg-orange-500 pr-2"
+        class="flex items-center hover:text-white hover:bg-orange-600 pr-2"
         style="cursor: pointer"
         @click="goTo('questions')"
       >
@@ -24,7 +24,7 @@
             <p class="ml-2">{{ username }}</p>
           </div>
           <div
-            class="h-full flex items-center hover:text-white hover:bg-orange-500 px-2"
+            class="h-full flex items-center hover:text-white hover:bg-orange-600 px-2"
             style="cursor: pointer;"
             @click="logout"
           >
@@ -36,14 +36,14 @@
         <!-- not login section -->
         <Fragment v-else>
           <div
-            class="h-full flex items-center hover:text-white hover:bg-orange-500 px-2"
+            class="h-full flex items-center hover:text-white hover:bg-orange-600 px-2"
             style="cursor: pointer;"
             @click="goTo('login')"
           >
             <p>Login</p>
           </div>
           <div
-            class="h-full flex items-center hover:text-white hover:bg-orange-500 px-2"
+            class="h-full flex items-center hover:text-white hover:bg-orange-600 px-2"
             style="cursor: pointer;"
             @click="goTo('register')"
           >

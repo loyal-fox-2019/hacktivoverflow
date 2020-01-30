@@ -20,6 +20,7 @@ const questionSchema = new Schema(
     },
     answers: [answerSchema],
     votes: [votesSchema],
+    tags: [String],
   },
   { timestamps: true },
 )

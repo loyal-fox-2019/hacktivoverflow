@@ -2,17 +2,15 @@
   <div class="border-b border-gray-200 mb-2">
     <div class="w-full flex">
       <div class="w-1/12">
-        <div style="cursor: pointer;">
+        <div style="cursor: pointer;" @click="vote(1)">
           <span class="fas fa-caret-up text-3xl"></span>
         </div>
         <div class="text-3xl">{{ localeVotes }}</div>
-        <div style="cursor: pointer;">
+        <div style="cursor: pointer;" @click="vote(-1)">
           <span class="fas fa-caret-down text-3xl"></span>
         </div>
       </div>
-      <div class="w-11/12">
-        {{ answer.description }}
-      </div>
+      <div class="w-11/12"><span v-html="answer.description"></span></div>
     </div>
     <div class="flex justify-end">
       <small class="font-hairline text-sm italic text-gray-600"
@@ -30,6 +28,7 @@
 
 <script>
 import moment from 'moment'
+import api from '@/config/api'
 
 export default {
   name: 'answer-card',
@@ -47,6 +46,54 @@ export default {
       return this.answer.createdAt
         ? moment(this.answer.createdAt).format('D MMM YYYY H:mA')
         : new Date().toLocaleString()
+    },
+    token() {
+      return this.$store.state.token
+    },
+  },
+  methods: {
+    vote(val) {
+      api
+        .post(
+          '/votes/answer',
+          {
+            questionId: this.$route.params.questionId,
+            answerId: this.answer._id,
+            value: val,
+          },
+          {
+            headers: {
+              token: this.token,
+            },
+          },
+        )
+        .then(({ data }) => {
+          this.$store.dispatch('fetchQuestion', {
+            method: 'get',
+            url: `/questions/${this.$route.params.questionId}`,
+            success: 'UPDATE_QUESTION',
+          })
+        })
+        .catch(err => {
+          this.$store.commit('UPDATE_IS_LOADING', false)
+          if (err.response) {
+            err.response.data.errors.forEach(error => {
+              this.$toast.open({
+                message: error,
+                type: 'error',
+                position: 'top-right',
+                duration: 1500,
+              })
+            })
+          } else {
+            this.$toast.open({
+              message: 'Error has happened, please refresh browser',
+              type: 'error',
+              position: 'top-right',
+              duration: 50000,
+            })
+          }
+        })
     },
   },
 }

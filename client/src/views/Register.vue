@@ -1,7 +1,12 @@
 <template>
   <div
-    class="w-screen justify-center flex items-center custom-container bg-gray-100 pr-10"
+    class="w-screen justify-center flex items-center custom-container bg-gray-100 pr-10 vld-parent"
   >
+    <Loading
+      :active.sync="isLoading"
+      :can-cancel="false"
+      :is-full-page="true"
+    ></Loading>
     <div
       class="w-4/12 border border-gray-300 p-5 bg-white shadow-md rounded-sm"
     >
@@ -139,12 +144,21 @@
 
 <script>
 import GoogleLogin from 'vue-google-login'
+import Loading from 'vue-loading-overlay'
 import api from '@/config/api'
+
+import 'vue-loading-overlay/dist/vue-loading.css'
 
 export default {
   name: 'home',
   components: {
     GoogleLogin,
+    Loading,
+  },
+  computed: {
+    isLoading() {
+      return this.$store.state.isLoading
+    },
   },
   data: function() {
     return {
@@ -161,24 +175,17 @@ export default {
   methods: {
     onSuccess(googleUser) {
       const token = googleUser.getAuthResponse().id_token
+      const vm = this
 
-      console.log('loading...')
-
-      api
-        .post('/third-api-login/google', { token })
-        .then(({ data }) => {
-          console.log('udah selesai loading')
-          console.log(data)
-        })
-        .catch(err => {
-          if (err.response) {
-            console.log('err with response')
-            console.log(err.response)
-          } else {
-            console.log('err without response')
-            console.log(err)
-          }
-        })
+      this.$store.dispatch('login', {
+        method: 'post',
+        url: '/third-api-login/google',
+        data: { token },
+        success: 'UPDATE_USER_DATA',
+        successMessage: 'Login success',
+        successUrl: '/questions',
+        router: vm.$router,
+      })
     },
     onFailure() {
       console.log('terjadi kesalahan')
@@ -187,16 +194,25 @@ export default {
       api
         .get('/third-api-login/request-twitter-token')
         .then(({ data }) => {
-          console.log(data)
           window.location = data.url
         })
         .catch(err => {
           if (err.response) {
-            console.log('err with response')
-            console.log(err.response)
+            err.response.data.errors.forEach(error => {
+              this.$toast.open({
+                message: error,
+                type: 'error',
+                position: 'top-right',
+                duration: 1500,
+              })
+            })
           } else {
-            console.log('err without response')
-            console.log(err)
+            this.$toast.open({
+              message: 'Error has happened, please refresh browser',
+              type: 'error',
+              position: 'top-right',
+              duration: 50000,
+            })
           }
         })
     },
@@ -204,7 +220,29 @@ export default {
       this.$router.push(url)
     },
     register() {
-      console.log('masuk')
+      if (this.password != this.rePassword) {
+        this.$toast.open({
+          message: 'Password isnt same',
+          type: 'error',
+          position: 'top-right',
+          duration: 1500,
+        })
+      } else {
+        const vm = this
+        this.$store.dispatch('login', {
+          method: 'post',
+          url: '/register',
+          data: {
+            email: this.email,
+            username: this.username,
+            password: this.password,
+          },
+          success: 'UPDATE_USER_DATA',
+          successMessage: 'Register success',
+          successUrl: '/questions',
+          router: vm.$router,
+        })
+      }
     },
   },
 }

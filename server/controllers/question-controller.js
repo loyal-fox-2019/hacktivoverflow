@@ -16,6 +16,7 @@ class QuestionController {
             createdAt: result.createdAt,
             updatedAt: result.updatedAt,
             answers: result.answers.length,
+            tags: result.tags,
           }
         })
         res.json(questions)
@@ -45,6 +46,7 @@ class QuestionController {
     Question.create({
       title: req.body.title,
       description: req.body.description,
+      tags: req.body.tags,
       owner: req.payload.id,
     })
       .then(question => {
@@ -58,6 +60,7 @@ class QuestionController {
       .then(question => {
         question.title = req.body.title || question.title
         question.description = req.body.description || question.description
+        question.tags = req.body.tags || question.tags
 
         return question.save()
       })

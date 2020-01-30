@@ -3,6 +3,7 @@ import Vuex from 'vuex'
 import api from '@/config/api'
 import VueToast from 'vue-toast-notification'
 import 'vue-toast-notification/dist/index.css'
+import jsonwebtoken from 'jsonwebtoken'
 
 Vue.use(Vuex)
 Vue.use(VueToast)
@@ -10,10 +11,12 @@ Vue.use(VueToast)
 export default new Vuex.Store({
   state: {
     isLoading: false,
+    _id: '',
     token: '',
     username: '',
     email: '',
     avatar: '',
+    tags: [],
     questions: [],
     question: {
       _id: '',
@@ -26,6 +29,7 @@ export default new Vuex.Store({
       createdAt: '',
       votes: [],
       answers: [],
+      tags: [],
     },
   },
   mutations: {
@@ -43,17 +47,26 @@ export default new Vuex.Store({
       state.username = payload.username
       state.email = payload.email
       state.avatar = payload.avatar
+      state.tags = payload.tags
+      state._id = payload.id
 
       localStorage.setItem('token', payload.token)
-      localStorage.setItem('username', payload.username)
-      localStorage.setItem('email', payload.email)
-      localStorage.setItem('avatar', payload.avatar)
+    },
+    REFRESH_USER_DATA(state, payload) {
+      state.token = localStorage.getItem('token')
+      state.username = payload.username
+      state.email = payload.email
+      state.avatar = payload.avatar
+      state.tags = payload.tags
+      state._id = payload.id
     },
     RESET_USER_DATA(state) {
       state.token = ''
       state.username = ''
       state.email = ''
       state.avatar = ''
+      state.tags = []
+      state._id = ''
 
       localStorage.clear()
     },
@@ -123,6 +136,14 @@ export default new Vuex.Store({
     login(context, payload) {
       context.dispatch('proxyAction', payload)
     },
+    refreshUserData(context) {
+      context.dispatch('proxyAction', {
+        url: '/users',
+        method: 'get',
+        useToken: true,
+        success: 'REFRESH_USER_DATA',
+      })
+    },
   },
   modules: {},
 })
@@ -133,6 +154,7 @@ export default new Vuex.Store({
 // data, // object if any
 // useToken, // boolean
 // success, // string -> commit name if success
+// dispatch, // string -> dispatch another actions if success
 // successMessage, // string -> message if success or let it empty if didnt want message
 // successUrl, // string -> go to url if success or let it empty if didnt want redirect
 // router, // object -> requried if successUrl has value

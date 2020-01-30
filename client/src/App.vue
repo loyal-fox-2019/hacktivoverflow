@@ -9,18 +9,47 @@
 
 <script>
 import Navbar from '@/components/Navbar.vue'
+import api from '@/config/api'
 
 export default {
   name: 'App',
   components: { Navbar },
   created() {
     if (localStorage.getItem('token')) {
-      this.$store.commit('UPDATE_USER_DATA', {
-        token: localStorage.getItem('token'),
-        username: localStorage.getItem('username'),
-        email: localStorage.getItem('email'),
-        avatar: localStorage.getItem('avatar'),
-      })
+      api
+        .get('/users', {
+          headers: {
+            token: localStorage.getItem('token'),
+          },
+        })
+        .then(({ data }) => {
+          this.$store.commit('REFRESH_USER_DATA', {
+            avatar: data.avatar,
+            email: data.email,
+            tags: data.tags,
+            username: data.username,
+          })
+        })
+        .catch(err => {
+          this.$store.commit('UPDATE_IS_LOADING', false)
+          if (err.response) {
+            err.response.data.errors.forEach(error => {
+              this.$toast.open({
+                message: error,
+                type: 'error',
+                position: 'top-right',
+                duration: 1500,
+              })
+            })
+          } else {
+            this.$toast.open({
+              message: 'Error has happened, please refresh browser',
+              type: 'error',
+              position: 'top-right',
+              duration: 50000,
+            })
+          }
+        })
     }
   },
 }

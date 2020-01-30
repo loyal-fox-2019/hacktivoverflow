@@ -9,12 +9,12 @@
       <div class="w-6/12 mx-auto">
         <div class="my-10">
           <h1 class="text-4xl text-gray-800 tracking-wide">
-            Ask a public question
+            Edit a question
           </h1>
         </div>
         <form
           class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 border border-gray-300"
-          @submit.prevent="askQuestion"
+          @submit.prevent="editQuestion"
         >
           <div class="mb-4">
             <label
@@ -27,7 +27,6 @@
               class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
               id="title"
               type="text"
-              placeholder="Title"
               autocomplete="off"
               v-model="title"
               required
@@ -42,9 +41,9 @@
             </label>
             <vue-editor v-model="body" />
             <b-form-tags
-              v-model="tags"
               class="mt-2 shadow appearance-none rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
               placeholder="Add tag separate with enter"
+              v-model="tags"
             />
           </div>
           <div>
@@ -52,7 +51,7 @@
               class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
               type="submit"
             >
-              Post your question
+              Edit your question
             </button>
           </div>
         </form>
@@ -69,7 +68,7 @@ import { BFormTags } from 'bootstrap-vue'
 import 'vue-loading-overlay/dist/vue-loading.css'
 
 export default {
-  name: 'ask-question',
+  name: 'edit-question',
   components: { Loading, VueEditor, BFormTags },
   data() {
     return {
@@ -87,12 +86,10 @@ export default {
     },
   },
   methods: {
-    askQuestion() {
-      this.$store.commit('UPDATE_IS_LOADING', true)
-
+    editQuestion() {
       api
-        .post(
-          '/questions',
+        .patch(
+          `/questions/${this.$route.params.questionId}`,
           {
             title: this.title,
             description: this.body,
@@ -105,18 +102,23 @@ export default {
           },
         )
         .then(({ data }) => {
+          this.$toast.open({
+            message: 'Question updated',
+            type: 'success',
+            position: 'top-right',
+            duration: 1500,
+          })
+
           const vm = this
           this.$store.dispatch('fetchAllQuestions', {
             url: '/questions',
             method: 'get',
             success: 'UPDATE_QUESTIONS',
-            successMessage: 'Post question success',
-            successUrl: '/questions',
+            successUrl: `/question/${this.$route.params.questionId}`,
             router: vm.$router,
           })
         })
         .catch(err => {
-          this.$store.commit('UPDATE_IS_LOADING', false)
           if (err.response) {
             err.response.data.errors.forEach(error => {
               this.$toast.open({
@@ -135,11 +137,35 @@ export default {
             })
           }
         })
-        .finally(() => {
-          this.title = ''
-          this.body = ''
-        })
     },
+  },
+  created() {
+    api
+      .get(`/questions/${this.$route.params.questionId}`)
+      .then(({ data }) => {
+        this.title = data.title
+        this.body = data.description
+        this.tags = data.tags
+      })
+      .catch(err => {
+        if (err.response) {
+          err.response.data.errors.forEach(error => {
+            this.$toast.open({
+              message: error,
+              type: 'error',
+              position: 'top-right',
+              duration: 1500,
+            })
+          })
+        } else {
+          this.$toast.open({
+            message: 'Error has happened, please refresh browser',
+            type: 'error',
+            position: 'top-right',
+            duration: 50000,
+          })
+        }
+      })
   },
 }
 </script>

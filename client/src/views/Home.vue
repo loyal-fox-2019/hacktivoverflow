@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="relative">
-      <img src="@/assets/background.jpg" />
+      <img src="@/assets/background.jpg" class="object-cover" />
       <div class="absolute inset-x-0 top-0 custom-content">
         <div class="flex flex-col justify-center h-full items-center">
           <div class="custom-hero rounded-sm px-2 shadow">
@@ -10,7 +10,7 @@
           <div class="text-center mt-10">
             <router-link
               to="/questions"
-              class="bg-orange-400 px-3 py-4 hover:bg-orange-500 hover:text-white rounded-sm focus:border-none shadow hover:shadow-lg"
+              class="bg-orange-500 px-3 py-4 hover:bg-orange-600 hover:text-white rounded-sm focus:border-none shadow hover:shadow-lg"
               >Let's get started</router-link
             >
           </div>
