@@ -53,7 +53,7 @@
                   </div>
                   <div class="registration text-center">
                     <p>Or login with different account,</p>
-                    <v-btn color="white"> <v-icon class="mr-2">mdi-google</v-icon>Google</v-btn>
+                    <v-btn color="white" @click="signGoogle"> <v-icon class="mr-2">mdi-google</v-icon>Google</v-btn>
                   </div>
                 </v-form>
               </v-card-text>
@@ -84,6 +84,35 @@ export default {
     }
   },
   methods: {
+    signGoogle () {
+      this.$gAuth
+        .signIn()
+        .then(GoogleUser => {
+          return axios({
+            method: 'post',
+            url: '/google',
+            data: { idToken: GoogleUser.getAuthResponse().id_token }
+          })
+          // this.isSignIn = this.$gAuth.isAuthorized
+        })
+        .then(({ data }) => {
+          localStorage.setItem('token', data.token)
+          localStorage.setItem('username', data.username)
+          this.$swal({
+            position: 'top-end',
+            icon: 'success',
+            title: 'Login success',
+            showConfirmButton: false,
+            timer: 1500
+          })
+          this.$store.commit('SET_LOGIN')
+          this.$store.dispatch('fetchUser')
+          this.$router.push('/')
+        })
+        .catch(() => {
+          this.errors.push('Google OAuth Failed')
+        })
+    },
     toHome () {
       this.$router.push('/')
     },

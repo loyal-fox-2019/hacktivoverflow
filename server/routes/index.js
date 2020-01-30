@@ -7,6 +7,7 @@ const router = require('express').Router(),
 
 router.post('/register', upload.single('profile_pic'), UserController.register)
 router.post('/login', UserController.login)
+router.post('/google', UserController.googleLogin)
 router.use('/users', userRoutes)
 router.use('/questions', questionRoutes)
 router.use('/answers', answerRoutes)

@@ -190,6 +190,7 @@ export default {
       this.$store.commit('SET_LOGOUT')
       this.$store.commit('CLEAR_USER')
       this.$router.push('/login')
+      this.$gAuth.signOut()
       localStorage.clear()
     }
   },

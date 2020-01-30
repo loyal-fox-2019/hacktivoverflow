@@ -4,7 +4,9 @@ const express = require('express'),
   routes = require('./routes'),
   errorHandler = require('./middlewares/errorHandler')
   app = express()
-
+  
+// const cronJob = require('./helpers/cron')
+// cronJob()
 require('./config/mongoose')
 
 app.use(cors())
