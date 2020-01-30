@@ -1,7 +1,7 @@
 import axios from 'axios'
 
 const base = axios.create({
-  baseURL: 'http://localhost:3000/',
+  baseURL: 'http://34.67.170.173/',
   headers: {'access_token': localStorage.getItem('access_token')}
 })
 

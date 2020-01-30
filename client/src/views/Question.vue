@@ -13,7 +13,7 @@
       <h4 class="text-sm italic">{{ question.poster.name }}</h4>
     </div>
     <div class="text-yellow-500 flex-shrink-0 my-auto">
-      <div class="flex items-center justify-between">
+      <div v-if="question.poster == user" class="flex items-center justify-between">
         <button @click="editQuestion(question._id)" class="mr-2 bg-yellow-400 text-gray-800 hover:bg-gray-800 hover:text-yellow-400 font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="button">
           Edit
         </button>
@@ -58,7 +58,7 @@
             <h4 class="text-sm italic">{{ answer.poster.name }}</h4>
           </div>
           <div class="text-yellow-500 flex-shrink-0 my-auto">
-            <div class="flex items-center justify-between">
+            <div v-if="answer.poster == user" class="flex items-center justify-between">
               <button @click="editAnswer(answer._id)" class="mr-2 bg-yellow-400 text-gray-800 hover:bg-gray-800 hover:text-yellow-400 font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="button">
                 Edit
               </button>
@@ -218,6 +218,9 @@ export default {
       // eslint-disable-next-line
       return hljs.highlightAuto(this.content).value;
     },
+    user() {
+      return localStorage.getItem('id')
+    }
   },
   watch: {
     '$route.params.id'() {
