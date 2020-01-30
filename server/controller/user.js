@@ -117,7 +117,7 @@ class controllerUser {
         }).catch(next)
     }
 
-    static currentUser(req, res, next){
+    static currentUser(req, res, next) {
         user.findById(
             req._id
         ).then(response => {
@@ -131,7 +131,7 @@ class controllerUser {
         }).catch(next)
     }
 
-    static viewUser(req, res, next){
+    static viewUser(req, res, next) {
         user.findById(
             req.params.id
         ).then(response => {
@@ -142,6 +142,18 @@ class controllerUser {
                     name: response.name,
                     email: response.email
                 }
+            })
+        }).catch(next)
+    }
+
+    static addWatchTags(req, res, next) {
+        user.updateOne({
+            _id: req._id
+        }, {
+            watchTags: req.body.tags
+        }).then(response => {
+            res.status(200).json({
+                message: "Watch tags successfully added"
             })
         }).catch(next)
     }

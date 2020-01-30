@@ -35,7 +35,10 @@ const userSchema = new mongoose.Schema({
     },
     confirmationCode: {
         type: String
-    }
+    },
+    watchTags: [{
+        type: String
+    }]
 }, {
     timestamps:
         {

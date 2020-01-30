@@ -14,7 +14,8 @@
                     ...
                 </div>
                 <p></p>
-                <sui-label tag color="orange" v-for="(tag, index) in questionData.tags" :key="index">
+                <sui-label tag :color="red" v-for="(tag, index) in questionData.tags"
+                           :key="index">
                     {{ tag }}
                 </sui-label>
             </a>
@@ -36,6 +37,7 @@
                     numOfUpVotes: 0,
                     numOfDownVotes: 0,
                     user: "",
+                    tagColor: ['red', 'teal', 'orange', 'green', 'blue', 'black', 'olive', 'purple']
                 },
                 description: ""
             }
@@ -74,6 +76,9 @@
             },
             users() {
                 return this.questionData.user
+            },
+            tagColorRandom() {
+                return this.tagColor[Math.random() * this.tagColor.length]
             }
         },
         mounted() {
