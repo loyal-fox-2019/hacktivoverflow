@@ -34,6 +34,7 @@ class QuestionController {
   }
 
   static findUserQuestion(req, res, next) {
+    console.log('TEST')
     Question.find({ user_id: req.loggedIn.id })
       .then(results => {
         res.status(200).json(results)

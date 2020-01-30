@@ -76,11 +76,9 @@ export default new Vuex.Store({
         })
     },
     FETCH_ALL(context) {
-      console.log(this.state.userID)
       axios
         .get(`${this.state.baseUrl}/question`)
         .then(results => {
-          console.log(results.data)
           context.commit('FILL_QUESTION', results.data)
         })
         .catch(err => {
@@ -91,15 +89,26 @@ export default new Vuex.Store({
           })
         })
     },
-    FETCH_USER_QUESTION(context) {
-      axios.get(`${this.state.baseUrl}/question/`)
+    FETCH_MINE(context, id) {
+      axios
+        .get(`${this.state.baseUrl}/question/my-question/${id}`, {
+          headers: { token: localStorage.getItem('token') }
+        })
+        .then(results => {
+          context.commit('FILL_QUESTION', results.data)
+        })
+        .catch(err => {
+          Swal.fire({
+            icon: 'error',
+            title: 'Failed',
+            text: err.response.status + err.response.statusText
+          })
+        })
     },
     ADD_VIEWS(context, id) {
       axios
         .patch(`${this.state.baseUrl}/question/click/${id}`)
-        .then(result => {
-          console.log(result)
-        })
+        .then(result => {})
         .catch(err => {
           Swal.fire({
             icon: 'error',
@@ -128,7 +137,6 @@ export default new Vuex.Store({
         })
     },
     FETCH_DETAIL(context, id) {
-      console.log('masuk detail')
       axios
         .get(`${this.state.baseUrl}/question/${id}`)
         .then(result => {
@@ -155,7 +163,6 @@ export default new Vuex.Store({
           this.dispatch('FETCH_DETAIL', id)
         })
         .catch(err => {
-          console.log(err.response)
           Swal.fire({
             icon: 'error',
             title: 'Failed',
@@ -229,7 +236,6 @@ export default new Vuex.Store({
           this.dispatch('FETCH_ANSWER', this.state.questionId)
         })
         .catch(err => {
-          console.log(err.response)
           Swal.fire({
             icon: 'error',
             title: 'Failed',
@@ -270,7 +276,6 @@ export default new Vuex.Store({
           this.dispatch('FETCH_ANSWER', this.state.questionId)
         })
         .catch(err => {
-          console.log(err.response)
           Swal.fire({
             icon: 'error',
             title: 'Failed',
@@ -289,7 +294,6 @@ export default new Vuex.Store({
           this.dispatch('FETCH_DETAIL', this.state.questionId)
         })
         .catch(err => {
-          console.log(err.response)
           Swal.fire({
             icon: 'error',
             title: 'Failed',

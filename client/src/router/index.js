@@ -3,6 +3,7 @@ import VueRouter from 'vue-router'
 import Home from '../views/Home.vue'
 import LoginPage from '@/views/LoginRegister.vue'
 import WriteQuestion from '@/views/WriteQuestion.vue'
+import MyQuestion from '@/views/MyQuestion.vue'
 
 Vue.use(VueRouter)
 
@@ -16,6 +17,11 @@ const routes = [
     path: '/login',
     name: 'LoginPage',
     component: LoginPage
+  },
+  {
+    path: '/my-question',
+    name: 'myQuestion',
+    component: MyQuestion
   },
   {
     path: '/ask',

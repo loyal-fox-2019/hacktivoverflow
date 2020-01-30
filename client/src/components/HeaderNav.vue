@@ -74,6 +74,9 @@ export default {
     },
     changePage() {
       this.$router.push('/login')
+    },
+    myQuestion() {
+      this.$router.push('/my-question')
     }
   },
   computed: {

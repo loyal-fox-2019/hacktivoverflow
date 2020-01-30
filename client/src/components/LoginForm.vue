@@ -67,6 +67,14 @@
                   Dont have an account?
                   <a href="#" @click.prevent="change">Register here</a>
                 </h3>
+                <g-signin-button
+                  id="gSign"
+                  :params="googleSignInParams"
+                  @success="onSignInSuccess"
+                  @error="onSignInError"
+                >
+                  Sign in with Google
+                </g-signin-button>
               </v-card-text>
             </v-card>
           </v-col>
@@ -87,7 +95,11 @@ export default {
       register: false,
       name: '',
       email: '',
-      password: ''
+      password: '',
+      googleSignInParams: {
+        client_id:
+          '2425414127-192o13psano8b1mjb1gnnh60l0ngp9pm.apps.googleusercontent.com'
+      }
     }
   },
   methods: {
@@ -145,6 +157,38 @@ export default {
             text: err.status + err.statusText
           })
         })
+    },
+    onSignInSuccess(googleUser) {
+      // `googleUser` is the GoogleUser object that represents the just-signed-in user.
+      // See https://developers.google.com/identity/sign-in/web/reference#users
+      // const profile = googleUser.getBasicProfile() // etc etc
+      const idToken = googleUser.getAuthResponse().id_token
+      axios
+        .post(`${this.$store.state.baseUrl}/user/google`, {
+          idToken: idToken
+        })
+        .then(result => {
+          localStorage.setItem('token', result.data.token)
+          localStorage.setItem('id', result.data.id)
+          this.$router.push('/')
+          this.$store.commit('CHANGE_LOGIN', result.data.id)
+          Swal.fire('Success', 'Google Sign In Success', 'success')
+        })
+        .catch(err => {
+          this.name = ''
+          this.email = ''
+          this.password = ''
+          console.log(err.response)
+          Swal.fire({
+            icon: 'error',
+            title: 'Registration Failed',
+            text: err.response.status + err.response.statusText
+          })
+        })
+    },
+    onSignInError(error) {
+      // `error` contains any error occurred.
+      console.log('OH NOES', error)
     }
   }
 }
@@ -153,5 +197,19 @@ export default {
 <style lang="css">
 h3 a:hover {
   color: black;
+}
+#gSign {
+  background-color: blue;
+  border-radius: 10px;
+  text-align: center;
+  color: white;
+  font-weight: 500;
+  font-size: 20px;
+  margin-top: 5px;
+  padding: 5px;
+  cursor: pointer;
+}
+#gSign:hover {
+  background-color: orange;
 }
 </style>

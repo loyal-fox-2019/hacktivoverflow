@@ -5,7 +5,7 @@ const Authorize = require('../middlewares/Authorization')
 
 router.get('/', QuestionController.findAll)
 router.get('/:id', QuestionController.findOne)
-router.get('/:user_id', Authenticate,  Authorize, QuestionController.findUserQuestion)
+router.get('/my-question/:id', Authenticate, QuestionController.findUserQuestion)
 
 router.post('/', Authenticate, QuestionController.addQuestion)
 router.put('/:id', Authenticate, Authorize, QuestionController.updateQuestion)
