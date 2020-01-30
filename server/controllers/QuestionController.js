@@ -26,7 +26,10 @@ class QuestionController {
       let question = await Question
         .findById(req.params.id)
         .populate('author')
-        .populate('answers')
+        .populate({
+          path: 'answers',
+          populate: { path: 'author' }
+        })
       res.status(200).json(question)
     } catch (error) {
       next(error)

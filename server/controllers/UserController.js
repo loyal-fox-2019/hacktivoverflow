@@ -9,7 +9,7 @@ class AuthorController {
       if (email) { email = email.toLowerCase() }
       let user = await User.create({ name, email, password })
       let token = generateToken({ id: user._id })
-      res.status(201).json({name:user.name, token})
+      res.status(201).json({name:user.name, token, watchedTags: user.watchedTags})
     } catch (error) {
       next(error)
     }
@@ -23,7 +23,7 @@ class AuthorController {
         next({ status: 404, message: 'Invalid Email or Password' })
       } else {
         let token = generateToken({ id: user._id })
-        res.status(200).json({name:user.name, token})
+        res.status(200).json({name:user.name, token, watchedTags: user.watchedTags})
       }
     } catch (error) {
       next(error)

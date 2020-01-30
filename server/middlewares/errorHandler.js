@@ -13,7 +13,7 @@ function errorHandler(err, req, res, next) {
       break;
     case 'JsonWebTokenError':
       status = 401
-      message = err.message
+      message = 'You need to login to do that!'
       break;
     default:
       status = err.status || 500

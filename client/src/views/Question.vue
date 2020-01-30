@@ -9,7 +9,7 @@
           v-model="form.title"
           type="text"
           required
-          placeholder="Enter title"
+          placeholder="Enter question title"
         ></b-form-input>
       </b-form-group>
       <b-form-group
@@ -21,10 +21,12 @@
           v-model="form.content"
           type="textarea"
           required
-          placeholder="Enter question here"
+          placeholder="Enter your question here"
         ></wysiwyg>
       </b-form-group>
-
+      <b-form-group>
+        <b-form-tags v-model="form.tags" class="mb-2" placeholder="Add tag by press enter..."></b-form-tags>
+      </b-form-group>
       <div class="button-group">
         <b-button type="submit" variant="primary">Submit</b-button>
         <b-button type="reset" variant="danger">Reset</b-button>
@@ -42,17 +44,18 @@ export default {
       form: {
         title: '',
         content: '',
-        tags: ''
+        tags: []
       }
     }
   },
   methods: {
     onSubmit () {
-      this.$store.dispatch('addThread', this.form)
+      this.$store.dispatch('addQuestion', this.form)
     },
     onReset () {
       this.form.title = ''
       this.form.content = ''
+      this.form.tags = []
     }
   },
   components: {

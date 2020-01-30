@@ -10,12 +10,11 @@ export default new Vuex.Store({
   state: {
     questions: [],
     currentQuestion: [],
-    user: {},
+    watchedTags: null,
     isLogin: false
   },
   mutations: {
     SET_QUESTIONS (state, payload) {
-      console.log(payload, 'mutation')
       state.questions = payload
     },
     SET_CURRENT_QUESTION (state, payload) {
@@ -24,8 +23,10 @@ export default new Vuex.Store({
     CHECK_LOGIN (state) {
       if (localStorage.getItem('token')) {
         state.isLogin = true
+        state.watchedTags = localStorage.getItem('watchedTags').split(',')
       } else {
         state.isLogin = false
+        state.watchedTags = null
       }
       router.push('/')
     }
@@ -42,7 +43,11 @@ export default new Vuex.Store({
         })
         context.commit('SET_QUESTIONS', questions.data)
       } catch (error) {
-        console.log(error)
+        Swal.fire({
+          icon: 'error',
+          title: 'Something wrong...',
+          text: error.response.data.errors
+        })
       }
     },
     async register (context, payload) {
@@ -54,9 +59,9 @@ export default new Vuex.Store({
         })
         localStorage.setItem('token', result.data.token)
         localStorage.setItem('name', result.data.name)
+        localStorage.setItem('watchedTags', result.data.watchedTags)
         context.commit('CHECK_LOGIN')
       } catch (error) {
-        console.log(error)
         Swal.fire({
           icon: 'error',
           title: 'Something wrong...',
@@ -73,9 +78,9 @@ export default new Vuex.Store({
         })
         localStorage.setItem('token', result.data.token)
         localStorage.setItem('name', result.data.name)
+        localStorage.setItem('watchedTags', result.data.watchedTags)
         context.commit('CHECK_LOGIN')
       } catch (error) {
-        console.log(error)
         Swal.fire({
           icon: 'error',
           title: 'Something wrong...',
@@ -95,7 +100,6 @@ export default new Vuex.Store({
         context.commit('SET_CURRENT_QUESTION', result.data)
         router.push(`/question/${result.data._id}`)
       } catch (error) {
-        console.log(error)
         Swal.fire({
           icon: 'error',
           title: 'Something wrong...',
@@ -109,9 +113,9 @@ export default new Vuex.Store({
         if (payload.modeURL === 'question') {
           url = `/questions/${payload.id}/vote`
         } else {
-          url = `/asnwers/${payload.id}/vote`
+          url = `/answers/${payload.id}/vote`
         }
-        let result = await server({
+        let some = await server({
           url: url,
           method: 'PATCH',
           data: {
@@ -121,9 +125,78 @@ export default new Vuex.Store({
             token: localStorage.getItem('token')
           }
         })
-        context.commit('SET_CURRENT_QUESTION', result.data)
+        if (some.data.question) {
+          context.dispatch('fetchQuestion', some.data.question)
+        } else {
+          context.dispatch('fetchQuestion', payload.id)
+        }
+        // context.commit('SET_CURRENT_QUESTION', result.data)
       } catch (error) {
-        console.log(error)
+        Swal.fire({
+          icon: 'error',
+          title: 'Something wrong...',
+          text: error.response.data.errors
+        })
+      }
+    },
+    async addQuestion (context, payload) {
+      try {
+        await server({
+          url: '/questions',
+          method: 'POST',
+          data: payload,
+          headers: {
+            token: localStorage.getItem('token')
+          }
+        })
+        context.dispatch('fetchQuestions')
+        router.push('/')
+      } catch (error) {
+        Swal.fire({
+          icon: 'error',
+          title: 'Something wrong...',
+          text: error.response.data.errors
+        })
+      }
+    },
+    async replyThread (context, payload) {
+      try {
+        await server({
+          url: `/answers/${payload.id}`,
+          method: 'POST',
+          data: {
+            content: payload.data.content
+          },
+          headers: {
+            token: localStorage.getItem('token')
+          }
+        })
+        context.dispatch('fetchQuestion', payload.id)
+      } catch (error) {
+        Swal.fire({
+          icon: 'error',
+          title: 'Something wrong...',
+          text: error.response.data.errors
+        })
+      }
+    },
+    async updateTags (context, payload) {
+      try {
+        let tags = await server({
+          url: '/tags',
+          method: 'POST',
+          data: {
+            tags: payload
+          },
+          headers: {
+            token: localStorage.getItem('token')
+          }
+        })
+        localStorage.setItem('watchedTags', tags.data.watchedTags)
+        context.commit('CHECK_LOGIN')
+        context.dispatch('fetchQuestions')
+        router.push('/')
+      } catch (error) {
         Swal.fire({
           icon: 'error',
           title: 'Something wrong...',

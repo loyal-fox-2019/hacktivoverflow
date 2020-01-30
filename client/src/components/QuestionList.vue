@@ -1,5 +1,5 @@
 <template>
-  <div class="question-list-wrapper" @click.prevent="viewquestion(question._id)">
+  <div class="question-list-wrapper" :class="isWatched" @click.prevent="viewquestion(question._id)">
     <div class="card question-card">
       <div class="question-score">{{questionScore}}</div>
       <label class="label-score">Vote</label>
@@ -10,7 +10,7 @@
     </div>
     <div class="question-content">
       <h5><strong>{{ question.title }}</strong></h5>
-      <p class="content">{{ question.content }}</p>
+      <p class="content"><span v-html="question.content"></span></p>
       <span style="font-size: 0.8rem">Author: {{ question.author.name }}</span> &nbsp;&nbsp;
       <span style="font-size: 0.8rem">Posted at: {{ createdAt }}</span>
       <div v-if="tagLength > 0">
@@ -23,17 +23,42 @@
 <script scoped>
 import moment from 'moment'
 export default {
+  data () {
+    return {
+      isWatched: ''
+    }
+  },
   props: ['question'],
   components: {
   },
   created () {
+    this.watched()
   },
   methods: {
     viewquestion (id) {
       this.$store.dispatch('fetchQuestion', id)
+    },
+    watched () {
+      const found = this.tags.some(item => this.$store.state.watchedTags.includes(item))
+      if (found) {
+        this.isWatched = 'watched'
+      } else {
+        this.isWatched = ''
+      }
+    }
+  },
+  watch: {
+    question (n, o) {
+      this.watched()
+    },
+    watchedTags (n, o) {
+      this.watched()
     }
   },
   computed: {
+    watchedTags () {
+      return this.$store.state.watchedTags
+    },
     tagLength () {
       return this.question.tags.length
     },
@@ -60,6 +85,9 @@ export default {
 </script>
 
 <style scoped>
+  .watched {
+    background-color: #dce7f3 !important;
+  }
   .question-card {
     width: 80px;
     height: 80px;

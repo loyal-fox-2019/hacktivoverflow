@@ -4,7 +4,10 @@
       <b-col>
         <div class="navigation">
           <div class="left">
-            <a href="#"><b-icon icon="plus"></b-icon>ASK QUESTIONS</a>
+           <router-link to="/question">
+            <b-icon icon="plus"></b-icon>
+            ASK QUESTIONS
+            </router-link>
           </div>
           <div class="right">
             <router-link class="mr-2" to="/">HOME</router-link>

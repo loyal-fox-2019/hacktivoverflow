@@ -3,8 +3,8 @@
     <VoteButton :modeURL="'answer'" :data="answer"/>
     <div class="answer-content">
       <p class="content">{{ answer.content }}</p>
-      <span><strong>Author:</strong> {{ $store.state.currentanswer.author.name }}</span> &nbsp;&nbsp;
-      <span><strong>Created At: </strong>{{ createdAt }}</span>
+      <span style="font-size:12px">Author: {{ answer.author.name }}</span> &nbsp;&nbsp;
+      <span style="font-size:12px">Created at: {{ createdAt }}</span>
     </div>
   </div>
 </template>
@@ -24,10 +24,7 @@ export default {
   },
   computed: {
     createdAt () {
-      return moment(this.answer.createdAt).format('hh:mm - DD MMMM YYYY')
-    },
-    currentQuestion () {
-      return this.$store.state.currentQuestion
+      return moment(this.answer.createdAt).fromNow()
     }
   }
 }
@@ -55,21 +52,11 @@ export default {
     color: #9c9c9c;
   }
   .question-list-wrapper {
+    border-bottom: 1px solid #cacaca;
     display: flex;
-    /* width: 80%; */
     padding: 1rem;
     margin: 0 auto;
-    background-color: #f0f0f0;
     cursor: pointer;
-    border-radius: 4px;
-  }
-  .question-list-wrapper:nth-child(even) {
-    background-color: #ffffff;
-  }
-  .question-list-wrapper:hover {
-    /* padding: 2rem; */
-    background-color: #78cad6;
-    transition: 0.4s padding;
   }
   .answer-content {
     margin-left: 2rem;

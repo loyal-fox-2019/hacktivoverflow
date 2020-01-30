@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Home from '../views/Home.vue'
+import Swal from 'sweetalert2'
 
 Vue.use(VueRouter)
 
@@ -29,6 +30,17 @@ const routes = [
   {
     path: '/question',
     name: 'question',
+    beforeEnter: (to, from, next) => {
+      if (localStorage.getItem('token')) {
+        next()
+      } else {
+        Swal.fire({
+          icon: 'error',
+          title: 'Something wrong...',
+          text: 'You need login to do that!'
+        })
+      }
+    },
     // route level code-splitting
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
