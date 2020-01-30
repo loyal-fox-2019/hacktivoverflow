@@ -30,6 +30,7 @@ class questionControllers {
     }
     static create(req, res, next) {
         const { title, description } = req.body
+        console.log(description);
         Questions.create({
             title,
             description,
