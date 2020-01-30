@@ -46,7 +46,7 @@ export default {
   methods: {
     login(){
        axios({
-            url: `http://localhost:3000/users/login`,
+            url: `http://18.136.105.19:3000/users/login`,
             method: 'post',
             data:{
               email: this.email,

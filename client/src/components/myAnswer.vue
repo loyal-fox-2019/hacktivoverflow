@@ -42,7 +42,7 @@ export default {
         },
         save(id){
              axios({
-            url: `http://localhost:3000/answers/${id}`,
+            url: `http://18.136.105.19:3000/answers/${id}`,
             method: 'put',
             headers:{
                 token : localStorage.getItem('token')

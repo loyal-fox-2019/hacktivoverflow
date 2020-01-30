@@ -68,7 +68,7 @@ export default {
     addTag(){
       let tags = this.value.join(',')
       axios({
-            url: `http://localhost:3000/tags`,
+            url: `http://18.136.105.19:3000/tags`,
             method: 'post',
             headers:{
               token : localStorage.getItem('token')
@@ -79,7 +79,7 @@ export default {
             })
             .then(()=>{
              return   axios({
-                      url: `http://localhost:3000/tags/search`,
+                      url: `http://18.136.105.19:3000/tags/search`,
                       method: 'post',
                       headers:{
                         token : localStorage.getItem('token')

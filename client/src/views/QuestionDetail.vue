@@ -96,7 +96,7 @@ export default {
         },        
         upQuestion(){
             axios({
-                url: `http://localhost:3000/questions/up/${this.$route.params.id}`,
+                url: `http://18.136.105.19:3000/questions/up/${this.$route.params.id}`,
                 method: 'patch',
                 headers:{
                     token : localStorage.getItem('token')
@@ -109,7 +109,7 @@ export default {
         },
          downQuestion(){
             axios({
-                url: `http://localhost:3000/questions/down/${this.$route.params.id}`,
+                url: `http://18.136.105.19:3000/questions/down/${this.$route.params.id}`,
                 method: 'patch',
                 headers:{
                     token : localStorage.getItem('token')
@@ -122,7 +122,7 @@ export default {
         },
 upAnswer(id){
             axios({
-            url: `http://localhost:3000/answers/up/${id}`,
+            url: `http://18.136.105.19:3000/answers/up/${id}`,
             method: 'patch',
             headers:{
                 token : localStorage.getItem('token')
@@ -138,7 +138,7 @@ upAnswer(id){
         },
         downAnswer(id){
             axios({
-            url: `http://localhost:3000/answers/down/${id}`,
+            url: `http://18.136.105.19:3000/answers/down/${id}`,
             method: 'patch',
             headers:{
                 token : localStorage.getItem('token')
@@ -154,7 +154,7 @@ upAnswer(id){
         },        
         fetchQuestion(){
             axios({
-                url: `http://localhost:3000/questions/${this.$route.params.id}`,
+                url: `http://18.136.105.19:3000/questions/${this.$route.params.id}`,
                 method: 'get',
                 })
                 .then(({data})=>{
@@ -166,7 +166,7 @@ upAnswer(id){
         },
         fetchAnswer(){
             axios({
-                url: `http://localhost:3000/answers/${this.$route.params.id}`,
+                url: `http://18.136.105.19:3000/answers/${this.$route.params.id}`,
                 method: 'get'
                 })
                 .then(({data})=>{
@@ -179,7 +179,7 @@ upAnswer(id){
         save(){
             console.log(this.myAnswer, 'ikiiiiiiiiii')
               axios({
-            url: `http://localhost:3000/answers`,
+            url: `http://18.136.105.19:3000/answers`,
             method: 'post',
             headers:{
                 token : localStorage.getItem('token')

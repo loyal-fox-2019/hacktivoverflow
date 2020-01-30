@@ -50,7 +50,7 @@ export default {
     save(){
       let tags = this.value.join(',')
         axios({
-            url: `http://localhost:3000/questions`,
+            url: `http://18.136.105.19:3000/questions`,
             method: 'post',
             headers:{
                 token : localStorage.getItem('token')

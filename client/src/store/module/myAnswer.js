@@ -11,7 +11,7 @@ const mutations = {
 const actions = {
   fetchAction(context) {
     axios({
-        url: `http://localhost:3000/answers`,
+        url: `http://18.136.105.19:3000/answers`,
         method: 'get',
         headers:{
             token : localStorage.getItem('token')

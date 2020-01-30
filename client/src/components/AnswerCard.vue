@@ -35,7 +35,7 @@ export default {
     methods:{
         upAnswer(id){
             axios({
-            url: `http://localhost:3000/answers/up/${id}`,
+            url: `http://18.136.105.19:3000/answers/up/${id}`,
             method: 'patch',
             headers:{
                 token : localStorage.getItem('token')
@@ -51,7 +51,7 @@ export default {
         },
         downAnswer(id){
             axios({
-            url: `http://localhost:3000/answers/down/${id}`,
+            url: `http://18.136.105.19:3000/answers/down/${id}`,
             method: 'patch',
             headers:{
                 token : localStorage.getItem('token')
@@ -67,7 +67,7 @@ export default {
         },
         fetchAnswer(){
                axios({
-            url: `http://localhost:3000/answers/${this.$route.params.id}`,
+            url: `http://18.136.105.19:3000/answers/${this.$route.params.id}`,
             method: 'get'
             })
             .then(({data})=>{
@@ -79,7 +79,7 @@ export default {
         },    
         fetchQuestion(){
              axios({
-            url: `http://localhost:3000/questions/${this.$route.params.id}`,
+            url: `http://18.136.105.19:3000/questions/${this.$route.params.id}`,
             method: 'get',
             })
             .then(({data})=>{

@@ -10,7 +10,7 @@ const mutations = {
 }
 const actions = {
   fetchAction(context) {
-      axios.get('http://localhost:3000/questions')
+      axios.get('http://18.136.105.19:3000/questions')
       .then(({data})=>{
           context.commit('fillItem',data)
       })
