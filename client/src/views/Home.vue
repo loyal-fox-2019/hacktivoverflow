@@ -35,8 +35,13 @@ export default {
   },
   created() {
     this.$store.dispatch('getAllQuestions')
-    this.questionsArr = this.$store.state.allQuestions
     this.$store.dispatch('getMyQuestions')
+    this.loading = true;
+    setTimeout(() => {
+      this.questionsArr = this.$store.state.allQuestions
+      this.loading = false;
+    },2000)
+    
   },
   methods: {
     toggleShowQn() {
