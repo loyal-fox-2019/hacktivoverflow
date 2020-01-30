@@ -17,7 +17,7 @@
                   type="email"
                   required
                   v-model="email"
-                  :rules="rules"
+                  :rules="emailRules"
                   hide-details="auto"
                 />
 
@@ -69,6 +69,10 @@ export default {
     return {
       name: '',
       email: '',
+      emailRules: [
+        v => !!v || 'E-mail is required',
+        v => /.+@.+/.test(v) || 'E-mail must be valid'
+      ],
       password: '',
       rules: [value => !!value || 'Required.']
     }
