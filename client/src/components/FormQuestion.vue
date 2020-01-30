@@ -1,9 +1,8 @@
 <template>
-  <v-form v-model="valid">
+  <v-form v-model="valid" @submit.prevent="createPOST" class="mx-auto">
     <v-container>
       <v-col
-          cols="12"
-          md="10"
+          class="mx-auto w-75"
         >
           <v-text-field
             v-model="title"
@@ -14,17 +13,21 @@
         </v-col>
 
         <v-col
-          cols="12"
-          md="10"
+          class="mx-auto w-75"
         >
-          <vue-editor v-model="content"></vue-editor>
+          <vue-editor v-model="content" required></vue-editor>
         </v-col>
 
         <v-col
-          cols="12"
-          md="10"
+          class="mx-auto w-75"
         >
-            <b-form-tags v-model="tags" class="mb-2"></b-form-tags>
+            <b-form-tags v-model="tags" separator=" ,;" class="mb-2"></b-form-tags>
+        </v-col>
+
+        <v-col
+        class="mx-auto w-75"
+        >
+        <v-btn small color="primary" type="submit" :block="true">Primary</v-btn>
         </v-col>
     </v-container>
   </v-form>
@@ -34,6 +37,7 @@
 import { VueEditor } from 'vue2-editor'
 export default {
   name: 'FormQuestion',
+  props: ['formType'],
   data () {
     return {
       valid: false,
@@ -48,6 +52,56 @@ export default {
   },
   components: {
     VueEditor
+  },
+  methods: {
+    createPOST () {
+      if (this.$store.state.isLogin) {
+        if (this.formType === 'questions') {
+          this.axios({
+            method: 'post',
+            url: 'questions',
+            data: {
+              title: this.title,
+              content: this.this.content,
+              tags: this.tags
+            }
+          })
+            .then(({ data }) => {
+              this.$store.state.theAnswer.push(data)
+            }).catch((err) => {
+              console.log(err.response.data.message)
+              this.$store.commit('SET_ALERT', {
+                message: err.response.data.message,
+                variant: 'danger'
+              })
+            })
+        } else if (this.formType === 'answers') {
+          this.axios({
+            method: 'post',
+            url: 'answers/' + this.$route.params.id,
+            data: {
+              content: this.this.content
+            }
+          })
+            .then(({ data }) => {
+              this.$store.state.theAnswer.push(data)
+            }).catch((err) => {
+              console.log(err.response.data.message)
+              this.$store.commit('SET_ALERT', {
+                message: err.response.data.message,
+                variant: 'danger'
+              })
+            })
+        }
+      } else {
+        this.$store.commit('SET_ALERT', {
+          message: 'Join the Hack beloflow community',
+          variant: 'warning'
+        })
+        this.$store.state.dismissCountDown = 3
+        this.$router.push('/signin/login')
+      }
+    }
   }
 }
 </script>

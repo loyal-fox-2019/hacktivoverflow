@@ -25,26 +25,26 @@
 
 <script>
 export default {
-  name: "NavBar",
-  data() {
-    return {};
+  name: 'NavBar',
+  data () {
+    return {}
   },
   computed: {
-    loginOra(){
+    loginOra () {
       return this.$store.state.isLogin
     }
   },
   methods: {
-    logout() {
-      localStorage.removeItem("token");
-      this.$store.state.isLogin = false;
-      this.$store.commit("SET_ALERT", {
-        message: "Success logout",
-        variant: "success"
-      });
+    logout () {
+      localStorage.removeItem('token')
+      this.$store.state.isLogin = false
+      this.$store.commit('SET_ALERT', {
+        message: 'Success logout',
+        variant: 'success'
+      })
     }
   }
-};
+}
 </script>
 
 <style scoped>

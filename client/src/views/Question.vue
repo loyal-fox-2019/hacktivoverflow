@@ -1,6 +1,17 @@
 /* eslint-disable vue/valid-v-for */
 <template>
 <div class="mt-9">
+<v-btn
+        class="ma-2 mt-1"
+        @click="expand = !expand"
+        small color="primary"
+        style="position: fixed; right: 15px"
+        >Ask Question</v-btn>
+
+  <v-expand-transition class="mx-auto">
+    <FormQ :formType="'questions'" v-show="expand" />
+  </v-expand-transition>
+
  <Cards
   :data="quest"
   @loadUlangQuestion="refreshQuestion"
@@ -18,16 +29,20 @@
     :tipe="'answers'"
     style="width: 60vw"
   class="ml-auto"/>
+
+  <FormQ :formType="'asnwers'" /> // blom ubah v show di sana
 </div>
 
 </template>
 
 <script>
 import Cards from '../components/Cards'
+import FormQ from '../components/FormQuestion'
 export default {
   name: 'Question',
   data () {
     return {
+      expand: false
     }
   },
   methods: {
@@ -59,7 +74,8 @@ export default {
     }
   },
   components: {
-    Cards
+    Cards,
+    FormQ
   },
   created () {
     this.$store.dispatch(

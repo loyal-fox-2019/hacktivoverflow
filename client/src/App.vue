@@ -54,6 +54,6 @@ export default {
 
 <style scoped>
 #app{
-  background-color: rgb(146, 144, 144);
+  background-color: rgb(219, 219, 219);
 }
 </style>
