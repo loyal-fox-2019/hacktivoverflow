@@ -2,17 +2,13 @@
   <div>
     <b-card class="mb-2 shadow-sm">
       <b-card-text v-if="!isNew || $route.params.id">
-        <h3>
-          1 Step Closer
-        </h3>
+        <h3>1 Step Closer</h3>
         <p class="text-muted" style="font-size:12px;">
           Complete form below to confirm your registration
         </p>
       </b-card-text>
       <b-card-text v-else>
-        <h3>
-          Register()
-        </h3>
+        <h3>Register()</h3>
         <p class="text-muted" style="font-size:12px;">
           This is the place where you can try and catch any errors you get
         </p>
@@ -85,13 +81,12 @@
             block
             size="sm"
             v-if="!isLoading"
+            >Sign up</b-button
           >
-            Sign up
-          </b-button>
 
           <b-button variant="info" disabled block size="sm" v-if="isLoading">
-            <b-spinner small label="spinning"></b-spinner>
-            Sending Confirmation Email...
+            <b-spinner small label="spinning"></b-spinner>Sending Confirmation
+            Email...
           </b-button>
         </b-form>
       </b-card-text>
@@ -146,6 +141,7 @@ export default {
         data: this.form
       })
         .then(({ data }) => {
+          localStorage.id = data.id;
           localStorage.name = data.name;
           localStorage.token = data.token;
           this.$store.commit("SET_USERLOGIN", data.name);

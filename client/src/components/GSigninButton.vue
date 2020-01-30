@@ -54,6 +54,7 @@ export default {
         }
       })
         .then(({ data }) => {
+          localStorage.id = data.id;
           localStorage.name = data.name;
           localStorage.token = data.token;
           this.$store.commit("SET_USERLOGIN", data.name);

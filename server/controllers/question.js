@@ -22,12 +22,16 @@ class Question {
     }
 
     static getQuestion(req, res, next) {
-        let options = {}
         if (req.query) {
-            options = req.query
+            for (const key in req.query) {
+                if (req.query[key] === 'true') {
+                    req.query[key] = -1
+                }
+            }
         }
         questionModel
-            .find(options)
+            .find({})
+            .sort(req.query)
             .then((questions) => {
                 res.status(200).json(questions)
             }).catch(next);
@@ -35,8 +39,14 @@ class Question {
 
     static getQuestionById(req, res, next) {
         questionModel
-            .findOne({
+            .findOneAndUpdate({
                 _id: ObjectId(req.params.id)
+            }, {
+                $inc: {
+                    'view': 1
+                }
+            }, {
+                new: true
             }).populate(['owner'])
             .then((question) => {
                 res.status(200).json(question)
@@ -51,10 +61,10 @@ class Question {
                 path: 'comments',
                 model: 'Comment',
                 populate: {
-                  path: 'user',
-                  model: 'User',
+                    path: 'user',
+                    model: 'User',
                 }
-              }])
+            }])
             .then((question) => {
                 res.status(200).json(question)
             }).catch(next);
@@ -83,6 +93,10 @@ class Question {
             }).catch(next);
     }
 
+    static updateCommentToQuestionId(req, res, next) {
+        res.status(200).json({msg: 'masuk nih'})
+    }
+
     static deleteQuestionById(req, res, next) {
         questionModel
             .findOneAndDelete({
@@ -95,10 +109,24 @@ class Question {
                         _id: ObjectId(comment._id)
                     }))
                 });
-                
+
                 return Promise.all(promises)
             }).then((result) => {
-                res.status(200).json(result)        
+                res.status(200).json(result)
+            }).catch(next);
+    }
+
+    static updateQuestionById(req, res, next) {
+        questionModel
+            .findOneAndUpdate({
+                _id: ObjectId(req.params.id)
+            },{
+                title: req.body.title,
+                body: req.body.body
+            },{
+                new: true
+            }).then((question) => {
+                res.status(200).json(question)
             }).catch(next);
     }
 }

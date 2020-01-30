@@ -22,8 +22,8 @@ app.use(express.urlencoded({
     extended: true
 })); // for parsing application/x-www-form-urlencoded
 
-// mongoose.connect(`mongodb://localhost:27017/errorhandler_${process.env.NODE_ENV}`, {
-mongoose.connect(`mongodb+srv://dbHarfi:${process.env.MONGO_PASSWORD}@hacktiv-ra2tp.mongodb.net/errorhandler_${process.env.NODE_ENV}?retryWrites=true&w=majority`, {
+mongoose.connect(`mongodb://localhost:27017/errorhandler_${process.env.NODE_ENV}`, {
+// mongoose.connect(`mongodb+srv://dbHarfi:${process.env.MONGO_PASSWORD}@hacktiv-ra2tp.mongodb.net/errorhandler_${process.env.NODE_ENV}?retryWrites=true&w=majority`, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
     useFindAndModify: false

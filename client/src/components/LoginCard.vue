@@ -32,9 +32,9 @@
             ></b-form-input>
           </b-form-group>
 
-          <b-button type="submit" variant="info" block size="sm">
-            Log in
-          </b-button>
+          <b-button type="submit" variant="info" block size="sm"
+            >Log in</b-button
+          >
         </b-form>
       </b-card-text>
     </b-card>
@@ -74,6 +74,7 @@ export default {
         data: this.form
       })
         .then(({ data }) => {
+          localStorage.id = data.id;
           localStorage.name = data.name;
           localStorage.token = data.token;
           this.$store.commit("SET_USERLOGIN", data.name);

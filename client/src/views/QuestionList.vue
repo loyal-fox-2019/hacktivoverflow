@@ -2,7 +2,7 @@
   <b-col cols="10" class="mt-5 pt-4" style="border-left:2px solid lightgrey">
     <b-row>
       <b-col class="text-left ml-3">
-        <h2>All Catches</h2>
+        <h2>All Tries</h2>
       </b-col>
       <b-col class="text-right">
         <b-button
@@ -34,13 +34,14 @@
             v-for="(btn, idx) in buttons"
             :key="idx"
             :pressed.sync="btn.state"
+            @click.prevent="changeOrder"
             variant="outline-success"
           >
             {{ btn.caption }}
           </b-button>
         </b-button-group>
         <p class="text-muted mt-2" style="font-size:11px;">
-          Combined sort results are based on each sort category
+          Default sort by newest date
         </p>
       </b-col>
     </b-row>
@@ -65,9 +66,7 @@ export default {
     return {
       buttons: [
         { caption: "Newest", state: true },
-        { caption: "Votes", state: false },
-        { caption: "Views", state: false },
-        { caption: "Unanswered", state: false }
+        { caption: "Views", state: false }
       ]
     };
   },
@@ -90,6 +89,9 @@ export default {
       } else {
         this.$router.push({ name: "try" });
       }
+    },
+    changeOrder() {
+      this.$store.dispatch("fetchQuestions", this.buttons);
     }
   },
   computed: {

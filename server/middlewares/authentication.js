@@ -26,7 +26,7 @@ module.exports = (req, res, next) => {
                 throw err;
             });
     } catch (err) {
-        res.status(err.statusCode || 404).json({
+        res.status(err.statusCode || 400).json({
             msg: 'Invalid Token'
         });
     }

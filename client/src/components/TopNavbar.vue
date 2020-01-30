@@ -64,6 +64,7 @@
 export default {
   methods: {
     logout() {
+      localStorage.removeItem("id");
       localStorage.removeItem("token");
       localStorage.removeItem("name");
       this.$store.state.isLogin = false;

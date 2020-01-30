@@ -13,6 +13,8 @@ router.post('/', questionController.addQuestion);
 router.post('/:id/comments', questionController.addCommentToQuestionId);
 
 router.use('/:id', authorization)
+router.patch('/:id', questionController.updateQuestionById);
+router.post('/:id/comments', questionController.updateCommentToQuestionId);
 router.delete('/:id', questionController.deleteQuestionById);
 
 module.exports = router

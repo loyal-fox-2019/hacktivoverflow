@@ -30,6 +30,10 @@ const questionSchema = new Schema({
         type: Schema.Types.ObjectId,
         ref: 'User'
     },
+    view: {
+        type: Number,
+        default: 0
+    },
     hasNewComment: {
         type: Boolean,
         default: false

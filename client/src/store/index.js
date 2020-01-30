@@ -6,11 +6,12 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
-    // API: "http://localhost:3000",
-    API: "http://13.250.122.239",
+    API: "http://localhost:3000",
+    // API: "http://13.250.122.239",
     registerData: null,
     isLogin: !!localStorage.token,
     userLogin: localStorage.name,
+    userId: localStorage.id,
     questions: [],
     questionDetail: null,
     comments: [],
@@ -38,9 +39,10 @@ export default new Vuex.Store({
     SET_COMMENTS(state, payload) {
       state.comments = payload;
     },
-    SET_EDITED(state, payload) {
-      state.editedContent[payload.key] = payload.value;
-      console.log("SET_EDITED", state.editedContent);
+    SET_EDITED(state, payloads) {
+      payloads.forEach(payload => {
+        state.editedContent[payload.key] = payload.value;
+      });
     }
   },
   actions: {
@@ -56,10 +58,26 @@ export default new Vuex.Store({
           context.commit("SET_REGISTERDATA", err);
         });
     },
-    fetchQuestions(context) {
+    fetchQuestions(context, sorts) {
+      let params = {};
+      if (sorts) {
+        sorts.forEach(sort => {
+          if (sort.caption === "Newest" && sort.state) {
+            params.createdAt = true;
+          } else if (sort.caption === "Views" && sort.state) {
+            params.view = true;
+          }
+        });
+      }
+
+      if (Object.keys(params).length === 0) {
+        params.createdAt = true;
+      }
+
       axios({
         method: "GET",
-        url: `${this.state.API}/questions`
+        url: `${this.state.API}/questions`,
+        params
       })
         .then(({ data }) => {
           context.commit("SET_QUESTIONS", data);
@@ -114,7 +132,79 @@ export default new Vuex.Store({
           }
         })
         .catch(err => {
-          console.log(err);
+          if (err.response.data) {
+            Vue.swal(
+              "Error",
+              err.response.data.msg ||
+                "Something went wrong, please try again later",
+              "error"
+            );
+          } else {
+            Vue.swal(
+              "Error",
+              "Something went wrong, please try again later",
+              "error"
+            );
+          }
+        });
+    },
+    saveChanges(context, id) {
+      axios({
+        method: "PATCH",
+        url: `${this.state.API}/questions/${id}`,
+        headers: {
+          token: localStorage.token
+        },
+        data: context.state.editedContent
+      })
+        .then(() => {
+          context.dispatch("fetchQuestionDetail", id);
+        })
+        .catch(err => {
+          if (err.response.data) {
+            Vue.swal(
+              "Error",
+              err.response.data.msg ||
+                "You are not authorized accessing this data",
+              "error"
+            );
+          } else {
+            Vue.swal(
+              "Error",
+              "Something went wrong, please try again later",
+              "error"
+            );
+          }
+        });
+    },
+    saveComment(context, id) {
+      axios({
+        method: "PATCH",
+        url: `${this.state.API}/questions/${id}/comments`,
+        headers: {
+          token: localStorage.token
+        },
+        data: context.state.editedContent
+      })
+        .then(({ data }) => {
+          context.dispatch("fetchQuestionDetail", data.questionId);
+          context.dispatch("fetchComments", data.questionId);
+        })
+        .catch(err => {
+          if (err.response.data) {
+            Vue.swal(
+              "Error",
+              err.response.data.msg ||
+                "You are not authorized accessing this data",
+              "error"
+            );
+          } else {
+            Vue.swal(
+              "Error",
+              "Something went wrong, please try again later",
+              "error"
+            );
+          }
         });
     }
   },

@@ -7,40 +7,40 @@
         </h2>
         <b-form-input v-model="title" v-if="editMode" size="lg"></b-form-input>
 
-        <p style="font-size:12px;">
-          <!-- <span class="text-muted">Viewed</span>
-          <span> 2 times</span> -->
-          <span>
-            <b-button
-              variant="link"
-              class="text-danger p-1"
-              style="font-size:12px;"
-              v-if="!editMode"
-              @click.prevent="deleteTry"
-            >
-              Delete
-            </b-button>
-            <b-button
-              variant="link"
-              class="text-muted p-1"
-              style="font-size:12px;"
-              @click.prevent="editQuestion"
-              v-if="!editMode"
-            >
-              Edit
-            </b-button>
-
-            <b-button
-              variant="link"
-              class="text-success p-1"
-              style="font-size:12px;"
-              @click.prevent="saveChanges"
-              v-if="editMode"
-            >
-              Save Changes
-            </b-button>
-          </span>
+        <p style="font-size:12px;" class="p-0 m-0">
+          <span class="text-muted">Viewed</span>
+          <span class="font-weight-bold"> {{ question.view }} times</span>
         </p>
+        <div>
+          <b-button
+            variant="link"
+            class="text-danger p-0"
+            style="font-size:12px;"
+            v-if="!editMode"
+            @click.prevent="deleteTry"
+          >
+            Delete
+          </b-button>
+          <b-button
+            variant="link"
+            class="text-secondary p-1"
+            style="font-size:12px;"
+            @click.prevent="editQuestion"
+            v-if="!editMode"
+          >
+            Edit
+          </b-button>
+
+          <b-button
+            variant="link"
+            class="text-success p-1"
+            style="font-size:12px;"
+            @click.prevent="saveChanges"
+            v-if="editMode"
+          >
+            Save Changes
+          </b-button>
+        </div>
         <hr />
       </b-col>
     </b-row>
@@ -162,14 +162,20 @@ export default {
       });
     },
     editQuestion() {
-      this.$store.commit("SET_EDITED", {
-        key: "title",
-        value: this.question.title
-      });
+      this.$store.commit("SET_EDITED", [
+        {
+          key: "title",
+          value: this.question.title
+        },
+        {
+          key: "body",
+          value: this.question.body
+        }
+      ]);
       this.editMode = true;
     },
     saveChanges() {
-      // this.$store.dispatch("saveChanges", this.question._id);
+      this.$store.dispatch("saveChanges", this.question._id);
       this.editMode = false;
     },
     saveComment() {
@@ -215,8 +221,18 @@ export default {
     comments() {
       return this.$store.state.comments;
     },
-    title() {
-      return this.$store.state.editedContent.title;
+    title: {
+      get() {
+        return this.$store.state.editedContent.title;
+      },
+      set(value) {
+        this.$store.commit("SET_EDITED", [
+          {
+            key: "title",
+            value
+          }
+        ]);
+      }
     }
   }
 };
