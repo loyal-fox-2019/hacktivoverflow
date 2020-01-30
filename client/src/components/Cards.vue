@@ -23,11 +23,22 @@
         </v-list-item-content>
         <div class="overline">
           <v-avatar>
-            <img :src="imageku" alt="John" />
+            <img :src="imageku" alt="John" class="mt-7"/>
           </v-avatar>
           {{namaku}}
           <br />
-          asked: {{date}}
+          asked: {{date}} <br>
+      <v-btn
+        color="green ma-2"
+        v-if="$route.path == '/mine'"
+        @click="forEdit"
+      >Edit</v-btn>
+      <v-btn
+        color="red ma-2"
+        v-if="$route.path == '/mine'"
+        @click="hapus"
+      >Delete</v-btn>
+      <Editor :ku_id="data._id" :data="data"/>
         </div>
       </v-list-item>
 
@@ -39,8 +50,17 @@
 </template>
 
 <script>
+import Editor from '../components/Editor'
 export default {
   name: 'Card',
+  components: {
+    Editor
+  },
+  data () {
+    return {
+      kumpul: {}
+    }
+  },
   computed: {
     route () {
       return this.$route.path
@@ -61,11 +81,51 @@ export default {
       return this.data.author ? this.data.author.name : ''
     }
   },
-  props: ['data', 'tipe'],
+  props: ['data'],
   mounted () {
     console.log(this.data.upVotes)
   },
   methods: {
+    hapus () {
+      this.axios({
+        url: 'questions/' + this.data._id,
+        method: 'delete',
+        headers: {
+          token: localStorage.getItem('token')
+        }
+      })
+        .then(({ data }) => {
+          this.$store.commit('SET_ALERT', {
+            message: data.title + ' deleted',
+            variant: 'danger'
+          })
+        }).catch((err) => {
+          console.log(err.response.data.message)
+          this.$store.commit('SET_ALERT', {
+            message: err.response.data.message,
+            variant: 'danger'
+          })
+        })
+    },
+    forEdit () {
+      this.$bvModal.show(this.data._id)
+      // this.axios({
+      //   url: 'questions/' + this.modalku,
+      //   method: 'get'
+      // })
+      //   .then(({ data }) => {
+      //     this.kumpul = data
+
+      //     console.log(this.kumpul);
+      //     this.$bvModal.show(this.modalku)
+      //   }).catch((err) => {
+      //     console.log(err.response.data.message)
+      //     this.$store.commit('SET_ALERT', {
+      //       message: err.response.data.message,
+      //       variant: 'danger'
+      //     })
+      //   })
+    },
     moveTo (id) {
       if (this.$route.path === '/') this.$router.push(`/question/${id}`)
     },
@@ -106,7 +166,7 @@ export default {
             }
           })
             .then(({ data }) => {
-              this.$store.dispatch('fetchAllQuestion')
+              // this.$store.dispatch('fetchAllQuestion')
               this.$emit('loadUlangAnswer')
             }).catch((err) => {
               console.log(err.response.data.message)

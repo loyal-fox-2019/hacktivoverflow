@@ -1,10 +1,13 @@
 const router = require('express').Router()
 const userController = require('../controllers/user')
 const { authentication } = require('../middlewares/auth')
+const gcs = require('../middlewares/gcs')
 
 router.get('/', userController.getAllUser)
 
-router.post('/register', userController.register)
+router.get('/one', authentication, userController.getOneUser)
+
+router.post('/register', gcs.single('photo'), userController.register)
 
 router.post('/login', userController.login)
 

@@ -22,7 +22,7 @@ function questionAuthorization(req, res, next) {
     Question.findById(req.params.id)
         .then((question) => {
             if (!question) throw ({ status: 404, msg: `Question not found` })
-            else if (question.author != req.decoded.id) throw ({ status: 403, msg: 'Forbidden' })
+            else if (question.author != req.decoded.id) throw ({ status: 403, msg: 'Forbidden, its not yours' })
             else next()
         }).catch(next);
 }

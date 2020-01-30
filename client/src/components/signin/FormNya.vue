@@ -42,6 +42,8 @@
                   :rules="rules"
                   hide-details="auto"
                 />
+
+                <v-file-input multiple label="profile pict" v-model="photo" v-if="sign !== 'Login'"></v-file-input>
               </v-form>
             </v-card-text>
             <v-card-actions>
@@ -69,6 +71,7 @@ export default {
     return {
       name: '',
       email: '',
+      photo: '',
       emailRules: [
         v => !!v || 'E-mail is required',
         v => /.+@.+/.test(v) || 'E-mail must be valid'
@@ -96,12 +99,14 @@ export default {
       })
         .then(({ data }) => {
           console.log(data)
-          localStorage.setItem('token', data)
+          localStorage.setItem('token', data.token)
+          this.$store.commit('SET_WHO', data.email)
           this.$store.state.isLogin = true
           this.$store.commit('SET_ALERT', {
             message: 'Success login',
             variant: 'success'
           })
+          this.$store.commit('SET_WATCH', data.tags)
           this.$router.push('/')
         })
         .catch(err => {
@@ -114,17 +119,20 @@ export default {
     },
     goRegister () {
       console.log('masuk register')
+      const formData = new FormData()
+      formData.append('photo', this.photo)
+      formData.set('name', this.name)
+      formData.set('email', this.email)
+      formData.set('password', this.password)
       this.axios({
         method: 'POST',
         url: 'users/register',
-        data: {
-          name: this.name,
-          email: this.email,
-          password: this.password
-        }
+        data: formData
       })
         .then(({ data }) => {
-          localStorage.setItem('token', data)
+          console.log(data)
+          localStorage.setItem('token', data.token)
+          this.$store.commit('SET_WHO', data.email)
           this.$store.state.isLogin = true
           this.$store.commit('SET_ALERT', {
             message: 'Success register',

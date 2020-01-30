@@ -15,6 +15,7 @@
       </v-btn>
     </div>
     <div v-else>
+      <v-btn to="/mine" class="ma-2" outlined color="indigo" small>My Question</v-btn>
       <v-btn to="/" @click.prevent="logout" class="ma-2" outlined color="indigo" small>
         Logout
         <v-icon>mdi-logout</v-icon>

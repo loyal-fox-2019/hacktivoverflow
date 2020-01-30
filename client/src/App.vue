@@ -47,6 +47,19 @@ export default {
     this.$store.dispatch('fetchAllQuestion')
     if (localStorage.getItem('token')) {
       this.$store.state.isLogin = true
+      this.axios({
+        method: 'get',
+        url: 'users/one',
+        headers: {
+          token: localStorage.getItem('token')
+        }
+      })
+        .then(({ data }) => {
+          console.log(data, 'ini harusnya email')
+          this.$store.commit('SET_WHO', data.email)
+        }).catch((err) => {
+          console.log(err)
+        })
     }
   }
 }

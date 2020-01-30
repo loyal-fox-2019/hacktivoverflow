@@ -8,7 +8,7 @@
         small color="primary">Ask Question</v-btn>
     </div>
       <v-expand-transition class="mx-auto">
-        <FormQ :formType="'questions'" v-show="expand" />
+        <FormQ :formType="'questions'" v-show="expand" @tutupForm="expand = !expand"/>
       </v-expand-transition>
     <div class="d-flex mx-auto">
       <div class="mx-auto">
@@ -21,9 +21,8 @@
         />
       </div>
       <div style="width: 250px" class="mr-auto ml-n12" v-show="$store.state.isLogin">
-        <b-card header="watched tags" header-tag="header" title="Title">
-          <b-card-text>Header and footers using props.</b-card-text>
-          <b-button href="#" variant="primary">Go somewhere</b-button>
+        <b-card header="watched tags" header-tag="header">
+          <b-form-tags v-model="diliatin" separator=" ,;" class="mb-2"></b-form-tags>
         </b-card>
       </div>
     </div>
@@ -49,6 +48,39 @@ export default {
   computed: {
     allQuestions () {
       return this.$store.state.allQuestions
+    },
+    diliatin: {
+      get () {
+        return this.$store.getters.tagu
+      },
+      set (val) {
+        // setTimeout(function () {
+        this.axios({
+          method: 'patch',
+          url: 'users',
+          data: {
+            tags: val
+          },
+          headers: {
+            token: localStorage.getItem('token')
+          }
+        })
+          .then(({ data }) => {
+            this.$store.commit('SET_ALERT', {
+              message: 'watched tag edited',
+              variant: 'success'
+            })
+          }).catch((err) => {
+            console.log(err.response.data.message)
+            this.$store.commit('SET_ALERT', {
+              message: err.response.data.message,
+              variant: 'danger'
+            })
+          })
+
+        this.$store.commit('SET_WATCH', val)
+        // }, 1000)
+      }
     }
   },
   methods: {}
