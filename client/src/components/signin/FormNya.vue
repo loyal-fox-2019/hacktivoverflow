@@ -63,55 +63,56 @@
 
 <script>
 export default {
-  name: "FormulirSign",
-  props: ["sign"],
-  data() {
+  name: 'FormulirSign',
+  props: ['sign'],
+  data () {
     return {
-      name: "",
-      email: "",
-      password: "",
-      rules: [value => !!value || "Required."]
-    };
+      name: '',
+      email: '',
+      password: '',
+      rules: [value => !!value || 'Required.']
+    }
   },
   computed: {
-    labeled() {
-      if (this.sign === "Login") return "email atau username";
-      else return "username";
+    labeled () {
+      if (this.sign === 'Login') return 'email atau username'
+      else return 'username'
     }
   },
   methods: {
-    goLogin() {
-      console.log("masuk loogin");
+    goLogin () {
+      console.log('masuk loogin')
       this.axios({
-        method: "POST",
-        url: "users/login",
+        method: 'POST',
+        url: 'users/login',
         data: {
           input: this.name,
           password: this.password
         }
       })
         .then(({ data }) => {
-          localStorage.setItem("token", data.token);
-          this.$store.state.isLogin = true;
-          this.$store.commit("SET_ALERT", {
-            message: "Success login",
-            variant: "success"
-          });
-          this.$router.push("/");
+          console.log(data)
+          localStorage.setItem('token', data)
+          this.$store.state.isLogin = true
+          this.$store.commit('SET_ALERT', {
+            message: 'Success login',
+            variant: 'success'
+          })
+          this.$router.push('/')
         })
         .catch(err => {
-          console.log(err.response.data.message);
-          this.$store.commit("SET_ALERT", {
+          console.log(err.response.data.message)
+          this.$store.commit('SET_ALERT', {
             message: err.response.data.message,
-            variant: "danger"
-          });
-        });
+            variant: 'danger'
+          })
+        })
     },
-    goRegister() {
-      console.log("masuk register");
+    goRegister () {
+      console.log('masuk register')
       this.axios({
-        method: "POST",
-        url: "users/register",
+        method: 'POST',
+        url: 'users/register',
         data: {
           name: this.name,
           email: this.email,
@@ -119,25 +120,25 @@ export default {
         }
       })
         .then(({ data }) => {
-          localStorage.setItem("token", data.token);
-          this.$store.state.isLogin = true;
-          this.$store.commit("SET_ALERT", {
-            message: "Success register",
-            variant: "success"
-          });
-          this.$router.push("/");
+          localStorage.setItem('token', data)
+          this.$store.state.isLogin = true
+          this.$store.commit('SET_ALERT', {
+            message: 'Success register',
+            variant: 'success'
+          })
+          this.$router.push('/')
         })
         .catch(err => {
-          console.log(err.response.data);
-          this.$store.commit("SET_ALERT", {
+          console.log(err.response.data)
+          this.$store.commit('SET_ALERT', {
             message: err.response.data.message[0],
-            variant: "danger"
-          });
+            variant: 'danger'
+          })
           // console.log(err.response.data.message)
-        });
+        })
     }
   }
-};
+}
 </script>
 
 <style>

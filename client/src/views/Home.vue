@@ -7,6 +7,7 @@
       <div class="mx-auto">
         <Cards
           v-for="quest in allQuestions"
+          :tipe="'questions'"
           :key="quest._id"
           :data="quest"
           style="width: 60vw; height: 150px"
@@ -24,18 +25,18 @@
 
 <script>
 // @ is an alias to /src
-import Cards from "../components/Cards";
+import Cards from '../components/Cards'
 
 export default {
-  name: "home",
+  name: 'home',
   components: {
     Cards
   },
   computed: {
-    allQuestions() {
-      return this.$store.state.allQuestions;
+    allQuestions () {
+      return this.$store.state.allQuestions
     }
   },
   methods: {}
-};
+}
 </script>

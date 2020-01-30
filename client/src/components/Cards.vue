@@ -1,5 +1,5 @@
 <template>
-  <v-card class="mx-auto d-flex" outlined @click="moveTo(data._id)">
+  <v-card class="mx-auto d-flex" outlined @click.prevent="moveTo(data._id)" :disable="$route.path !== '/'">
     <div style="width: 10%; text-align: center">
       <b-button v-if="this.$route.name != 'home'" @click.prevent="upVote">^</b-button>
 
@@ -18,13 +18,14 @@
       <v-list-item three-line>
         <v-list-item-content>
           <v-list-item-title class="headline mb-1">{{data.title}}</v-list-item-title>
-          <v-list-item-subtitle v-html="data.content">{{}}</v-list-item-subtitle>
+          <hr v-if="this.$route.name != 'home'">
+          <v-list-item-subtitle v-html="data.content"></v-list-item-subtitle>
         </v-list-item-content>
         <div class="overline">
           <v-avatar>
-            <img :src="data.author.photo" alt="John" />
+            <img :src="imageku" alt="John" />
           </v-avatar>
-          {{data.author.name}}
+          {{namaku}}
           <br />
           asked: {{date}}
         </div>
@@ -39,31 +40,135 @@
 
 <script>
 export default {
-  name: "Card",
+  name: 'Card',
   computed: {
-    route() {
-      return this.$route.path;
+    route () {
+      return this.$route.path
     },
-    totalVote() {
-      return this.data.upVotes.length - this.data.downVotes.length
+    totalVote () {
+      return this.data.upVotes ? this.data.upVotes.length - this.data.downVotes.length : 0
     },
-    date() {
-      return new Date(this.data.createdAt).toLocaleString();
+    date () {
+      return new Date(this.data.createdAt).toLocaleString()
     },
-    totalAnswer() {
-      return this.data.answer.length
+    totalAnswer () {
+      return this.data.answer ? this.data.answer.length : 0
+    },
+    imageku () {
+      return this.data.author ? this.data.author.photo : 'kosong'
+    },
+    namaku () {
+      return this.data.author ? this.data.author.name : ''
     }
   },
-  props: ["data"],
-  mounted() {
-    // console.log(this.data);
+  props: ['data', 'tipe'],
+  mounted () {
+    console.log(this.data.upVotes)
   },
-  methods:{
-    moveTo(id){
-      this.$router.push(`/question/${id}`)
+  methods: {
+    moveTo (id) {
+      if (this.$route.path === '/') this.$router.push(`/question/${id}`)
+    },
+    upVote () {
+      if (!this.$store.state.isLogin) {
+        this.$store.commit('SET_ALERT', {
+          message: 'Join the Hack beloflow community',
+          variant: 'warning'
+        })
+        this.$store.state.dismissCountDown = 3
+        this.$router.push('/signin/login')
+      } else {
+        console.log(this.tipe, this.data._id)
+        if (this.tipe === 'questions') {
+          this.axios({
+            method: 'patch',
+            url: `questions/upvote/${this.data._id}`,
+            headers: {
+              token: localStorage.getItem('token')
+            }
+          })
+            .then(({ data }) => {
+              this.$store.dispatch('fetchAllQuestion')
+              this.$emit('loadUlangQuestion')
+            }).catch((err) => {
+              console.log(err.response.data.message)
+              this.$store.commit('SET_ALERT', {
+                message: err.response.data.message,
+                variant: 'danger'
+              })
+            })
+        } else {
+          this.axios({
+            method: 'patch',
+            url: `answers/upvote/${this.data._id}`,
+            headers: {
+              token: localStorage.getItem('token')
+            }
+          })
+            .then(({ data }) => {
+              this.$store.dispatch('fetchAllQuestion')
+              this.$emit('loadUlangAnswer')
+            }).catch((err) => {
+              console.log(err.response.data.message)
+              this.$store.commit('SET_ALERT', {
+                message: err.response.data.message,
+                variant: 'danger'
+              })
+            })
+        }
+      }
+    },
+    downVote () {
+      console.log(this.tipe, this.data._id)
+      if (!this.$store.state.isLogin) {
+        this.$store.commit('SET_ALERT', {
+          message: 'Join the Hack beloflow community',
+          variant: 'warning'
+        })
+        this.$store.state.dismissCountDown = 3
+        this.$router.push('/signin/login')
+      } else {
+        if (this.tipe === 'questions') {
+          this.axios({
+            method: 'patch',
+            url: `questions/downvote/${this.data._id}`,
+            headers: {
+              token: localStorage.getItem('token')
+            }
+          })
+            .then(({ data }) => {
+              this.$store.dispatch('fetchAllQuestion')
+              this.$emit('loadUlangQuestion')
+            }).catch((err) => {
+              console.log(err.response.data.message)
+              this.$store.commit('SET_ALERT', {
+                message: err.response.data.message,
+                variant: 'danger'
+              })
+            })
+        } else {
+          this.axios({
+            method: 'patch',
+            url: `answers/downvote/${this.data._id}`,
+            headers: {
+              token: localStorage.getItem('token')
+            }
+          })
+            .then(({ data }) => {
+              this.$store.dispatch('fetchAllQuestion')
+              this.$emit('loadUlangAnswer')
+            }).catch((err) => {
+              console.log(err.response.data.message)
+              this.$store.commit('SET_ALERT', {
+                message: err.response.data.message,
+                variant: 'danger'
+              })
+            })
+        }
+      }
     }
   }
-};
+}
 </script>
 
 <style>

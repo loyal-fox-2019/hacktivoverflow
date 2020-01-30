@@ -5,6 +5,7 @@ const { verifyToken } = require('../helpers/jwt')
 
 function authentication(req, res, next) {
     try {
+        console.log(req.headers.token, 'ini header');
         req.decoded = verifyToken(req.headers.token)
 
         User.findById(req.decoded.id)

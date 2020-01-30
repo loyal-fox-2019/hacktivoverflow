@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import axios from '../plugins/axiosAPI';
+import axios from '../plugins/axiosAPI'
 Vue.use(Vuex)
 
 export default new Vuex.Store({
@@ -11,23 +11,31 @@ export default new Vuex.Store({
     dismissCountDown: 0,
     isLogin: false,
     myQuestions: [],
-    allQuestions: []
+    allQuestions: [],
+    singleQuestion: {},
+    theAnswer: []
   },
   mutations: {
-    SET_ALERT(state, payload) {
+    SET_ALERT (state, payload) {
       state.dismissCountDown = state.dismissSecs
       state.alertMessage = payload.message
       state.alertVariant = payload.variant
     },
-    SET_MYQUESTION(state, payload) {
+    SET_MYQUESTION (state, payload) {
       state.myQuestions = payload
     },
-    SET_ALLQUESTIONS(state, payload) {
+    SET_ALLQUESTIONS (state, payload) {
       state.allQuestions = payload
+    },
+    SET_SINGLEQUESTION (state, payload) {
+      state.singleQuestion = payload
+    },
+    SET_ANSWERS (state, payload) {
+      state.theAnswer = payload
     }
   },
   actions: {
-    fetchAllQuestion(context) {
+    fetchAllQuestion (context) {
       axios({
         method: 'get',
         url: 'questions'
@@ -36,14 +44,13 @@ export default new Vuex.Store({
           context.commit('SET_ALLQUESTIONS', data)
         }).catch((err) => {
           console.log(err.response.data.message)
-          context.commit("SET_ALERT", {
+          context.commit('SET_ALERT', {
             message: err.response.data.message,
-            variant: "danger"
-          });
-        });
-
+            variant: 'danger'
+          })
+        })
     },
-    fetchMyQuestions(context) {
+    fetchMyQuestions (context) {
       axios({
         method: 'get',
         url: 'questions/mine'
@@ -52,23 +59,41 @@ export default new Vuex.Store({
           context.commit('SET_MYQUESTION', data)
         }).catch((err) => {
           console.log(err.response.data.message)
-          context.commit("SET_ALERT", {
+          context.commit('SET_ALERT', {
             message: err.response.data.message,
-            variant: "danger"
-          });
-        });
+            variant: 'danger'
+          })
+        })
     },
-    fetchSingleQuestion(context, payload) {
-      return axios({
+    fetchSingleQuestion (context, payload) {
+      axios({
         method: 'get',
         url: 'questions/' + payload
       })
+        .then(({ data }) => {
+          context.commit('SET_SINGLEQUESTION', data)
+        }).catch((err) => {
+          console.log(err.response.data.message)
+          context.commit('SET_ALERT', {
+            message: err.response.data.message,
+            variant: 'danger'
+          })
+        })
     },
-    fetchTheAnswer(context, payload){
+    fetchTheAnswer (context, payload) {
       return axios({
         method: 'get',
-        url: 'answers/' + payload 
+        url: 'answers/' + payload
       })
+        .then(({ data }) => {
+          context.commit('SET_ANSWERS', data)
+        }).catch((err) => {
+          console.log(err.response.data.message)
+          context.commit('SET_ALERT', {
+            message: err.response.data.message,
+            variant: 'danger'
+          })
+        })
     }
   },
   modules: {

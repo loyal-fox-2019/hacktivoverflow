@@ -1,66 +1,89 @@
+/* eslint-disable vue/valid-v-for */
 <template>
-  <div>{{quest.title}}</div>
+<div class="mt-9">
+ <Cards
+  :data="quest"
+  @loadUlangQuestion="refreshQuestion"
+  :tipe="'questions'"
+  style="width: 60vw"
+  class="ml-auto"/>
+  <hr style="size:10px">
+  <h3 style="width: 60vw; text-decoration: underline;"
+  class="mx-auto">{{answers.length}} Answer</h3> <br>
+  <Cards
+    v-for="(jawab, index) in answers"
+    :key="index"
+    @loadUlangAnswer="refreshAnswers"
+    :data="jawab"
+    :tipe="'answers'"
+    style="width: 60vw"
+  class="ml-auto"/>
+</div>
+
 </template>
 
 <script>
-import moduleName from "../components/Cards";
+import Cards from '../components/Cards'
 export default {
-  name: "Question",
-  data() {
+  name: 'Question',
+  data () {
     return {
-      quest: {},
-      answers: []
-    };
+    }
   },
-  beforeMount() {
-    this.$store
-      .dispatch("fetchSingleQuestion", this.$route.params.id)
-      .then(({ data }) => {
-        this.quest = data;
-      })
-      .catch(err => {
-        console.log(err.response.data.message);
-        this.$store.commit("SET_ALERT", {
-          message: err.response.data.message,
-          variant: "danger"
-        });
-      });
+  methods: {
+    refreshQuestion (payload) {
+      this.$store.dispatch(
+        'fetchSingleQuestion',
+        this.$route.params.id
+      )
+    },
+    refreshAnswers (payload) {
+      this.answers = this.$store.dispatch(
+        'fetchTheAnswer',
+        this.$route.params.id
+      )
+    }
   },
-  mounted() {
-    this.$store
-      .dispatch("fetchTheAnswer", this.$route.params.id)
-      .then(({ data }) => {
-        this.answers = data;
-      })
-      .catch(err => {
-        this.$store.commit("SET_ALERT", {
-          message: err.response.data.message,
-          variant: "danger"
-        });
-        console.log(err.response.data.message);
-      });
-  },
-  watch: {
-    ["$route.params.id"]: async function() {
-      try {
-        this.quest = this.$store.dispatch(
-          "fetchSingleQuestion",
-          this.$route.params.id
-        );
-        this.answers = this.$store.dispatch(
-          "fetchTheAnswer",
-          this.$route.params.id
-        );
-      } catch (err) {
-        this.$store.commit("SET_ALERT", {
-          message: err.response.data.message,
-          variant: "danger"
-        });
-        console.log(err.response.data.message);
+  computed: {
+    quest () {
+      return this.$store.state.singleQuestion
+    },
+    answers: {
+      set (val) {
+        console.log(val, 'ini val')
+        this.$store.state.theAnswer = val
+      },
+      get () {
+        return this.$store.state.theAnswer
       }
     }
+  },
+  components: {
+    Cards
+  },
+  created () {
+    this.$store.dispatch(
+      'fetchSingleQuestion',
+      this.$route.params.id
+    )
+    this.answers = this.$store.dispatch(
+      'fetchTheAnswer',
+      this.$route.params.id
+    )
+  },
+  watch: {
+    '$route.params.id' () {
+      this.$store.dispatch(
+        'fetchSingleQuestion',
+        this.$route.params.id
+      )
+      this.answers = this.$store.dispatch(
+        'fetchTheAnswer',
+        this.$route.params.id
+      )
+    }
   }
-};
+}
 </script>
 
 <style>
