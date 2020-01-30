@@ -67,7 +67,7 @@ export default {
       localStorage.removeItem("token");
       localStorage.removeItem("name");
       this.$store.state.isLogin = false;
-      this.$router.replace({ name: "home" });
+      this.$router.replace({ name: "try list" });
     }
   },
   computed: {

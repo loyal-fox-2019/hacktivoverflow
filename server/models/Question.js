@@ -11,21 +11,27 @@ const questionSchema = new Schema({
         required: [true, 'Body required']
     },
     tags: {
-        type: [String]
+        type: [String],
+        required: [true, 'Tags required']
     },
-    comments: {
-        type: [Schema.Types.ObjectId],
+    comments: [{
+        type: Schema.Types.ObjectId,
+        ref: 'Comment'
+    }],
+    upvotes: [{
+        type: Schema.Types.ObjectId,
+        ref: 'User'
+    }],
+    downvotes: [{
+        type: Schema.Types.ObjectId,
+        ref: 'User'
+    }],
+    owner: {
+        type: Schema.Types.ObjectId,
         ref: 'User'
     },
-    upvotes: {
-        type: [Schema.Types.ObjectId],
-        ref: 'User'
-    },
-    downvotes: {
-        type: [Schema.Types.ObjectId],
-        ref: 'User'
-    },
-});
+},
+{timestamps: true});
 
 const Question = mongoose.model('Question', questionSchema);
 module.exports = Question;

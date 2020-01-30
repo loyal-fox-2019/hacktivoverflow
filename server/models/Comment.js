@@ -18,7 +18,12 @@ const commentSchema = new Schema({
         type: [Schema.Types.ObjectId],
         ref: 'User'
     },
-});
+    isSent: {
+        type: Boolean,
+        default: false
+    }
+}
+,{timestamps: true});
 
 const Comment = mongoose.model('Comment', commentSchema);
 module.exports = Comment;

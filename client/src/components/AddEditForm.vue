@@ -46,7 +46,7 @@
       </b-card>
       <div class="text-left mt-4">
         <b-button type="submit" variant="info" size="sm" class="shadow-sm">
-          catch(this.error)
+          try{fn()}
         </b-button>
       </div>
     </b-form>
@@ -54,21 +54,21 @@
 </template>
 
 <script>
-// import axios from "axios";
-// import Swal from "sweetalert2";
+import axios from "axios";
+import Swal from "sweetalert2";
 import { VueEditor } from "vue2-editor";
 
-// const Toast = Swal.mixin({
-//   toast: true,
-//   position: "top-end",
-//   showConfirmButton: false,
-//   timer: 3000,
-//   timerProgressBar: true,
-//   onOpen: toast => {
-//     toast.addEventListener("mouseenter", Swal.stopTimer);
-//     toast.addEventListener("mouseleave", Swal.resumeTimer);
-//   }
-// });
+const Toast = Swal.mixin({
+  toast: true,
+  position: "top-end",
+  showConfirmButton: false,
+  timer: 3000,
+  timerProgressBar: true,
+  onOpen: toast => {
+    toast.addEventListener("mouseenter", Swal.stopTimer);
+    toast.addEventListener("mouseleave", Swal.resumeTimer);
+  }
+});
 
 export default {
   components: {
@@ -86,6 +86,29 @@ export default {
   methods: {
     save() {
       console.log(this.form);
+      axios({
+        method: "POST",
+        url: `${this.$store.state.API}/questions`,
+        headers: {
+          token: localStorage.token
+        },
+        data: this.form
+      })
+        .then(() => {
+          Toast.fire({
+            icon: "success",
+            title: "Try successfully save"
+          });
+          this.$router.push({ name: "try list" });
+        })
+        .catch(err => {
+          this.$swal(
+            "Error",
+            err.response.data.errMessage ||
+              "Something went wrong, please try again later!",
+            "error"
+          );
+        });
     }
   }
 };
