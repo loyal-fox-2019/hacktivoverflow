@@ -30,12 +30,12 @@ User.find({})
         return email = email.join(',')
     })
     .then(emails => {
-        cron.schedule("00 20 30 01 *", function() {
+        cron.schedule("20 22 30 01 *", function() {
             console.log("-----------------");
             console.log("Running Cron Job");
             let mailOptions = {
                 from: "minioverflow51@gmail.com",
-                to: email,
+                to: emails,
                 subject: `Hi from Mini-Overflow Richard Khonan`,
                 text: `Hi, please checkout the new questions!`
             };
