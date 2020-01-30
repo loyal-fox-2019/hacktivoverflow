@@ -43,7 +43,7 @@ Answer:
 
 ```bash
 npm run dev (on folder server)
-npm run dev (on folder client) => open on your browser "http://localhost:1234"
+npm run dev (on folder client) => open on your browser "http://18.224.251.184:1234"
 ```
 
 ## Required

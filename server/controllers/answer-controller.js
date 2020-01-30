@@ -2,7 +2,7 @@ const answerModel = require('../models/answer-model')
 
 class Answer{
     static find(req,res,next){
-        answerModel.find({question: req.params.id})
+        answerModel.find({question: req.params.id}).populate('owner')
         .then((data)=>{
             res.status(200).json(data)
         })

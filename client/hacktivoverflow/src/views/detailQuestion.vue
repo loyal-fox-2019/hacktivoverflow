@@ -8,7 +8,7 @@
       <b-row>
           <b-col cols="1" class="total">
               <p><i class="far fa-arrow-alt-circle-up star" @click.prevent="upquestion"></i></p>
-              <p class="num">{{detailQuestion.upvotes.length - detailQuestion.downvotes.length}}</p>
+              <p class="num animated fadeIn">{{detailQuestion.upvotes.length - detailQuestion.downvotes.length}}</p>
               <p><i class="far fa-arrow-alt-circle-down star" @click.prevent="downquestion"></i></p>
           </b-col>
           <b-col cols="11" class="description">

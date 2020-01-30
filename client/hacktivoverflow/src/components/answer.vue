@@ -10,7 +10,7 @@
       <b-row>
           <b-col cols="1" class="total">
               <p @click.prevent="upAnswer"><i class="far fa-arrow-alt-circle-up star"></i></p>
-              <p class="num">{{data.upvotes.length - data.downvotes.length}}</p>
+              <p class="num animated fadeIn">{{data.upvotes.length - data.downvotes.length}}</p>
               <p @click.prevent="downAnswer"><i class="far fa-arrow-alt-circle-down star"></i></p>
           </b-col>
           <b-col cols="11" class="descriptionAnswer">

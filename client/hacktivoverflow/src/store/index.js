@@ -33,7 +33,7 @@ export default new Vuex.Store({
   actions: {
     signup (action, payload) {
       axios({
-        url: 'http://localhost:3000/users/signup',
+        url: 'http://18.224.251.184:3000/users/signup',
         method: 'POST',
         data: payload
       })
@@ -56,7 +56,7 @@ export default new Vuex.Store({
     },
     signin (action, payload) {
       axios({
-        url: 'http://localhost:3000/users/signin',
+        url: 'http://18.224.251.184:3000/users/signin',
         method: 'POST',
         data: payload
       })
@@ -80,7 +80,7 @@ export default new Vuex.Store({
     },
     postQuestion (action, payload) {
       axios({
-        url: 'http://localhost:3000/questions',
+        url: 'http://18.224.251.184:3000/questions',
         headers: { token: localStorage.getItem('token') },
         method: 'POST',
         data: payload
@@ -103,7 +103,7 @@ export default new Vuex.Store({
     },
     patch (action) {
       axios({
-        url: 'http://localhost:3000/questions',
+        url: 'http://18.224.251.184:3000/questions',
         method: 'GET'
       })
         .then((data) => {
@@ -119,7 +119,7 @@ export default new Vuex.Store({
     },
     patchQuestionDetail (action, payload) {
       axios({
-        url: 'http://localhost:3000/questions/' + payload,
+        url: 'http://18.224.251.184:3000/questions/' + payload,
         method: 'GET'
       })
         .then((data) => {
@@ -135,7 +135,7 @@ export default new Vuex.Store({
     },
     patchQuestionAnswer (action, payload) {
       axios({
-        url: 'http://localhost:3000/answers/' + payload,
+        url: 'http://18.224.251.184:3000/answers/' + payload,
         method: 'GET'
       })
         .then((data) => {
@@ -151,7 +151,7 @@ export default new Vuex.Store({
     },
     postAnswer (action, payload) {
       axios({
-        url: 'http://localhost:3000/answers',
+        url: 'http://18.224.251.184:3000/answers',
         method: 'POST',
         data: payload.input,
         headers: { token: localStorage.getItem('token') }
@@ -162,7 +162,7 @@ export default new Vuex.Store({
     },
     deleteQuestion (action, payload) {
       axios({
-        url: 'http://localhost:3000/questions/' + payload,
+        url: 'http://18.224.251.184:3000/questions/' + payload,
         method: 'DELETE',
         headers: { token: localStorage.getItem('token') }
       })
@@ -180,7 +180,7 @@ export default new Vuex.Store({
     },
     editQuestion (action, payload) {
       axios({
-        url: 'http://localhost:3000/questions/' + payload.id,
+        url: 'http://18.224.251.184:3000/questions/' + payload.id,
         method: 'PUT',
         data: payload.input,
         headers: { token: localStorage.getItem('token') }
@@ -198,7 +198,7 @@ export default new Vuex.Store({
     },
     async upQuestion (action, payload) {
       await axios({
-        url: 'http://localhost:3000/questions/upvote/' + payload,
+        url: 'http://18.224.251.184:3000/questions/upvote/' + payload,
         method: 'PATCH',
         headers: { token: localStorage.getItem('token') }
       })
@@ -214,7 +214,7 @@ export default new Vuex.Store({
     },
     async downQuestion (action, payload) {
       await axios({
-        url: 'http://localhost:3000/questions/downvote/' + payload,
+        url: 'http://18.224.251.184:3000/questions/downvote/' + payload,
         method: 'PATCH',
         headers: { token: localStorage.getItem('token') }
       })
@@ -230,7 +230,7 @@ export default new Vuex.Store({
     },
     async upAnswer (action, payload) {
       await axios({
-        url: 'http://localhost:3000/answers/upvote/' + payload.id,
+        url: 'http://18.224.251.184:3000/answers/upvote/' + payload.id,
         method: 'PATCH',
         headers: { token: localStorage.getItem('token') }
       })
@@ -247,7 +247,7 @@ export default new Vuex.Store({
     },
     async downAnswer (action, payload) {
       await axios({
-        url: 'http://localhost:3000/answers/downvote/' + payload.id,
+        url: 'http://18.224.251.184:3000/answers/downvote/' + payload.id,
         method: 'PATCH',
         headers: { token: localStorage.getItem('token') }
       })
@@ -264,7 +264,7 @@ export default new Vuex.Store({
     },
     editAnswer (action, payload) {
       axios({
-        url: 'http://localhost:3000/answers/' + payload.id,
+        url: 'http://18.224.251.184:3000/answers/' + payload.id,
         method: 'PUT',
         data: payload.input,
         headers: { token: localStorage.getItem('token') }

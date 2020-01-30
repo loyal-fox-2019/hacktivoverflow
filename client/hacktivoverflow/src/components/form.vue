@@ -47,9 +47,8 @@ export default {
   props: ['data'],
   created () {
     if (this.data === 'ask') {
-      console.log('s')
     } else {
-      setTimeout(() => { this.patchForm() }, 1000)
+      setTimeout(() => { this.patchForm() }, 2000)
     }
   },
   data () {
