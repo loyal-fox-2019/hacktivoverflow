@@ -11,6 +11,9 @@ export default new Vuex.Store({
   state: {
     isLoading: false,
     token: '',
+    username: '',
+    email: '',
+    avatar: '',
     questions: [],
     question: {
       _id: '',
@@ -34,6 +37,25 @@ export default new Vuex.Store({
     },
     UPDATE_QUESTION(state, payload) {
       state.question = payload
+    },
+    UPDATE_USER_DATA(state, payload) {
+      state.token = payload.token
+      state.username = payload.username
+      state.email = payload.email
+      state.avatar = payload.avatar
+
+      localStorage.setItem('token', payload.token)
+      localStorage.setItem('username', payload.username)
+      localStorage.setItem('email', payload.email)
+      localStorage.setItem('avatar', payload.avatar)
+    },
+    RESET_USER_DATA(state) {
+      state.token = ''
+      state.username = ''
+      state.email = ''
+      state.avatar = ''
+
+      localStorage.clear()
     },
   },
   actions: {
@@ -66,13 +88,17 @@ export default new Vuex.Store({
               duration: 1500,
             })
           }
+
+          if (payload.successUrl) {
+            payload.router.push(payload.successUrl)
+          }
         })
         .catch(err => {
           context.commit('UPDATE_IS_LOADING', false)
           if (err.response) {
             err.response.data.errors.forEach(error => {
               Vue.$toast.open({
-                message: error.message,
+                message: error,
                 type: 'error',
                 position: 'top-right',
                 duration: 1500,
@@ -94,6 +120,9 @@ export default new Vuex.Store({
     fetchQuestion(context, payload) {
       context.dispatch('proxyAction', payload)
     },
+    login(context, payload) {
+      context.dispatch('proxyAction', payload)
+    },
   },
   modules: {},
 })
@@ -105,4 +134,6 @@ export default new Vuex.Store({
 // useToken, // boolean
 // success, // string -> commit name if success
 // successMessage, // string -> message if success or let it empty if didnt want message
+// successUrl, // string -> go to url if success or let it empty if didnt want redirect
+// router, // object -> requried if successUrl has value
 // }

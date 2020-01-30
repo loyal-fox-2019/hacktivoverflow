@@ -16,7 +16,7 @@
     </div>
     <div class="flex justify-end">
       <small class="font-hairline text-sm italic text-gray-600"
-        >Answered at 6 Jan 2020 04:23AM</small
+        >Answered at {{ localeTime }}</small
       >
     </div>
     <div class="flex justify-end mb-2">
@@ -29,6 +29,8 @@
 </template>
 
 <script>
+import moment from 'moment'
+
 export default {
   name: 'answer-card',
   props: ['answer'],
@@ -40,6 +42,11 @@ export default {
       return this.answer.owner.avatar
         ? this.answer.owner.avatar
         : 'https://placekitten.com/200/200'
+    },
+    localeTime() {
+      return this.answer.createdAt
+        ? moment(this.answer.createdAt).format('D MMM YYYY H:mA')
+        : new Date().toLocaleString()
     },
   },
 }

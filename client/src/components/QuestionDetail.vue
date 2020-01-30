@@ -49,6 +49,15 @@
             :key="answer._id"
             :answer="answer"
           />
+          <div>
+            <div class="text-2xl my-5">Your answer</div>
+            <vue-editor v-model="answerContent" />
+            <button
+              class="my-2 px-4 py-2 bg-blue-400 text-white rounded-sm hover:bg-blue-500"
+            >
+              Post your answer
+            </button>
+          </div>
         </div>
       </div>
     </div>
@@ -57,13 +66,19 @@
 
 <script>
 import moment from 'moment'
+import { VueEditor } from 'vue2-editor'
 import Loading from 'vue-loading-overlay'
 import AnswerCard from '@/components/AnswerCard.vue'
 import 'vue-loading-overlay/dist/vue-loading.css'
 
 export default {
   name: 'question-detail',
-  components: { Loading, AnswerCard },
+  components: { Loading, AnswerCard, VueEditor },
+  data() {
+    return {
+      answerContent: '',
+    }
+  },
   created() {
     this.$store.dispatch('fetchQuestion', {
       method: 'get',

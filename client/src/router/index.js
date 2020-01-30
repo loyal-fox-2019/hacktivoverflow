@@ -59,6 +59,12 @@ const routes = [
       },
     ],
   },
+  {
+    path: '/ask-question',
+    name: 'ask-question',
+    component: () =>
+      import(/* webpackChunkName: "ask-question" */ '@/views/AskQuestion.vue'),
+  },
 ]
 
 const router = new VueRouter({

@@ -1,7 +1,12 @@
 <template>
   <div
-    class="w-screen justify-center flex items-center custom-container bg-gray-100"
+    class="w-screen justify-center flex items-center custom-container bg-gray-100 vld-parent"
   >
+    <Loading
+      :active.sync="isLoading"
+      :can-cancel="false"
+      :is-full-page="true"
+    ></Loading>
     <div class="w-3/12">
       <div class="w-full flex justify-center mb-2">
         <img
@@ -64,6 +69,7 @@
                 class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
                 id="password"
                 type="password"
+                placeholder="Password"
                 v-model="password"
                 required
               />
@@ -90,13 +96,17 @@
 </template>
 
 <script>
+import Loading from 'vue-loading-overlay'
 import GoogleLogin from 'vue-google-login'
 import api from '@/config/api'
+
+import 'vue-loading-overlay/dist/vue-loading.css'
 
 export default {
   name: 'home',
   components: {
     GoogleLogin,
+    Loading,
   },
   data: function() {
     return {
@@ -111,42 +121,49 @@ export default {
   methods: {
     onSuccess(googleUser) {
       const token = googleUser.getAuthResponse().id_token
+      const vm = this
 
-      console.log('loading...')
-
-      api
-        .post('/third-api-login/google', { token })
-        .then(({ data }) => {
-          console.log('udah selesai loading')
-          console.log(data)
-        })
-        .catch(err => {
-          if (err.response) {
-            console.log('err with response')
-            console.log(err.response)
-          } else {
-            console.log('err without response')
-            console.log(err)
-          }
-        })
+      this.$store.dispatch('login', {
+        method: 'post',
+        url: '/third-api-login/google',
+        data: { token },
+        success: 'UPDATE_USER_DATA',
+        successMessage: 'Login success',
+        successUrl: '/questions',
+        router: vm.$router,
+      })
     },
     onFailure() {
-      console.log('terjadi kesalahan')
+      this.$toast.open({
+        message: 'Error just happened',
+        type: 'error',
+        duration: 2000,
+        position: 'top-right',
+      })
     },
     requestTwitterToken() {
       api
         .get('/third-api-login/request-twitter-token')
         .then(({ data }) => {
-          console.log(data)
           window.location = data.url
         })
         .catch(err => {
           if (err.response) {
-            console.log('err with response')
-            console.log(err.response)
+            err.response.data.errors.forEach(error => {
+              this.$toast.open({
+                message: error,
+                type: 'error',
+                position: 'top-right',
+                duration: 1500,
+              })
+            })
           } else {
-            console.log('err without response')
-            console.log(err)
+            this.$toast.open({
+              message: 'Error has happened, please refresh browser',
+              type: 'error',
+              position: 'top-right',
+              duration: 50000,
+            })
           }
         })
     },
@@ -154,7 +171,24 @@ export default {
       this.$router.push(url)
     },
     login() {
-      console.log('masuk')
+      const vm = this
+      this.$store.dispatch('login', {
+        method: 'post',
+        url: '/login',
+        data: {
+          email: this.email,
+          password: this.password,
+        },
+        success: 'UPDATE_USER_DATA',
+        successMessage: 'Login success',
+        successUrl: '/questions',
+        router: vm.$router,
+      })
+    },
+  },
+  computed: {
+    isLoading() {
+      return this.$store.state.isLoading
     },
   },
 }

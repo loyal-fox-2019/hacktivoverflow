@@ -15,7 +15,7 @@ class UserController {
         }
 
         const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET)
-        res.json({ token, email: user.email })
+        res.json({ token, email: user.email, username: user.username })
       })
       .catch(next)
   }
@@ -29,7 +29,9 @@ class UserController {
     })
       .then(user => {
         const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET)
-        res.status(201).json({ token, email: user.email })
+        res
+          .status(201)
+          .json({ token, email: user.email, username: user.username })
       })
       .catch(next)
   }

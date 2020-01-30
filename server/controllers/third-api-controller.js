@@ -43,7 +43,12 @@ class ThirdAPIController {
       })
       .then(user => {
         const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET)
-        res.json({ token, email: user.email })
+        res.json({
+          token,
+          email: user.email,
+          username: user.username,
+          avatar: user.avatar,
+        })
       })
       .catch(next)
   }
@@ -111,7 +116,12 @@ class ThirdAPIController {
       })
       .then(user => {
         const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET)
-        res.json({ token, username: user.username })
+        res.json({
+          token,
+          username: user.username,
+          username: user.username,
+          avatar: user.avatar,
+        })
       })
       .catch(next)
   }
@@ -180,7 +190,12 @@ class ThirdAPIController {
                     { id: user.id },
                     process.env.JWT_SECRET,
                   )
-                  res.json({ token, email: user.email })
+                  res.json({
+                    token,
+                    email: user.email,
+                    username: user.username,
+                    avatar: user.avatar,
+                  })
                 } else {
                   User.create({
                     username: body.screen_name,
@@ -194,7 +209,12 @@ class ThirdAPIController {
                         { id: user.id },
                         process.env.JWT_SECRET,
                       )
-                      res.json({ token, email: user.email })
+                      res.json({
+                        token,
+                        email: user.email,
+                        username: user.username,
+                        avatar: user.avatar,
+                      })
                     })
                     .catch(next)
                 }
