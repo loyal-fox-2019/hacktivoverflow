@@ -33,7 +33,7 @@ export default new Vuex.Store({
   actions: {
     register({ commit }, payload) {
       axios
-        .post('http://localhost:3000/users/register', {
+        .post('http://13.229.218.165:3000/users/register', {
           name: payload.name,
           username: payload.username,
           email: payload.email,
@@ -53,7 +53,7 @@ export default new Vuex.Store({
     },
     login({ commit }, payload) {
       axios
-        .post('http://localhost:3000/users/login', {
+        .post('http://13.229.218.165:3000/users/login', {
           email: payload.email,
           password: payload.password
         })
@@ -74,7 +74,7 @@ export default new Vuex.Store({
     addQuestion({ commit }, payload) {
       axios
         .post(
-          'http://localhost:3000/questions/',
+          'http://13.229.218.165:3000/questions/',
           {
             title: payload.title,
             description: payload.description
@@ -103,7 +103,7 @@ export default new Vuex.Store({
     },
     fetch_question({ commit }) {
       axios
-        .get('http://localhost:3000/questions')
+        .get('http://13.229.218.165:3000/questions')
         .then(({ data }) => {
           commit('FETCH_LIST_QUESTION', data)
         })
@@ -116,7 +116,7 @@ export default new Vuex.Store({
     },
     question_detail({ commit }, payload) {
       axios
-        .get('http://localhost:3000/questions/' + payload)
+        .get('http://13.229.218.165:3000/questions/' + payload)
         .then(({ data }) => {
           commit('GET_QUESTION_DETAIL', data)
         })
@@ -130,7 +130,7 @@ export default new Vuex.Store({
     },
     fetch_answer({ commit }, payload) {
       axios
-        .get('http://localhost:3000/answers/' + payload)
+        .get('http://13.229.218.165:3000/answers/' + payload)
         .then(({ data }) => {
           commit('GET_ANSWER_BYQUESTION', data)
         })
@@ -144,7 +144,7 @@ export default new Vuex.Store({
     },
     fetch_allanswer({ commit }, payload) {
       axios
-        .get('http://localhost:3000/answers/')
+        .get('http://13.229.218.165:3000/answers/')
         .then(({ data }) => {
           commit('GET_ALL_ANSWER', data)
         })
@@ -159,7 +159,7 @@ export default new Vuex.Store({
     post_answer({ commit }, payload) {
       axios
         .post(
-          'http://localhost:3000/answers/',
+          'http://13.229.218.165:3000/answers/',
           {
             description: payload.description,
             questionId: payload.questionId
@@ -189,7 +189,7 @@ export default new Vuex.Store({
     upvote_question({ commit }, payload) {
       axios
         .patch(
-          'http://localhost:3000/questions/upvote/' + payload,
+          'http://13.229.218.165:3000/questions/upvote/' + payload,
           {},
           {
             headers: {
@@ -216,7 +216,7 @@ export default new Vuex.Store({
     downvote_question({ commit }, payload) {
       axios
         .patch(
-          'http://localhost:3000/questions/downvote/' + payload,
+          'http://13.229.218.165:3000/questions/downvote/' + payload,
           {},
           {
             headers: {
@@ -243,7 +243,7 @@ export default new Vuex.Store({
     upvote_answer({ commit }, payload) {
       axios
         .patch(
-          'http://localhost:3000/answers/upvote/' + payload.id,
+          'http://13.229.218.165:3000/answers/upvote/' + payload.id,
           {},
           {
             headers: {
@@ -270,7 +270,7 @@ export default new Vuex.Store({
     downvote_answer({ commit }, payload) {
       axios
         .patch(
-          'http://localhost:3000/answers/downvote/' + payload.id,
+          'http://13.229.218.165:3000/answers/downvote/' + payload.id,
           {},
           {
             headers: {
@@ -306,7 +306,7 @@ export default new Vuex.Store({
       }).then(result => {
         if (result.value) {
           axios
-            .delete('http://localhost:3000/questions/' + payload, {
+            .delete('http://13.229.218.165:3000/questions/' + payload, {
               headers: {
                 token: localStorage.getItem('token')
               }
@@ -328,7 +328,7 @@ export default new Vuex.Store({
     edit_question({ commit }, payload) {
       axios
         .put(
-          'http://localhost:3000/questions/' + payload.id,
+          'http://13.229.218.165:3000/questions/' + payload.id,
           {
             title: payload.title,
             description: payload.description
@@ -358,7 +358,7 @@ export default new Vuex.Store({
     edit_answer({ commit }, payload) {
       axios
         .put(
-          'http://localhost:3000/answers/' + payload.id,
+          'http://13.229.218.165:3000/answers/' + payload.id,
           {
             description: payload.description
           },
