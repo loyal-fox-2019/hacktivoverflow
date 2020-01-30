@@ -151,8 +151,8 @@ import Axios from '../config/server';
 import Alert from '@/components/Alert.vue';
 import router from '@/router';
 
-// const BASE_URL = 'http://localhost:3000';
-const BASE_URL = 'http://13.250.99.228';
+const BASE_URL = 'http://localhost:3000';
+// const BASE_URL = 'http://13.250.99.228';
 
 export default {
   components: { Alert, Password },

@@ -2,6 +2,9 @@
 const { User, Question } = require('../models');
 const { sign } = require('../helpers/jwt');
 const { compare } = require('../helpers/bcryptjs');
+const kue = require('kue');
+const queue = kue.createQueue();
+const mailer = require('../helpers/mailer');
 
 class UserController {
 
@@ -48,6 +51,14 @@ class UserController {
         username,
         id: _id
       };
+      queue.create('New user', {
+        title: 'Send email to slimypiigyy@gmail.com',
+      })
+      .save();
+      queue.process('New user', (job, done) => {
+        mailer();
+        console.log(job.data);
+      });
       const token = sign(payload);
       res.status(201).json({ token, username });
     } catch (err) {
