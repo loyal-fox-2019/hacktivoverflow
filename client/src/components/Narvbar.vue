@@ -8,7 +8,7 @@
           <div class="login" v-show="!isLogin">
             <button
               v-google-signin-button="clientId"
-              class="google-signin-button"
+              class="google-signin-button btn btn-primary mr-2"
             >Continue with Google</button>
             <b-button v-b-modal.modal-login class="btn btn-primary mr-2">Log in</b-button>
             <b-button v-b-modal.modal-signup class="btn btn-outline-primary">Sign up</b-button>
@@ -166,7 +166,7 @@ export default {
         }
       })
         .then(({ data }) => {
-          console.log(data);
+          // console.log(data);
           localStorage.setItem("userId", data.user._id);
           localStorage.setItem("token", data.token);
           this.$store.commit("changeIsLogin", true);
