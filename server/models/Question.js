@@ -30,6 +30,10 @@ const questionSchema = new Schema({
         type: Schema.Types.ObjectId,
         ref: 'User'
     },
+    hasNewComment: {
+        type: Boolean,
+        default: false
+    }
 },
 {timestamps: true});
 

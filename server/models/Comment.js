@@ -17,10 +17,6 @@ const commentSchema = new Schema({
     downvotes: {
         type: [Schema.Types.ObjectId],
         ref: 'User'
-    },
-    isSent: {
-        type: Boolean,
-        default: false
     }
 }
 ,{timestamps: true});

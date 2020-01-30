@@ -75,7 +75,8 @@ class Question {
                     }, {
                         $addToSet: {
                             comments: comment._id
-                        }
+                        },
+                        hasNewComment: true
                     })
             }).then((result) => {
                 res.status(200).json(newComment)
@@ -84,11 +85,20 @@ class Question {
 
     static deleteQuestionById(req, res, next) {
         questionModel
-            .deleteOne({
+            .findOneAndDelete({
                 _id: ObjectId(req.params.id)
             })
-            .then((result) => {
-                res.status(200).json(result)
+            .then((question) => {
+                let promises = []
+                question.comments.forEach(comment => {
+                    promises.push(commentModel.deleteOne({
+                        _id: ObjectId(comment._id)
+                    }))
+                });
+                
+                return Promise.all(promises)
+            }).then((result) => {
+                res.status(200).json(result)        
             }).catch(next);
     }
 }
