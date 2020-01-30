@@ -1,9 +1,5 @@
 <template>
-  <b-col
-    cols="10"
-    class="mt-5 pt-4"
-    style="height: 2000px;border-left:2px solid lightgrey"
-  >
+  <b-col cols="10" class="mt-5 pt-4" style="border-left:2px solid lightgrey">
     <b-row>
       <b-col class="text-left ml-3">
         <h2>All Catches</h2>
