@@ -57,6 +57,7 @@ export default {
         .then(({ data }) => {
           console.log(data, 'ini harusnya email')
           this.$store.commit('SET_WHO', data.email)
+          this.$store.commit('SET_WATCH', data.watched_tags)
         }).catch((err) => {
           console.log(err)
         })

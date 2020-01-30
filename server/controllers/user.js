@@ -12,7 +12,7 @@ class Controller {
     }
 
     static getOneUser(req,res,next){
-        User.findById(req.decoded.id).select('email')
+        User.findById(req.decoded.id).select('email watched_tags')
         .then((user) => {
             res.status(200).json(user)
         }).catch(next);

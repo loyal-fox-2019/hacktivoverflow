@@ -18,7 +18,7 @@ export default new Vuex.Store({
     theAnswer: []
   },
   mutations: {
-    SET_WATCH(state, payload){
+    SET_WATCH (state, payload) {
       state.watched = payload
     },
     SET_WHO (state, payload) {
