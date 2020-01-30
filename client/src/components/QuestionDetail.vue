@@ -45,6 +45,12 @@
               @click="editQuestion"
               >edit</small
             >
+            <small
+              class="text-sm italic text-white bg-red-800 px-1 rounded-sm ml-2"
+              style="cursor: pointer;"
+              @click="deleteQuestion"
+              >delete</small
+            >
           </div>
           <div
             class="border border-gray-300 py-2 px-2 flex items-start rounded-sm"
@@ -231,8 +237,46 @@ export default {
         })
     },
     editQuestion() {
-      // console.log('masuk sini', this.$route.params.questionId)
       this.$router.push(`/edit/${this.$route.params.questionId}`)
+    },
+    deleteQuestion() {
+      this.$store.commit('UPDATE_IS_LOADING', true)
+      api
+        .delete(`/questions/${this.$route.params.questionId}`, {
+          headers: {
+            token: this.token,
+          },
+        })
+        .then(({ data }) => {
+          this.$toast.open({
+            message: 'Success delete question',
+            position: 'top-right',
+            duration: 1500,
+            type: 'success',
+          })
+          this.$store.commit('UPDATE_IS_LOADING', false)
+          this.$router.push('/questions')
+        })
+        .catch(err => {
+          this.$store.commit('UPDATE_IS_LOADING', false)
+          if (err.response) {
+            err.response.data.errors.forEach(error => {
+              this.$toast.open({
+                message: error,
+                type: 'error',
+                position: 'top-right',
+                duration: 1500,
+              })
+            })
+          } else {
+            this.$toast.open({
+              message: 'Error has happened, please refresh browser',
+              type: 'error',
+              position: 'top-right',
+              duration: 50000,
+            })
+          }
+        })
     },
   },
 }
