@@ -50,7 +50,7 @@ Authorization: token {{user2token}}
 }
 
 ### Get all questions
-GET {{baseUrl}}/questions
+GET {{baseUrl}}/questions/?sortBy=upvotes
 
 ### Get question
 GET {{baseUrl}}/questions/{{question2id}}

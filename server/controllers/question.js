@@ -15,6 +15,7 @@ class QuestionController {
 
   static readAll(req, res, next) {
     const output = [];
+    const { sortBy } = req.query;
 
     Question.find({})
       .populate('authorId')
@@ -24,6 +25,28 @@ class QuestionController {
           throw new Error(`Question collection is empty!`);
         } else {
           const tempPromise = [];
+
+          questions.forEach(question => {
+            console.log(question.createdAt);
+          });
+
+          questions.sort((a, b) => {
+            switch (sortBy) {
+              case 'upvotes':
+                const ATotalVote = a.upvote.length - a.downvote.length;
+                const BTotalVote = b.upvote.length - b.downvote.length;
+                return BTotalVote - ATotalVote;
+              case 'latest':
+              default:
+                return b.createdAt - a.createdAt;
+            }
+          });
+          console.log(' ---- ');
+
+          questions.forEach(question => {
+            console.log(question.createdAt);
+          });
+
           questions.forEach(question => {
             output.push({
               _id: question._id,
@@ -36,7 +59,8 @@ class QuestionController {
                 username: question.authorId.username,
                 avatar: question.authorId.avatar
               },
-              totalAnswer: null
+              totalAnswer: null,
+              createdAt: question.createdAt
             });
 
             tempPromise.push(Answer.find({ questionId: question._id }));

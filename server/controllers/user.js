@@ -1,6 +1,9 @@
+const kue = require('kue');
 const { User } = require('../models');
 const Token = require('../helpers/token');
 const Hash = require('../helpers/hash');
+
+const jobs = kue.createQueue();
 
 class UserController {
   // register
@@ -8,6 +11,22 @@ class UserController {
     User.create(req.body)
       .then(user => {
         const { _id: userId, role: userRole } = user;
+
+        const message = {
+          from: process.env.EMAIL,
+          to: user.email,
+          subject: 'Welcome message!',
+          text: `Welcome to the Hacktiv Overflow! I'm sure you'll find the question and answer that you care about!`,
+          html: `<h1>Welcome to the Hacktiv Overflow!</h1><p>I'm sure you'll find the question and answer that you care about!</p>`
+        };
+
+        console.log(`Send email...`);
+        jobs
+          .create('testing', {
+            title: `Send email...`,
+            message
+          })
+          .save();
 
         res.status(201).json({
           message: `User has been successfully created!`,
