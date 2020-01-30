@@ -2,11 +2,11 @@ require('dotenv').config()
 const express = require('express'),
   cors = require('cors'),
   routes = require('./routes'),
-  errorHandler = require('./middlewares/errorHandler')
-  app = express()
+  errorHandler = require('./middlewares/errorHandler'),
+  app = express(),
+  cronJob = require('./helpers/cron')
   
-// const cronJob = require('./helpers/cron')
-// cronJob()
+cronJob()
 require('./config/mongoose')
 
 app.use(cors())
