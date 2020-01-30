@@ -1,0 +1,119 @@
+@baseUrl = http://localhost:3000
+@user1token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI1ZTMwZWFhM2ZjMjYwYzQyNDAyMWIwNmQiLCJ1c2VyUm9sZSI6ImN1c3RvbWVyIiwiaWF0IjoxNTgwMjY5MDY4fQ.n1ZrypHfFvuPIrm6dq8U1JAFa4IC2hZXNFHJG7vqLbM
+
+@user2token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI1ZTMwZjY3Yjc3NjU2ZjcwYzhjNDk5NzgiLCJ1c2VyUm9sZSI6ImN1c3RvbWVyIiwiaWF0IjoxNTgwMjY5MTA3fQ.atnDUta64i5Ap7gMNnd1jTKL2FYgrv4qyeSXTuzLOMA
+
+@question1id = 5e30fb951c3c3a01e0a5f992
+
+@question2id = 5e30fbd01c3c3a01e0a5f993
+
+@answer1id = 5e30fee79afbab0c46dd5c73
+
+@answer2id = 5e30fefe9afbab0c46dd5c74
+
+### User register
+POST {{baseUrl}}/users/register
+Content-Type: application/json
+
+{
+  "email": "antoni@suwignyo.com",
+  "password": "12345"
+}
+
+### User sign in
+POST {{baseUrl}}/users/signin
+Content-Type: application/json
+
+{
+  "email": "antoni@suwignyo.com",
+  "password": "12345"
+}
+
+### User by ID
+GET {{baseUrl}}/users/5e315131dc4d1134a3c16494
+
+###
+GET {{baseUrl}}/users/profile
+Authorization: token {{user1token}}
+
+### Create question
+POST {{baseUrl}}/questions
+Content-Type: application/json
+Authorization: token {{user2token}}
+
+{
+  "title": "Strange thing happen to my laptop!",
+  "description": "I've no idea why this is happen to me. Help me!"
+}
+
+### Create answer
+POST {{baseUrl}}/answers
+Content-Type: application/json
+Authorization: token {{user2token}}
+
+{
+  "content": "Take a good rest!",
+  "questionId": "{{question1id}}"
+}
+
+### Get all questions
+GET {{baseUrl}}/questions/?sortBy=upvotes
+
+### Get question
+GET {{baseUrl}}/questions/{{question2id}}
+
+### Update question
+PUT {{baseUrl}}/questions/{{question1id}}
+Content-Type: application/json
+Authorization: token {{user1token}}
+
+{
+  "title": "How to Fix Vue.js bug?"
+}
+
+### User upvote the question
+PUT {{baseUrl}}/questions/{{question1id}}/upvote
+Authorization: token {{user1token}}
+
+### User downvote the question
+PUT {{baseUrl}}/questions/{{question1id}}/downvote
+Authorization: token {{user1token}}
+
+### User unvote the question
+PUT {{baseUrl}}/questions/{{question1id}}/unvote
+Authorization: token {{user1token}}
+
+### Delete question
+DELETE {{baseUrl}}/questions/{{question2id}}
+Authorization: token {{user2token}}
+
+### READ ALL ANSWERS
+GET {{baseUrl}}/answers
+
+### READ ONE ANSWER
+GET {{baseUrl}}/answers/{{answer2id}}
+
+### UPDATE ANSWER
+PUT {{baseUrl}}/answers/{{answer1id}}
+Content-Type: application/json
+Authorization: token {{user2token}}
+
+{
+  "content": "I believe you need to read more documentation. Just saying..."
+}
+
+### User upvote the answer
+PUT {{baseUrl}}/answers/{{answer1id}}/upvote
+Authorization: token {{user2token}}
+
+### User downvote the answer
+PUT {{baseUrl}}/answers/{{answer1id}}/downvote
+Authorization: token {{user1token}}
+
+### User unvote the answer
+PUT {{baseUrl}}/answers/{{answer1id}}/unvote
+Authorization: token {{user1token}}
+
+### User delete the answer
+DELETE  {{baseUrl}}/answers/{{answer1id}}
+Authorization: token {{user2token}}
