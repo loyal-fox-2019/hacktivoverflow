@@ -32,7 +32,10 @@ const userSchema = new Schema({
     },
     watched_tags: [{
         type: String
-    }]
+    }],
+    reputation: {
+        type: Number
+    }
 }, {timestamps : true},{versionKey : false});   //timestamps add createdAt, updatedAt fields
 
 userSchema.pre('save',function(next) {

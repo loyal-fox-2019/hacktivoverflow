@@ -20,3 +20,12 @@ mongoose.connect(db_url, { useNewUrlParser: true, useUnifiedTopology: true, useC
 app.use('/', routes);
 
 app.listen(PORT, ()=> console.log('Listening to port: ', PORT));
+
+const Scheduled = require("./helpers/scheduled");
+const CronJob = require('cron').CronJob;
+
+let cronStr = '0 0 3 * * *';
+let job = new CronJob(cronStr, function() {
+  Scheduled.bulkUpdateReputation()
+}, null, true, 'Asia/Jakarta');
+job.start()

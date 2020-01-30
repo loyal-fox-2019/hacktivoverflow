@@ -1,5 +1,5 @@
 const {OAuth2Client} = require('google-auth-library');
-const CLIENT_ID = 'process.env.GOOGLE_CLIENT_ID';
+const CLIENT_ID = process.env.GOOGLE_CLIENT_ID;
 const client = new OAuth2Client(CLIENT_ID);
 
 function verifyGoogleToken(req,res,next)
@@ -9,7 +9,9 @@ function verifyGoogleToken(req,res,next)
         audience: CLIENT_ID
     })
     .then(()=>{next()})
-    .catch(() => {
+    .catch((err) => {
+        console.log(err);
+        
         res.status(400).json({
             msg: "invalid request"
         })

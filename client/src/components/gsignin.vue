@@ -19,7 +19,7 @@ export default {
        * @type {Object} 
        */
       googleSignInParams: {
-        client_id: '1055647920913-8pqfh0q919tf5cb58kop5459ki39o0gj.apps.googleusercontent.com'
+        client_id: '990920590017-n8jlc7m8budggtnnf1o9pps4s51ti29m.apps.googleusercontent.com'
       }
     }
   },
@@ -32,6 +32,7 @@ export default {
       const email = profile.getEmail();
       
       const id_token = googleUser.getAuthResponse().id_token;
+      console.log("id_token",id_token);
       
       axiosReq({
         url: "/users/gsignin",
