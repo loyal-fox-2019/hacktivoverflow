@@ -23,11 +23,6 @@
     </b-collapse>
     <section id="questions" class="mt-4">
       <div id="question">
-        <!-- <Card
-        v-for="(question, i) in 5"
-        :key="i"
-        :question="question"
-        /> -->
         <Card
         v-for="(question, i) in $store.state.questions"
         :key="i"

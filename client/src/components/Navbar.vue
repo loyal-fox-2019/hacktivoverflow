@@ -15,7 +15,7 @@
               <b-dropdown-item v-b-modal.modal-profile >Profile</b-dropdown-item>
             </div>
             <div>
-              <b-modal id="modal-profile" size="lg" centered title="My Profile">
+              <b-modal id="modal-profile" size="xl" centered title="My Profile">
                 <section id="follow-tag">
                   <div>
                     <b-form-tags v-model="$store.state.tags" class="mb-2"></b-form-tags>
@@ -46,11 +46,28 @@
                       <td>
                         <b-button @click="remove(question._id)"
                         variant="outline-primary">DELETE</b-button>
+                        <b-button @click="edit(question)"
+                        variant="outline-primary">EDIT</b-button>
                       </td>
                     </tr>
                   </tbody>
                 </table>
-                <section id="questions"></section>
+                 <b-collapse id="editQuestion" class="mt-2">
+                    <b-card>
+                      Title:
+                      <b-form-input class="mb-2"
+                      v-model="article.title"
+                      ></b-form-input>
+                      Description:
+                      <wysiwyg
+                      v-model="article.description"/>
+                      <div class="text-center mt-2">
+                        <b-button variant="outline-primary"
+                        @click="updateQuestion"
+                        >Update</b-button>
+                      </div>
+                    </b-card>
+                  </b-collapse>
               </b-modal>
             </div>
             <b-dropdown-item @click="signout">Sign Out</b-dropdown-item>
@@ -134,7 +151,8 @@ import Axios from '../config/server';
 import Alert from '@/components/Alert.vue';
 import router from '@/router';
 
-const BASE_URL = 'http://localhost:3000';
+// const BASE_URL = 'http://localhost:3000';
+const BASE_URL = 'http://13.250.99.228';
 
 export default {
   components: { Alert, Password },
@@ -145,9 +163,22 @@ export default {
       username: '',
       password: '',
       isButton: false,
+      article: {},
     };
   },
   methods: {
+    async updateQuestion() {
+      try {
+        const { _id } = this.article;
+        await Axios.put(`/questions/${_id}`, this.article, { headers: { token: localStorage.getItem('token') } });
+        this.$store.dispatch('fetchData');
+        this.$store.dispatch('getMyQuestions');
+        this.$swal('Question updated!');
+        this.$bvModal.hide('modal-profile');
+      } catch (err) {
+        this.$swal('Oppss... something went wrong');
+      }
+    },
     showScore(score) {
       if (score < 2) {
         this.isButton = false;
@@ -162,13 +193,16 @@ export default {
         this.$store.dispatch('getMyQuestions');
         this.$swal('Question deleted!');
       } catch (err) {
-        console.log(err.response.data);
         this.$swal('Oppss... something went wrong');
       }
     },
     signout() {
       localStorage.clear();
       this.$store.dispatch('checkLogin');
+    },
+    edit(payload) {
+      this.article = payload;
+      this.$root.$emit('bv::toggle::collapse', 'editQuestion');
     },
     async loginAttempt() {
       const payload = {
@@ -241,7 +275,6 @@ export default {
       return localStorage.getItem('username');
     },
     getTags() {
-      console.log(this.$store.state.tags);
       if (!this.$store.state.tags) {
         return '';
       }
@@ -252,6 +285,7 @@ export default {
 </script>
 
 <style scoped>
+@import "~vue-wysiwyg/dist/vueWysiwyg.css";
 .form {
   position: relative;
   transform: translateX(-50%);

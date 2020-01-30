@@ -7,6 +7,9 @@
         variant="outline-primary" class="mb-2">
         <b-icon-chevron-up></b-icon-chevron-up>
         </b-button><br>
+        <h2 style="margin-left: 15px">
+          {{ total }}
+        </h2>
         <b-button
         @click="downvotes"
         variant="outline-primary">
@@ -37,22 +40,25 @@
             <hr>
             <!-- List comment -->
             <h4 style="text-align: center;">Answer</h4>
-            <b-card
-            v-for="(question, i) in answers" :key="i"
-            border-variant="dark"
-            :header="question.userId.username" align="center">
-              <h5>Title: {{question.title}}</h5>
-              <b-card-text v-html="question.description"/>
-              <div class="text-center">
-                  <b-button variant="outline-primary"
-                  @click="answerUp(question._id)"
-                  ><b-icon-chevron-up class="answervote"/>
-                  {{answersvotes(question.upvotes)}}</b-button>
-                  <b-button @click="answerDown(question._id)"
-                  variant="outline-primary">{{answersvotes(question.downvotes)}}
-                  <b-icon-chevron-down class="answervote"/></b-button>
-              </div>
-            </b-card>
+            <div id="list-answer">
+              <b-card
+              v-for="(question, i) in answers" :key="i"
+              border-variant="dark"
+              :header="question.userId.username" align="center">
+                <h5>Title: {{question.title}}</h5>
+                <b-card-text v-html="question.description"/>
+                <div class="text-center">
+                    <b-button variant="outline-primary"
+                    @click="answerUp(question._id)"
+                    ><b-icon-chevron-up class="answervote"/>
+                    {{answersvotes(question.upvotes)}}</b-button>
+                    <b-button @click="answerDown(question._id)"
+                    variant="outline-primary">{{answersvotes(question.downvotes)}}
+                    <b-icon-chevron-down class="answervote"/></b-button>
+                </div>
+              </b-card>
+
+            </div>
             <hr>
           </section>
         </b-collapse>
@@ -85,6 +91,12 @@ export default {
     };
   },
   methods: {
+    // total(up, down) {
+    //   const upvotes = Number(up);
+    //   console.log(up, down);
+    //   const downvotes = Number(down);
+    //   return Math.abs(upvotes - downvotes);
+    // },
     answersvotes(answer) {
       if (!answer) {
         return 0;
@@ -185,7 +197,6 @@ export default {
           await axios.patch(`/questions/${_id}/upvotes`, null, { headers: { token: localStorage.getItem('token') } });
           this.$store.dispatch('fetchData');
         } catch (err) {
-          console.log(err.response);
           this.$swal(err.response.data.errors[0]);
         }
       }
@@ -201,7 +212,6 @@ export default {
         }
       }
     }
-    console.log(isFollowed);
     if (isFollowed) {
       this.followed = 'background-color: yellow;';
     }
@@ -225,6 +235,14 @@ export default {
       }
       return this.question.upvotes;
     },
+    total() {
+      if (!this.question.upvotes && !this.question.downvotes) {
+        return 0;
+      }
+      const up = this.question.upvotes || 0;
+      const down = this.question.downvotes || 0;
+      return Math.abs(up - down);
+    },
   },
 };
 </script>
@@ -243,5 +261,8 @@ export default {
 }
 #w-answer {
   height: 30vh;
+}
+#list-answer, #main-content, #detail {
+  overflow-x: scroll !important;
 }
 </style>

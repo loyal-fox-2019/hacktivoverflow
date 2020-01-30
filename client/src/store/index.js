@@ -1,8 +1,9 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
 import axios from 'axios';
+import { swal } from 'sweetalert2/dist/sweetalert2';
 
-const BASE_URL = 'http://localhost:3000';
+const BASE_URL = 'http://13.250.99.228';
 
 Vue.use(Vuex);
 
@@ -56,9 +57,9 @@ export default new Vuex.Store({
           },
         });
         const { data } = response;
-        console.log(data, 'my tags');
         commit('SET_TAGS', data);
       } catch (err) {
+        swal('Oppss...');
         //
       }
     },
@@ -127,7 +128,7 @@ export default new Vuex.Store({
         const { data } = response;
         commit('SET_MYQUESTIONS', data);
       } catch (err) {
-        console.log(err);
+        swal('Opps.. something went wrong');
       }
     },
   },
