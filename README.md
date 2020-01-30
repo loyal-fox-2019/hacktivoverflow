@@ -3,7 +3,23 @@
 Deploy Link: 
 
 ```
-<insert AWS link here>
+http://hacktivoverflow.lieprojects.com.s3-website-ap-southeast-1.amazonaws.com
+```
+
+
+
+API IP Addresss:
+
+```
+http://52.14.182.202:3000
+```
+
+
+
+Personal Domain Address:
+
+```
+http://hacktivoverflow.lieprojects.com
 ```
 
 
