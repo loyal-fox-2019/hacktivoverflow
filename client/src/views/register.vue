@@ -46,7 +46,7 @@ export default {
         const id_token = googleUser.getAuthResponse().id_token;
         axios({
             method: 'post',
-            url: 'http://localhost:3000/user/gsignin',
+            url: 'http://3.134.253.117:3000/user/gsignin',
             data: {
                 id_token
             }

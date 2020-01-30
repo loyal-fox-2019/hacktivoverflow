@@ -1,8 +1,11 @@
 # hacktivoverflow
 
+you can use this app to ask and answer questions.
+
 ### <u>Shema</u>
 
 All API access is over HTTP, and accessed from `http://localhost:8080`.
+deployed link `http://hacktivoverflow.serafimsng.top/`
 
 ### <u>Authentication</u>
 

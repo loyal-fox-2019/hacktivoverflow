@@ -44,7 +44,7 @@ export default new Vuex.Store({
     updatePicture(context,payload){
       axios({
         method: 'patch',
-        url: `http://localhost:3000/user/profile`,
+        url: `http://3.134.253.117:3000/user/profile`,
         headers: {
           token: localStorage.getItem('token')
         },
@@ -64,7 +64,7 @@ export default new Vuex.Store({
       console.log('answer=========', payload)
       axios({
         method: 'put',
-        url: `http://localhost:3000/answer/${payload._id}`,
+        url: `http://3.134.253.117:3000/answer/${payload._id}`,
         headers: {
           token: localStorage.getItem('token')
         },
@@ -82,7 +82,7 @@ export default new Vuex.Store({
       console.log(payload,'update quest', payload.data.title)
       axios({
         method: 'put',
-        url: `http://localhost:3000/question/${payload._id}`,
+        url: `http://3.134.253.117:3000/question/${payload._id}`,
         headers:{
           token: localStorage.getItem('token')
         },
@@ -99,7 +99,7 @@ export default new Vuex.Store({
     deleteQuestion(context,payload){
       axios({
         method: 'delete',
-        url: `http://localhost:3000/question/${payload}`,
+        url: `http://3.134.253.117:3000/question/${payload}`,
         headers:{
           token: localStorage.getItem('token')
         }
@@ -115,7 +115,7 @@ export default new Vuex.Store({
     getUserQuestions(context){
       axios({
         method: 'get',
-        url: `http://localhost:3000/question/user`,
+        url: `http://3.134.253.117:3000/question/user`,
         headers: {
           token: localStorage.getItem('token')
         }
@@ -131,7 +131,7 @@ export default new Vuex.Store({
     createQuestion(context, payload){
       axios({
         method: 'post',
-        url: 'http://localhost:3000/question',
+        url: 'http://3.134.253.117:3000/question',
         headers: {
           token: localStorage.getItem('token')
         },
@@ -150,7 +150,7 @@ export default new Vuex.Store({
     createAnswer(context, payload){
       axios({
         method: 'post',
-        url:'http://localhost:3000/answer',
+        url:'http://3.134.253.117:3000/answer',
         headers:{
           token: localStorage.getItem('token')
         },
@@ -170,7 +170,7 @@ export default new Vuex.Store({
     downvoteAnswer(context,payload){
       axios({
         method: 'patch',
-        url: `http://localhost:3000/answer/downvote/${payload}`,
+        url: `http://3.134.253.117:3000/answer/downvote/${payload}`,
         headers: {
           token: localStorage.getItem('token')
         }
@@ -185,7 +185,7 @@ export default new Vuex.Store({
     upvoteAnswer(context,payload){
       axios({
         method: 'patch',
-        url: `http://localhost:3000/answer/upvote/${payload}`,
+        url: `http://3.134.253.117:3000/answer/upvote/${payload}`,
         headers:{
           token: localStorage.getItem('token')
         }
@@ -200,7 +200,7 @@ export default new Vuex.Store({
     downvoteQuestion(context,payload){
       axios({
         method: 'patch',
-        url: `http://localhost:3000/question/downvote/${payload}`,
+        url: `http://3.134.253.117:3000/question/downvote/${payload}`,
         headers:{
           token: localStorage.getItem('token')
         }
@@ -216,7 +216,7 @@ export default new Vuex.Store({
       console.log('masuk upvote question di stroe', payload)
       axios({
         method: 'patch',
-        url: `http://localhost:3000/question/upvote/${payload}`,
+        url: `http://3.134.253.117:3000/question/upvote/${payload}`,
         headers: {
           token: localStorage.getItem('token')
         }
@@ -232,7 +232,7 @@ export default new Vuex.Store({
       console.log('masuk getanswers')
       axios({
         method: 'get',
-        url: `http://localhost:3000/answer/${payload}`,
+        url: `http://3.134.253.117:3000/answer/${payload}`,
         headers: {
           token: localStorage.getItem('token')
         }
@@ -244,7 +244,7 @@ export default new Vuex.Store({
     getOneQuestion(context, payload){
       axios({
         method: 'get',
-        url: `http://localhost:3000/question/${payload}`,
+        url: `http://3.134.253.117:3000/question/${payload}`,
         headers: {
           token: localStorage.getItem('token')
         }
@@ -258,7 +258,7 @@ export default new Vuex.Store({
       console.log('masuk all questions')
       axios({
         method: 'get',
-        url: `http://localhost:3000/question`,
+        url: `http://3.134.253.117:3000/question`,
         headers: {
           token: localStorage.getItem('token')
         }
@@ -276,7 +276,7 @@ export default new Vuex.Store({
       // console.log('masuk register')
       axios({
           method: 'post',
-          url: `http://localhost:3000/user/register`,
+          url: `http://3.134.253.117:3000/user/register`,
           data:payload
       })
       .then(({data})=>{
@@ -293,7 +293,7 @@ export default new Vuex.Store({
       console.log('masuk login', router)
       axios({
         method: 'post',
-        url: 'http://localhost:3000/user/login',
+        url: 'http://3.134.253.117:3000/user/login',
         data:payload
       })
       .then(({data})=>{
