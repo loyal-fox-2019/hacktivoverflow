@@ -22,6 +22,7 @@ const userSchema = new Schema ({
           message: 'Email already registered'
       }
   },
+  watchedTags: [],
   password:{
     type: String,
     required: [true, 'Password cannot be empty'],

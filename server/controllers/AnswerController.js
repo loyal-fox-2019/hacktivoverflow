@@ -2,20 +2,11 @@ const Answer = require('../models/Answer')
 const Question = require('../models/Question')
 
 class AnswerController {
-  static async getAll(req, res, next) {
-    try {
-      let answer = await Answer.find({author:req.decodedId})
-        .populate('Question')
-      res.status(200).json(answer)
-    } catch (error) {
-      next(error)
-    }
-  }
-  static async create(req, res, next) {
+   static async create(req, res, next) {
     try {
       const { content } = req.body
       const author = req.decodedId
-      const question = req.params.QuestionId
+      const question = req.params.questionId
       let answer = await Answer.create({      
         content,
         author,
@@ -23,7 +14,7 @@ class AnswerController {
       })
       await Question
         .findByIdAndUpdate(req.params.questionId, 
-          {$addToSet: {answer: answer._id}}
+          {$push: {answers: answer._id}}
         )
       res.status(201).json({message: 'Answer submitted!'})
     } catch (error) {

@@ -20,7 +20,7 @@ module.exports = {
   },
   async authorizeQuestion(req, res, next) {
     try {
-      let question = Question.findById(req.params.id)
+      let question = await Question.findById(req.params.id)
       if (question) {
         if (question.author == req.decodedId) next() 
         else next({status:401, message: 'You are unauthorized!'})
@@ -33,7 +33,7 @@ module.exports = {
   },
   async authorizeAnswer(req, res, next) {
     try {
-      let answer = Answer.findById(req.params.id)
+      let answer = await Answer.findById(req.params.id)
       if (answer) {
         if (answer.author == req.decodedId) next() 
         else next({status:401, message: 'You are unauthorized!'})

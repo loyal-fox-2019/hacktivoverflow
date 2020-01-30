@@ -13,7 +13,7 @@ class QuestionController {
       let question = await Question
         .find(filter)
         .populate('author')
-        .populate('replies')
+        .populate('answers')
         .sort({updatedAt: -1})
       res.status(200).json(question)
     } catch (error) {
@@ -26,7 +26,7 @@ class QuestionController {
       let question = await Question
         .findById(req.params.id)
         .populate('author')
-        .populate('replies')
+        .populate('answers')
       res.status(200).json(question)
     } catch (error) {
       next(error)
