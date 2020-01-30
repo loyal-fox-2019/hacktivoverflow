@@ -11,7 +11,7 @@ const routes = require('./router')
 
 const CronJob = require('cron').CronJob
 const content = require("./helpers/mailer")
-const job = new CronJob('0 0 * */7 * *', function () {
+const job = new CronJob('1 1 * * 1/7', function () {
     // console.log('test')
     content()
 }, null, true, 'Asia/Jakarta')
