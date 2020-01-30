@@ -10,5 +10,9 @@ router.post('/create', controllerAnswer.create);
 router.get('/', controllerAnswer.view);
 //delete answer
 router.delete('/:id', controllerAnswer.delete);
+//give like
+router.patch('/:id/like/',controllerAnswer.like);
+//give unlike
+router.patch('/:id/unlike/',controllerAnswer.unLike);
 
 module.exports = router;

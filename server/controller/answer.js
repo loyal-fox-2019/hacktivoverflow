@@ -51,6 +51,87 @@ class controllerAnswer {
             })
         }).catch(next)
     }
+
+    static like(req, res, next) {
+        answer.findById(
+            req.params.id
+        ).then(response => {
+            let like = response.upVotes;
+            let isUserAlreadyLike = like.indexOf(req._id);
+            if (isUserAlreadyLike > -1) {
+                throw({code: 400, errmsg: "You already like this answer"});
+            }
+
+            let unLike = response.downVotes;
+            let isUserAlreadyUnLike = unLike.indexOf(req._id);
+            if (isUserAlreadyUnLike > -1) {
+                return answer.findByIdAndUpdate(
+                    req.params.id,
+                    {
+                        "$push": {
+                            upVotes: req._id
+                        },
+                        "$pull": {
+                            downVotes: req._id
+                        }
+                    })
+            } else {
+                return answer.findByIdAndUpdate(
+                    req.params.id,
+                    {
+                        "$push": {
+                            upVotes: req._id
+                        }
+                    })
+            }
+
+        }).then(response => {
+            res.status(201).send({
+                message: "Successfully like"
+            })
+        }).catch(next)
+    }
+
+    static unLike(req, res, next) {
+        answer.findById(
+            req.params.id
+        ).then(response => {
+            let unLike = response.downVotes;
+            let isUserAlreadyUnLike = unLike.indexOf(req._id);
+
+            if (isUserAlreadyUnLike > -1) {
+                throw({code: 400, errmsg: "You already unlike this question"});
+            }
+
+            let like = response.upVotes;
+            let isUserAlreadyLike = like.indexOf(req._id);
+            if (isUserAlreadyLike > -1) {
+                return answer.findByIdAndUpdate(
+                    req.params.id,
+                    {
+                        "$push": {
+                            downVotes: req._id
+                        },
+                        "$pull": {
+                            upVotes: req._id
+                        }
+                    })
+            } else {
+                return answer.findByIdAndUpdate(
+                    req.params.id,
+                    {
+                        "$push": {
+                            downVotes: req._id
+                        }
+                    })
+            }
+        }).then(response => {
+            res.status(201).send({
+                message: "Successfully unLike"
+            })
+        }).catch(next)
+    }
+
 }
 
 module.exports = controllerAnswer;

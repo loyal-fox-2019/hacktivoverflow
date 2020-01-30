@@ -1,13 +1,12 @@
 <template>
-    <sui-message id="message">
+    <sui-segment>
         <div align="right">
             <router-link to="/">
                 <sui-icon name="home" class="sui-icon"/>
             </router-link>
             |
-            <sui-icon color="red" name="delete" v-if="isRemoveable" class="sui-icon" @click="removeQuestion"/>
+            <sui-icon color="red" name="delete" v-if="isRemoveAble" class="sui-icon" @click="removeQuestion"/>
         </div>
-
         <sui-header color="blue">{{questionData.data.title}}</sui-header>
         <small>{{ createdAt }}</small>
         <div id="detail">
@@ -22,7 +21,7 @@
             <answer v-for="answer in questionData.data.answer" :key="answer._id" :answer="answer"/>
         </sui-list>
         <add-new-answer :answerId="questionData.data._id"/>
-    </sui-message>
+    </sui-segment>
 </template>
 
 <script>
@@ -34,7 +33,10 @@
     export default {
         name: "detailQuestion",
         data() {
-            return {}
+            return {
+                currentQuestionData: "",
+                isRemoveAble: false
+            }
         },
         methods: {
             removeQuestion() {
@@ -42,7 +44,7 @@
             }
         },
         mounted() {
-            this.$store.dispatch('getCurrentQuestion', this.$route.params.id)
+            this.$store.dispatch('getCurrentQuestion', this.$route.params.id);
         },
         computed: {
             ...mapGetters([
@@ -58,19 +60,21 @@
             },
             numOfAttributes() {
                 return {
-                    numOfAnswers: 0,
-                    numOfUpVotes: 0,
-                    numOfDownVotes: 0,
-                    user: this.questionData.data.user
+                    numOfAnswers: this.questionData.data.answer.length,
+                    numOfUpVotes: this.questionData.data.upVotes.length,
+                    numOfDownVotes: this.questionData.data.downVotes.length,
+                    user: this.questionData.data.user,
+                    id: this.questionData.data._id
                 }
-            },
-            isRemoveable() {
-                return this.questionData.data.user._id === this.getCurrentUser._id
             }
         },
         watch: {
             questionData(a, b) {
-                this.$store.dispatch('getCurrentQuestion', this.$route.params.id)
+                this.currentQuestionData = this.questionData
+                this.isRemoveAble = (this.questionData.data.user._id === this.getCurrentUser._id);
+            },
+            getCurrentUser(a, b) {
+                this.$store.dispatch('getCurrentQuestion', this.$route.params.id);
             }
         },
         components: {

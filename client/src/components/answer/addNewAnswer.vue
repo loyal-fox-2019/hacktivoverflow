@@ -5,9 +5,6 @@
         <sui-form-field>
             <label>Answer : </label>
             <vue-editor v-model="content"></vue-editor>
-<!--            <textarea maxlength="500" v-model="description"-->
-<!--                      required class="input" tranparent-->
-<!--                      rows="5" cols="10"/>-->
             <small>Max 500 Character</small>
         </sui-form-field>
         <sui-form-field align="right">
@@ -54,8 +51,9 @@
                         this.msgMessage = "Nice Hacker, " +
                             "thank you for giving a great shoot";
                     }
+                    this.$store.dispatch('getCurrentQuestion', this.answerId)
                     // this.msgMessage = response.data.message;
-                    this.$emit('updateAnswers');
+                    // this.$emit('updateAnswers');
 
                 }).catch(err => {
                     console.log(err.response.data.error);

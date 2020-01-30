@@ -5,9 +5,9 @@
             {{ dataAttributes.numOfAnswers }}
         </sui-label>
         <sui-label basic>
-            <sui-icon name="thumbs up outline" @click="fetchDataDetail" class="thumb"/>
+            <sui-icon name="thumbs up outline" @click="like" class="thumb"/>
             {{ dataAttributes.numOfUpVotes }} /
-            <sui-icon name="thumbs down outline" @click="fetchDataDetail" class="thumb"/>
+            <sui-icon name="thumbs down outline" @click="unLike" class="thumb"/>
             {{ dataAttributes.numOfDownVotes }}
         </sui-label>
         <a is="sui-label" basic image>
@@ -30,12 +30,14 @@
             like() {
                 this.$axios({
                     method: 'patch',
-                    url: '/questions/' + this.id + '/like',
+                    url: '/questions/' + this.dataAttributes.id + '/like',
                     headers: {
                         Authorization: 'token ' + this.$cookies.get('token')
                     }
                 }).then(response => {
-                    this.fetchDataDetail()
+                    console.log(response)
+                    this.$store.dispatch('getCurrentQuestion', this.dataAttributes.id);
+                    this.$store.dispatch('listOfQuestions');
                 }).catch(err => {
                     console.log(err.response);
                 })
@@ -43,12 +45,14 @@
             unLike() {
                 this.$axios({
                     method: 'patch',
-                    url: '/questions/' + this.id + '/unlike',
+                    url: '/questions/' + this.dataAttributes.id+ '/unlike',
                     headers: {
                         Authorization: 'token ' + this.$cookies.get('token')
                     }
                 }).then(response => {
-                    this.fetchDataDetail()
+                    console.log(response)
+                    this.$store.dispatch('getCurrentQuestion', this.dataAttributes.id);
+                    this.$store.dispatch('listOfQuestions');
                 }).catch(err => {
                     console.log(err.response);
                 })

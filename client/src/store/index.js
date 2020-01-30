@@ -24,7 +24,7 @@ export default new Vuex.Store({
             state.questionsList = payload
         },
         setCurrentQuestions(state, payload) {
-            state.questionData = payload
+            state.questionData = payload;
         },
         setCurrentUser(state, payload) {
             state.user = payload;
@@ -41,7 +41,6 @@ export default new Vuex.Store({
     },
     actions: {
         postQuestion(context, payload) {
-            console.log(payload);
             base({
                 method: 'post',
                 url: '/questions/create',
@@ -116,7 +115,6 @@ export default new Vuex.Store({
                     Authorization: 'token ' + Vue.$cookies.get('token')
                 }
             }).then(response => {
-                // console.log(response.data);
                 context.commit('setCurrentQuestions', response.data)
             }).catch(err => {
                 console.log(err.response);
@@ -130,7 +128,7 @@ export default new Vuex.Store({
                     Authorization: "token " + Vue.$cookies.get('token')
                 }
             }).then(response => {
-                console.log(response);
+                // console.log(response);
                 router.push("/")
             }).catch(err => [
                 console.log(err.response)
