@@ -7,6 +7,7 @@
          <br><br>
          <formAsk v-if="ask" @cancel="can" @submitQ="can" data="ask"></formAsk>
       </p>
+      <h2>Question:</h2>
       <quest
       v-for="(question ,i) in questions"
       :key="i"

@@ -14,7 +14,7 @@ async function sendEmail(params) {
         service: 'gmail',
       auth: {
           user: 'hacktiv8overflow123@gmail.com',
-          pass: 'rikoorland0'
+          pass: process.env.PASSWORDEMAIL
         }
     };
     
@@ -47,7 +47,6 @@ function send (){
             .save(function(err) {
               if (!err) console.log(job.id);
             });
-        
             queue.process('email', (job, done) => {  
                 sendEmail(job.data.title)
                 done();
