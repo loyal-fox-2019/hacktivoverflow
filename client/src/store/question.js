@@ -20,9 +20,9 @@ export default {
     },
   },
   actions: {
-    async getQuestions({ commit }) {
+    async getQuestions({ commit }, payload = null) {
       try {
-        const { data } = await Axios.get('/questions');
+        const { data } = await Axios.get(`/questions?q=${payload}`);
         commit('SET_QUESTIONS', data);
       } catch ({ response }) {
         commit('SET_ERRORS', response.data.errors.join(' '), { root: true });

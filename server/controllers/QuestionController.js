@@ -1,5 +1,7 @@
 const Question = require('../models/Question')
 const Answer = require('../models/Answer')
+const kue = require("kue");
+const queue = kue.createQueue();
 
 class QuestionController {
     static create(req, res, next){
@@ -10,17 +12,30 @@ class QuestionController {
                 content, 
                 tags,
                 author: req.userId,
-                slug: QuestionController.generateSlug(title)
+                slug: QuestionController.generateSlug(title),
+                notification: false
             })
             .then(question => {
+                console.log(req.userEmail)
+                QuestionController.createKue(question._id, req.userEmail)
                 res.status(201).json(question)
             })
             .catch(next)
     }
 
     static getAll(req, res, next){
+        let options = {}
+        const { q, search } = req.query
+        if (q) {
+            if (search) {
+                console.log(search)
+                options.title = {
+                    $regex: `.*${search}.*`,
+                };
+            }
+        }
         Question
-            .find()
+            .find(options)
             .populate({ path: 'author', select: '-password' })
             .populate({ path: 'upvote', select: '-password' })
             .populate({ path: 'downvote', select: '-password' })
@@ -205,6 +220,20 @@ class QuestionController {
                 })
             })
             .catch(next)
+    }
+
+    static createKue(data, email){
+        setTimeout(function(){ 
+            const CronJob = require('cron').CronJob;
+            queue
+            .create("question", {
+                title: "question",
+                data: data,
+                email: email
+            })
+            .priority("high")
+            .save();
+        }, 3000);
     }
 
     static generateSlug(title){

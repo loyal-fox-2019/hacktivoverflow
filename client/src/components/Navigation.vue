@@ -16,14 +16,19 @@
     <div class="collapse navbar-collapse" id="navbarTogglerDemo03">
       <ul class="navbar-nav mr-auto mt-2 mt-lg-0"></ul>
       <div class="form-inline my-2 my-lg-0">
+        <span
+          class="nav-link my-2 my-sm-0 text-dark"
+          @click="$router.go(0), $store.commit('SET_SUCCESS', 'page have reloaded')"
+          style="cursor:pointer;"
+        >
+          <font size="3">
+            <b-icon-bootstrap-reboot></b-icon-bootstrap-reboot>
+          </font>
+        </span>
         <template v-if="$store.state.isLogin">
-          <a href="#" class="nav-link my-2 my-sm-0 text-dark"
-            ><img
-              src="https://avatars1.githubusercontent.com/u/38948296?s=460&v=4"
-              width="25"
-              height="25"
-              alt=""
-          /></a>
+          <router-link :to="{ name: 'dashboard' }" class="nav-link my-2 my-sm-0 text-dark">
+            {{ myEmail }}
+          </router-link>
           <a href="#" class="nav-link my-2 my-sm-0 text-dark" @click="$store.dispatch('logout')">
             <font size="3">
               <b-icon-power></b-icon-power>
@@ -48,6 +53,16 @@ export default {
 
   data() {
     return {};
+  },
+  computed: {
+    myEmail() {
+      return localStorage.getItem('stuckoverlow.email');
+    },
+  },
+  methods: {
+    urlSc() {
+      return Math.floor(6 * Math.random()) + 1;
+    },
   },
 };
 </script>

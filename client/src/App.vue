@@ -1,13 +1,34 @@
 <template>
-  <div id="app">
-    <router-view />
+  <div>
+    <Search :isSearch="isSearch" />
+    <Navigation />
+    <div class="container-fluid">
+      <div class="row">
+        <Sidebar @isSearch="isSearch = !isSearch" />
+        <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
+          <router-view></router-view>
+        </main>
+      </div>
+    </div>
+    <footer class="mt-5"></footer>
   </div>
 </template>
 <script>
+import Navigation from '@/components/Navigation.vue';
+import Sidebar from '@/components/Sidebar.vue';
+import Search from '@/components/Search.vue';
+
 export default {
   name: 'App',
+  components: {
+    Navigation,
+    Sidebar,
+    Search,
+  },
   data() {
-    return {};
+    return {
+      isSearch: false,
+    };
   },
   computed: {
     errors() {
@@ -48,4 +69,12 @@ export default {
   },
 };
 </script>
-<style></style>
+<style>
+body {
+  font-size: 0.875rem;
+}
+
+[role='main'] {
+  padding-top: 55px;
+}
+</style>

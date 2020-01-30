@@ -32,6 +32,9 @@ const questionSchema = new Schema({
     }],
     views: {
         type: Number
+    },
+    notification: {
+        type: Boolean
     }
 }, {
     timestamps: { 

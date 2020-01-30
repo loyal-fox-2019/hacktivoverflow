@@ -2,8 +2,12 @@
   <div id="myOverlay" class="overlay" v-show="active">
     <span class="closebtn" @click="active = false" title="Close Overlay">×</span>
     <div class="overlay-content">
-      <form action="/">
-        <input type="text" placeholder="Search Questions.." name="search" />
+      <form
+        @submit.prevent="
+          getQuestions(urlQuery), $store.commit('SET_SUCCESS', 'search: '+content)((active = false))
+        "
+      >
+        <input type="text" placeholder="Search Questions.." name="search" v-model="content" />
         <button type="submit"><b-icon-search></b-icon-search></button>
       </form>
     </div>
@@ -11,13 +15,24 @@
 </template>
 
 <script>
+import { mapActions } from 'vuex';
+
 export default {
   name: 'Search',
   props: ['isSearch'],
   data() {
     return {
       active: false,
+      content: '',
     };
+  },
+  computed: {
+    urlQuery() {
+      return `true&search=${this.content}`;
+    },
+  },
+  methods: {
+    ...mapActions('Question', ['getQuestions']),
   },
   watch: {
     isSearch() {

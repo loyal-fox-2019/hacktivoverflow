@@ -8,13 +8,21 @@ const express = require('express');
 const indexRouter = require('./routes/index');
 const cors = require('cors');
 const app = express();
+const kue = require('./helpers/excuteKue')
+kue()
 
 app.use(cors())
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
-app.use('/', indexRouter);
+var CronJob = require('cron').CronJob;
+var job = new CronJob('*/1 * * * * *', function() {
+  console.log()
+  require('./helpers/clearQuestion')()
+}, null, true, "Asia/Jakarta");
+job.start();
 
+app.use('/', indexRouter);
 // catch 404 and forward to error handler
 app.use(function(err, req, res, next) {
   console.log(err)
