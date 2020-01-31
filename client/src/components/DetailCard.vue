@@ -51,7 +51,7 @@
           class="text-decoration-none"
           style="font-size:12px;"
           @click.prevent="editComment"
-          v-if="!editMode"
+          v-if="!editMode && isMyComment"
         >
           Edit this catch
         </b-button>
@@ -61,7 +61,7 @@
           class="text-decoration-none text-success"
           style="font-size:12px;"
           @click.prevent="saveComment"
-          v-if="editMode"
+          v-if="editMode && isMyComment"
         >
           Save Catch
         </b-button>
@@ -120,6 +120,7 @@ export default {
       this.editMode = true;
     },
     saveComment() {
+      this.$store.dispatch("saveComment", this.data._id);
       this.editMode = false;
     },
     vote(voteState) {
@@ -160,6 +161,12 @@ export default {
     },
     userId() {
       return this.$store.state.userId;
+    },
+    isMyComment() {
+      if (this.data.user) {
+        return this.data.user._id === localStorage.id;
+      }
+      return null;
     }
   }
 };

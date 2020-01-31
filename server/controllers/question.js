@@ -94,7 +94,23 @@ class Question {
     }
 
     static updateCommentToQuestionId(req, res, next) {
-        res.status(200).json({msg: 'masuk nih'})
+        let questionId
+        questionModel
+            .findOne({
+                comments: {$in: [ObjectId(req.params.id)]}
+            })
+            .then((question) => {
+                questionId = question._id;
+                return commentModel.findOneAndUpdate({
+                    _id: ObjectId(req.params.id),
+                },{
+                    body: req.body.body
+                },{
+                    new: true
+                })
+            }).then((comment) => {
+                res.status(200).json({comment, questionId})
+            }).catch(next);
     }
 
     static deleteQuestionById(req, res, next) {

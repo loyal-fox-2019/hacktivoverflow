@@ -11,10 +11,10 @@ router.get('/:id/comments', questionController.getCommentsByQuestionId);
 router.use('/', authentication)
 router.post('/', questionController.addQuestion);
 router.post('/:id/comments', questionController.addCommentToQuestionId);
+router.patch('/:id/comments', questionController.updateCommentToQuestionId);
 
 router.use('/:id', authorization)
 router.patch('/:id', questionController.updateQuestionById);
-router.post('/:id/comments', questionController.updateCommentToQuestionId);
 router.delete('/:id', questionController.deleteQuestionById);
 
 module.exports = router

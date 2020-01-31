@@ -53,7 +53,7 @@
     <b-row>
       <b-col>
         <h4 class="text-right font-weight-bold mt-3">
-          {{ $store.state.comments.length }} Answers
+          {{ $store.state.comments.length }} Catches
         </h4>
         <hr />
       </b-col>
