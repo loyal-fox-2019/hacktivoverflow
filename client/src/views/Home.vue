@@ -11,9 +11,18 @@
         <FormQ :formType="'questions'" v-show="expand" @tutupForm="expand = !expand"/>
       </v-expand-transition>
     <div class="d-flex mx-auto">
-      <div class="mx-auto">
+      <div class="mx-auto" v-if="!$store.state.search">
         <Cards
           v-for="quest in allQuestions"
+          :tipe="'questions'"
+          :key="quest._id"
+          :data="quest"
+          style="width: 60vw; height: 150px"
+        />
+      </div>
+      <div class="mx-auto" v-else>
+        <Cards
+          v-for="quest in allFilter"
           :tipe="'questions'"
           :key="quest._id"
           :data="quest"
@@ -46,6 +55,9 @@ export default {
     }
   },
   computed: {
+    allFilter(){
+      return this.$store.getters.filtered
+    },
     allQuestions () {
       return this.$store.state.allQuestions
     },
@@ -86,3 +98,6 @@ export default {
   methods: {}
 }
 </script>
+<style scoped>
+
+</style>
