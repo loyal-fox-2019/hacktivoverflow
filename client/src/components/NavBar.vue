@@ -3,7 +3,8 @@
     <div class="my-0 mr-auto ml-9">
       <v-btn text large to="/" active-class="default-class test" small>hackbelowflow_v2</v-btn>
     </div>
-    <v-btn class="ml-auto mr-12" to="/signin" small>UMPAMANA ini SEARCH</v-btn>
+    <v-text-field label="search" class="w-25 ml-auto mr-12" v-if="$route.path == '/'"></v-text-field>
+    <v-btn v-if="$route.path != '/'" to="/" class="mr-12" small>back to home fo search</v-btn>
     <div class="mr-12 ml-auto" v-if="!loginOra">
       <v-btn to="/signin/login" color="primary" small>
         Login

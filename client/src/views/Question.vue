@@ -36,8 +36,11 @@
     :data="jawab"
     style="width: 60vw"
   class="ml-auto"/>
-
-  <FormQ :formType="'answers'" />
+<hr>
+<h5 style="margin-left: 20vw">Your answer here:</h5>
+<div style="background-color: white; width: 60vw" class="mx-auto">
+  <FormQ :formType="'answers'"/>
+</div>
 </div>
 
 </template>
