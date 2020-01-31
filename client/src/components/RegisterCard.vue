@@ -200,7 +200,12 @@ export default {
           this.form = data;
         })
         .catch(err => {
-          console.log(err);
+          this.$swal(
+            "Error",
+            err.response.data.errMessage ||
+              "Something went wrong, please try again later!",
+            "error"
+          );
         });
     },
     resetForm() {
