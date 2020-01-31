@@ -24,7 +24,7 @@ class Question {
     static getQuestion(req, res, next) {
         questionModel
             .find()
-            .sort(req.query)
+            .sort({createdAt: -1})
             .then((questions) => {
                 res.status(200).json(questions)
             }).catch(next);
