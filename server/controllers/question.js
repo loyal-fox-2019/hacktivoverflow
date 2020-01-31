@@ -22,17 +22,9 @@ class Question {
     }
 
     static getQuestion(req, res, next) {
-        let sortBy = {};
-        if (req.query) {
-            for (const key in req.query) {
-                if (req.query[key] === 'true' || req.query[key] === true) {
-                    sortBy[key] = -1
-                }
-            }
-        }
         questionModel
             .find({})
-            .sort(sortBy)
+            .sort(req.query)
             .then((questions) => {
                 res.status(200).json(questions)
             }).catch(next);

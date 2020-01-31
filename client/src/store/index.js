@@ -62,15 +62,15 @@ export default new Vuex.Store({
       if (sorts) {
         sorts.forEach(sort => {
           if (sort.caption === "Newest" && sort.state) {
-            params.createdAt = true;
+            params.createdAt = -1;
           } else if (sort.caption === "Views" && sort.state) {
-            params.view = true;
+            params.view = -1;
           }
         });
       }
 
       if (Object.keys(params).length === 0) {
-        params.createdAt = true;
+        params.createdAt = -1;
       }
 
       axios({
