@@ -3,7 +3,11 @@ import VueRouter from 'vue-router'
 import Home from '../views/Home.vue'
 import Account from '../views/account.vue'
 import AskQuestion from '../views/askQuestion.vue'
-import Question from '../views/question.vue';
+import Question from '../views/question.vue'
+import User from '../views/user.vue'
+import EditQuestion from '../views/editQuest.vue'
+import MyAnswer from '../views/myAnswers.vue'
+import EditAnswer from '../views/editAnsw.vue'
 
 Vue.use(VueRouter)
 
@@ -35,7 +39,27 @@ const routes = [
     path: '/question/:id',
     name: 'question',
     component: Question
-  }
+  },
+  {
+    path: '/myQuestion',
+    name: 'user',
+    component: User
+  },
+  {
+    path: '/editQuestion/:id',
+    name: 'editQuestion',
+    component: EditQuestion
+  },
+  {
+    path: '/myAnswer',
+    name: 'myAnswer',
+    component: MyAnswer
+  },
+  {
+    path: '/editAnswer/:id',
+    name: 'editAnswer',
+    component: EditAnswer
+  },
 ]
 
 const router = new VueRouter({

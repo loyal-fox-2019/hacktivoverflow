@@ -31,11 +31,17 @@
       <div class="col ml-5">
         <button
           v-if="$store.state.login"
-          @click="dataUser"
+          @click="myQuestion"
           type="button"
           class="btn btn-info"
-        >Data User</button>
+        >My Question</button>
       </div>
+      <button
+        v-if="$store.state.login"
+        @click="myAnswer"
+        type="button"
+        class="btn btn-info"
+      >My Answer</button>
     </div>
     <form class="form-inline">
       <button v-if="!$store.state.login" @click="account" type="button" class="btn btn-info">account</button>
@@ -52,9 +58,16 @@ export default {
     },
     logout() {
       this.$store.dispatch("goLogout");
+      this.$router.push("/");
     },
     goHome() {
       this.$router.push("/");
+    },
+    myQuestion() {
+      this.$router.push("/myQuestion");
+    },
+    myAnswer() {
+      this.$router.push("/myAnswer");
     }
   }
 };

@@ -70,13 +70,13 @@
                             alt="..."
                             class="rounded-circle"
                           />
-                          <span>{{question.createdAt}}</span>
+                          <span>{{this.question.createdAt}}</span>
                         </span>
                       </div>
                       <div style="text-align: end;">Asked: {{username(question.user)}}</div>
                     </div>
                   </div>
-                  <p>===================================================================================================</p>
+                  <hr />
                   <div style="text-align: left; padding: 15px 50px 15px">
                     <h5>{{getLengthAnswers(question.answers)}} Answers</h5>
                   </div>
@@ -113,16 +113,18 @@
                       <div style="text-align: end;">Answered: {{answer.username}}</div>
                     </div>
                   </div>
-                  <p>------------------------------------------------------------------------------------------------------------------------------------------------------------------------------</p>
-                  <div style="text-align: left; padding: 0px 50px 10px">
-                    <h5>Your Answers</h5>
-                  </div>
-                  <vue-editor v-model="description"></vue-editor>
-                  <button
-                    type="submit"
-                    style="text-align:left"
-                    class="btn btn-info"
-                  >Post Your Answer</button>
+                  <hr />
+                  <form @submit.prevent="postAnswer(question._id)">
+                    <div style="text-align: left; padding: 10px 50px 10px">
+                      <h5>Your Answers</h5>
+                    </div>
+                    <vue-editor v-model="description"></vue-editor>
+                    <button
+                      type="submit"
+                      style="text-align:left"
+                      class="btn btn-info"
+                    >Post Your Answer</button>
+                  </form>
                 </div>
               </div>
             </div>
@@ -134,6 +136,7 @@
 </template>
 
 <script>
+import axios from "axios";
 import { VueEditor } from "vue2-editor";
 export default {
   data() {
@@ -155,11 +158,9 @@ export default {
     },
     upVoteAnswer(id) {
       this.$store.dispatch("upVoteAnswer", id);
-      this.$store.dispatch("getQuestion", this.$route.params.id);
     },
     downVoteAnswer(id) {
       this.$store.dispatch("downVoteAnswer", id);
-      this.$store.dispatch("getQuestion", this.$route.params.id);
     },
     getTotalVote(up, down) {
       if (up && down) {
@@ -175,6 +176,10 @@ export default {
       if (user) {
         return user.username;
       }
+    },
+    postAnswer(questionId) {
+      this.$store.dispatch("postAnswer", questionId);
+      location.reload();
     }
   },
   created() {
@@ -186,6 +191,11 @@ export default {
     },
     question() {
       return this.$store.state.question;
+    }
+  },
+  watch: {
+    description: function() {
+      this.$store.commit("setDescription", this.description);
     }
   }
 };

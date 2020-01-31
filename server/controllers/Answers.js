@@ -4,6 +4,19 @@ const Answer = require('../models/Answers')
 const Questions = require('../models/Questions')
 
 class answersControllers {
+    static findAll(req, res, next) {
+        Answer.find()
+            .then((answers) => {
+                const myAnswers = []
+                answers.forEach(answer => {
+                    if (String(answer.user) === String(req.user._id)) {
+                        myAnswers.push(answer)
+                    }
+                })
+                res.status(200).json(myAnswers)
+            })
+            .catch(next);
+    }
     static create(req, res, next) {
         const { description } = req.body
         let questionData = null

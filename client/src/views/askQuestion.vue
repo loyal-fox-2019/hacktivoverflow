@@ -7,13 +7,9 @@
 <script>
 import formQuestion from "../components/formQuestion";
 export default {
-  data() {
-    return {};
-  },
   components: {
     formQuestion
-  },
-  methods: {}
+  }
 };
 </script>
 

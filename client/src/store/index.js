@@ -14,7 +14,9 @@ export default new Vuex.Store({
     title: "",
     questions: [],
     question: [],
-    user: null
+    user: null,
+    editQuestion: null,
+    editAnswer: null
   },
   mutations: {
     successRegister(state, payload) {
@@ -35,6 +37,12 @@ export default new Vuex.Store({
     setQuestions(state, payload) {
       state.questions = payload
     },
+    setEditQuestion(state, payload) {
+      state.editQuestion = payload
+    },
+    setEditAnswer(state, payload) {
+      state.editAnswer = payload
+    }
   },
   actions: {
     goRegister(context, payload) {
@@ -181,7 +189,7 @@ export default new Vuex.Store({
         }
       })
         .then(({ data }) => {
-          console.log(data);
+          router.push('/')
         })
         .catch(err => {
           Swal.fire("Error!", err.message, "error");
@@ -196,7 +204,69 @@ export default new Vuex.Store({
         }
       })
         .then(({ data }) => {
-          console.log(data);
+          router.push('/')
+        })
+        .catch(err => {
+          Swal.fire("Error!", err.message, "error");
+        })
+    },
+    postAnswer(context, questionId) {
+      const description = this.state.description
+      axios({
+        url: `${baseUrl}/answers/${questionId}`,
+        method: "POST",
+        data: {
+          description
+        },
+        headers: {
+          token: localStorage.getItem('token')
+        }
+      })
+        .then(({ data }) => {
+          Swal.fire("Success!", 'Create Question Success', "success");
+          router.push(`/question/${questionId}`)
+        })
+        .catch(err => {
+          Swal.fire("Error!", err.message, "error");
+        })
+    },
+    editedQuestion(context, id) {
+      let title = this.state.title
+      let description = this.state.description
+      axios({
+        url: `${baseUrl}/questions/${id}`,
+        method: "PATCH",
+        data: {
+          title,
+          description
+        },
+        headers: {
+          token: localStorage.getItem('token')
+        }
+      })
+        .then(({ data }) => {
+          Swal.fire("Success!", 'Create Question Success', "success");
+          router.push(`/myQuestion`)
+        })
+        .catch(err => {
+          Swal.fire("Error!", err.message, "error");
+        })
+    },
+    editedAnswer(context, id) {
+      let description = this.state.description
+      axios({
+        url: `${baseUrl}/answers/${id}`,
+        method: "PATCH",
+        data: {
+          description
+        },
+        headers: {
+          token: localStorage.getItem('token')
+        }
+      })
+        .then(({ data }) => {
+          Swal.fire("Success!", 'Create Question Success', "success");
+          router.push(`/myAnswer`)
         })
         .catch(err => {
           Swal.fire("Error!", err.message, "error");

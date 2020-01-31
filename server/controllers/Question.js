@@ -17,6 +17,22 @@ class questionControllers {
             })
             .catch(next)
     }
+    static findQuestionUser(req, res, next) {
+        Questions.find()
+            .sort({ createdAt: 'desc' })
+            .populate('answers')
+            .populate('user')
+            .then((questions) => {
+                const data = []
+                questions.forEach(el => {
+                    if (String(el.user._id) === String(req.user._id)) {
+                        data.push(el)
+                    }
+                })
+                res.status(200).json(data)
+            })
+            .catch(next)
+    }
     static findOne(req, res, next) {
         Questions.findOne({
             _id: req.params.id
@@ -24,6 +40,18 @@ class questionControllers {
             .populate('answers')
             .populate('user')
             .then((question) => {
+                res.status(200).json(question)
+            })
+            .catch(next)
+    }
+    static update(req, res, next) {
+        Questions.findByIdAndUpdate({
+            _id: req.params.id
+        }, {
+            title: req.body.title,
+            description: req.body.description
+        })
+            .then(question => {
                 res.status(200).json(question)
             })
             .catch(next)
