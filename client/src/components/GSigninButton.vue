@@ -54,6 +54,8 @@ export default {
         }
       })
         .then(({ data }) => {
+          console.log(data);
+
           localStorage.id = data.id;
           localStorage.name = data.name;
           localStorage.token = data.token;
