@@ -9,6 +9,8 @@ const authentication = require('../middlewares/authentication')
 router.post('/register', userController.create)
 router.post('/login', userController.login)
 router.use(authentication)
+router.get('/', userController.getProfile)
 router.patch('/tags', userController.updateTags)
+
 
 module.exports = router

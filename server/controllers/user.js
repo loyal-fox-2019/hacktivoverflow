@@ -60,9 +60,26 @@ class UserController {
 
                     res.status(200).json({
                         message: 'login success',
+                        userID: user.id,
+                        name: user.name,
+                        email: user.email,
                         access_token: token
                     })
                 }
+            })
+            .catch(next)
+    }
+
+    static getProfile(req, res, next) {
+        const { userID } = req.user
+        console.log(userID)
+        userModel.findById(userID)
+            .then(user => {
+                res.status(200).json({
+                    userID: user.id,
+                    name: user.name,
+                    email: user.email,
+                })
             })
             .catch(next)
     }

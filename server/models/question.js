@@ -28,7 +28,7 @@ const questionSchema = new Schema({
 
 questionSchema.pre('find', function () {
     this.populate('owner', 'name email totalUpVotes totalDownVotes')
-    this.populate('answer totalAnswer')
+    this.populate('answers totalAnswer')
 })
 
 questionSchema.virtual('totalUpVotes').get(function () {
@@ -56,7 +56,7 @@ questionSchema.virtual('totalDownVotes').get(function () {
     return count
 })
 
-questionSchema.virtual('answer', {
+questionSchema.virtual('answers', {
     ref: 'Answer',
     localField: '_id',
     foreignField: 'questionId'

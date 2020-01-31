@@ -10,9 +10,10 @@ const router = require('express').Router()
 router.get('/', questionController.getAll)
 router.get('/:questionId', questionController.getOne)
 router.use(authentication)
+router.patch('/:questionId/votes', questionController.voteQuestion)
 router.post('/', questionController.create)
 router.use('/:questionId', ownQuestion)
 router.patch('/:questionId', questionController.update)
-router.patch('/:questionId/votes', questionController.voteQuestion)
+router.delete('/:questionId', questionController.remove)
 
 module.exports = router

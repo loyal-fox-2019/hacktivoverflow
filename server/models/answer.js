@@ -23,6 +23,10 @@ const answerSchema = new Schema({
 
 }, { versionKey: false, timestamps: { createdAt: 'createdAt', updatedAt: 'updatedAt' }, toJSON: { virtuals: true } })
 
+answerSchema.pre('find', function () {
+    this.populate('owner', 'name email totalUpVotes totalDownVotes')
+})
+
 answerSchema.virtual('totalUpVotes').get(function () {
     if (this.votes) {
         let voteData = Array.from(this.votes.values())

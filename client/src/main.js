@@ -8,6 +8,7 @@ import 'bootstrap-vue/dist/bootstrap-vue.css'
 import '@fortawesome/fontawesome-free/css/all.css'
 import '@fortawesome/fontawesome-free/js/all.js'
 import wysiwyg from "vue-wysiwyg"
+import axios from "axios"
 
 Vue.use(wysiwyg, { hideModules: { "image": true } }) // config is optional. more below
 
@@ -24,6 +25,22 @@ router.beforeEach((to, from, next) => {
   }
   else {
     store.commit('SET_LOGIN_TRUE')
+    axios({
+      method: 'get',
+      url: 'http://localhost:3000/users/',
+      headers: {
+        Authorization: `token ` + localStorage.getItem('access_token')
+      }
+    })
+      .then(({ data }) => {
+        console.log(data);
+        store.commit('SET_USER_ID', data.userID)
+        store.commit('SET_NAME', data.name)
+        store.commit('SET_EMAIL', data.email)
+      })
+      .catch(error => {
+        console.log(error)
+      })
   }
   next()
 })

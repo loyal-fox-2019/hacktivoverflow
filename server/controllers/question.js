@@ -18,6 +18,8 @@ class QuestionController {
     static getOne(req, res, next) {
         const { questionId } = req.params
         questionModel.findById(questionId)
+            .populate('owner')
+            .populate('totalAnswer answers')
             .then(question => {
                 res.status(200).json({
                     question
@@ -89,6 +91,20 @@ class QuestionController {
             })
             .then(question => {
                 res.send(question)
+            })
+            .catch(next)
+    }
+
+    static remove(req, res, next) {
+        const { questionId } = req.params
+
+        questionModel.deleteOne({
+            _id: questionId
+        })
+            .then(question => {
+                res.status(200).json({
+                    message: `question deleted!`
+                })
             })
             .catch(next)
     }

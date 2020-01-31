@@ -7,6 +7,9 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   state: {
     isLogin: false,
+    userID: '',
+    name: '',
+    email: '',
     questions: []
   },
   mutations: {
@@ -19,6 +22,15 @@ export default new Vuex.Store({
     },
     SET_QUESTIONS_LIST(state, payload){
       state.questions = payload
+    },
+    SET_USER_ID(state, payload){
+      state.userID = payload
+    },
+    SET_EMAIL(state, payload){
+      state.email = payload
+    },
+    SET_NAME(state, payload){
+      state.name = payload
     }
   },
   actions: {
@@ -31,6 +43,9 @@ export default new Vuex.Store({
         .catch(error => {
           console.log(error)
         })
+    },
+    userLogin(context, payload){
+
     }
   },
   modules: {
