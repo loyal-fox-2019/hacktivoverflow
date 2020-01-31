@@ -72,7 +72,7 @@ export default {
   methods: {
     getAnswers() {
       axios({
-        url: `http://localhost:3000/answers`,
+        url: `http://18.222.26.165:3000/answers`,
         method: "GET",
         headers: {
           token: localStorage.getItem("token")

@@ -5,7 +5,7 @@ import router from '../router'
 import Swal from 'sweetalert2'
 
 Vue.use(Vuex)
-let baseUrl = 'http://localhost:3000'
+let baseUrl = 'http://18.222.26.165:3000'
 
 export default new Vuex.Store({
   state: {

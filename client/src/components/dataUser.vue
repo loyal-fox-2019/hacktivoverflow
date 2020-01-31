@@ -83,7 +83,7 @@ export default {
     },
     getUserQuestion() {
       axios({
-        url: `http://localhost:3000/user/questions`,
+        url: `http://18.222.26.165:3000/user/questions`,
         method: "GET",
         headers: {
           token: localStorage.getItem("token")
@@ -98,7 +98,7 @@ export default {
     },
     removeQuestion(question) {
       axios({
-        url: `http://localhost:3000/questions/${question._id}`,
+        url: `http://18.222.26.165:3000/questions/${question._id}`,
         method: "DELETE",
         headers: {
           token: localStorage.getItem("token")

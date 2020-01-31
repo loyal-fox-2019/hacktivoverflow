@@ -13,6 +13,7 @@ const cors = require('cors')
 const app = express()
 const routes = require('./routes')
 const errorHandler = require('./middleware/errorHandler')
+require('./helpers/cron')
 
 mongoose
     .connect(MONGO_URI, {
