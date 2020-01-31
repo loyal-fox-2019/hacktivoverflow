@@ -11,6 +11,9 @@ const mongoDB = process.env.MONGO_URI || `mongodb://localhost:27017/hackoverflow
 
 const errorHandler = require('./middlewares/errorHandler')
 const router = require('./routes')
+const cronjob = require('./helpers/cron')
+
+cronjob()
 
 const app = express()
 
