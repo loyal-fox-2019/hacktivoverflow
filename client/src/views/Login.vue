@@ -5,11 +5,11 @@
 </template>
 
 <script>
-import LoginPage from '../components/signin/LoginPage.vue';
+// import LoginPage from '../components/signin/LoginPage.vue';
 export default {
   name: 'Sign',
   components:{
-    LoginPage
+    // LoginPage
   }
 };
 </script>

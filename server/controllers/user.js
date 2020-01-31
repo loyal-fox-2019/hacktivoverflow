@@ -19,6 +19,7 @@ class Controller {
     }
 
     static register(req, res, next) {
+        console.log(req.body.file);
         const { email, password, file, name } = req.body
         console.log(req.body);
 

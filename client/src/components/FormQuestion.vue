@@ -112,6 +112,9 @@ export default {
             })
         }
       } else {
+        localStorage.setItem('title', this.title)
+        localStorage.setItem('content', this.content)
+        localStorage.setItem('tags', this.tags)
         this.$store.commit('SET_ALERT', {
           message: 'Join the Hack beloflow community',
           variant: 'warning'
@@ -119,6 +122,20 @@ export default {
         this.$store.state.dismissCountDown = 3
         this.$router.push('/signin/login')
       }
+    }
+  },
+  created(){
+    if(localStorage.getItem('title')){
+      this.title = localStorage.getItem('title')
+      localStorage.removeItem('title')
+    }
+    if(localStorage.getItem('content')){
+      this.content = localStorage.getItem('content')
+      localStorage.removeItem('content')
+    }
+    if(localStorage.getItem('tags')){
+      this.tags = localStorage.getItem('tags')
+      localStorage.removeItem('tags')
     }
   }
 }

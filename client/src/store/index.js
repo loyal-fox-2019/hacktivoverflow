@@ -5,6 +5,7 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
+    search: '',
     watched: [],
     who: '',
     alertMessage: '',
@@ -15,9 +16,13 @@ export default new Vuex.Store({
     myQuestions: [],
     allQuestions: [],
     singleQuestion: {},
-    theAnswer: []
+    theAnswer: [],
+    filter: []
   },
   mutations: {
+    SET_FILTER(state, payload){
+      state.filter = state.allQuestions.filter(question => question.title.toLowerCase().includes(payload.toLowerCase()))
+    },
     SET_WATCH (state, payload) {
       state.watched = payload
     },
@@ -122,6 +127,9 @@ export default new Vuex.Store({
     },
     tagu: state => {
       return state.watched
+    },
+    filtered: state => {
+      return state.filter
     }
   }
 })
