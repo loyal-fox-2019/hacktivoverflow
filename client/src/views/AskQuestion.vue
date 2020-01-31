@@ -41,10 +41,12 @@
               Body
             </label>
             <vue-editor v-model="body" />
-            <b-form-tags
-              v-model="tags"
-              class="mt-2 shadow appearance-none rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-              placeholder="Add tag separate with enter"
+            <vue-tags-input
+              v-model="tag"
+              :tags="tags"
+              :placeholder="'Add new tag press enter'"
+              @tags-changed="newTags => (tags = newTags)"
+              class="mt-2"
             />
           </div>
           <div>
@@ -62,6 +64,7 @@
 </template>
 
 <script>
+import VueTagsInput from '@johmun/vue-tags-input'
 import api from '@/config/api'
 import { VueEditor } from 'vue2-editor'
 import Loading from 'vue-loading-overlay'
@@ -70,12 +73,13 @@ import 'vue-loading-overlay/dist/vue-loading.css'
 
 export default {
   name: 'ask-question',
-  components: { Loading, VueEditor, BFormTags },
+  components: { Loading, VueEditor, BFormTags, VueTagsInput },
   data() {
     return {
       title: '',
       body: '',
       tags: [],
+      tag: '',
     }
   },
   computed: {
@@ -96,7 +100,7 @@ export default {
           {
             title: this.title,
             description: this.body,
-            tags: this.tags,
+            tags: this.tags.map(tag => tag.text),
           },
           {
             headers: {
