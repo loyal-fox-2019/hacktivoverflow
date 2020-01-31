@@ -59,7 +59,7 @@ export default new Vuex.Store({
     FETCH_QUESTION_DETAIL({ commit }, questionId) {
       axios({
         method: 'get',
-        url: 'http://3.1.84.218:3000/questions/' + questionId,
+        url: 'http://3.1.84.218:3000/questions/id/' + questionId,
         headers: {
           token: localStorage.getItem('token')
         }
@@ -92,7 +92,7 @@ export default new Vuex.Store({
         }
       })
         .then(({ data }) => {
-          // console.log(data)
+          console.log(data)
           commit('SAVE_MY_QUESTIONS', data)
         })
         .catch((err) => {

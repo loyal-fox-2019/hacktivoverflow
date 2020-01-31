@@ -1,6 +1,6 @@
 <template>
   <div class="q-mx-auto" style="width:80%;">
-    <!-- <pre>{{ myQuestions }}</pre> -->
+    <pre>{{ myQuestions }}</pre>
     <FormQuestion class="flex justify-end q-mt-none" />
     <h4>My Questions</h4>
 

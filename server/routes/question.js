@@ -6,7 +6,7 @@ const authenticate = require('../middlewares/authenticate')
 
 questionRouter.get('/', ControllerQuestion.find)
 
-questionRouter.get('/:id', ControllerQuestion.findOne)
+questionRouter.get('/id/:id', ControllerQuestion.findOne)
 
 questionRouter.use(authenticate)
 
