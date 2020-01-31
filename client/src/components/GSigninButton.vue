@@ -54,8 +54,6 @@ export default {
         }
       })
         .then(({ data }) => {
-          console.log(data);
-
           localStorage.id = data.id;
           localStorage.name = data.name;
           localStorage.token = data.token;
@@ -76,8 +74,7 @@ export default {
           );
         });
     },
-    OnGoogleAuthFail(error) {
-      console.log(error);
+    OnGoogleAuthFail() {
       this.$swal(
         "Error",
         "Something went wrong, please try again later!",

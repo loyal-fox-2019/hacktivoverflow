@@ -6,7 +6,7 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
-    API: "http://13.250.122.239",
+    API: "//18.139.222.246",
     // API: "http://localhost:3000",
     registerData: null,
     isLogin: !!localStorage.token,
