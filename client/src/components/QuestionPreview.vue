@@ -1,12 +1,10 @@
 <template>
     <div class="card m-0 mx-auto">
         <div class="row">
-            <div class="col-1 m-0 my-auto pt-2 pl-5">
-                <h2><i class="fa fa-arrow-circle-o-up" aria-hidden="true"></i></h2>
-                <h2 class="upvotes"> {{votes}}</h2>
-                <h2><i class="fa fa-arrow-circle-o-down" aria-hidden="true"></i></h2>
+            <div class="col-2 m-0 my-auto pt-2 pl-5">
+                <h2 class="upvotes p-5"> {{question.upvotes.length - question.downvotes.length}}</h2>
             </div>
-            <div class="col-9">
+            <div class="col-8">
                 <div class="card-body text-left pt-2 pb-1">
                 <h2 @click="goToDetail(question._id)" class="card-title">{{question.title}}</h2>
                 <p class="card-text" v-html="question.content"></p>
@@ -31,7 +29,7 @@ export default {
     },
     methods : {
         goToDetail(id){
-            this.$router.push('/q/'+id)
+            this.$router.push('/'+id)
         },
         countVotes(){
             this.votes =  question.upvotes.length - question.downvotes.length
@@ -91,6 +89,8 @@ img{
 }
 
 .upvotes{
-    font-size: 10px;
+    box-shadow:
+    -12px -12px 12px 0 rgba(255, 255, 255, .5),
+    12px 12px 12px 0 rgba(0, 0, 0, .06);
 }
 </style>

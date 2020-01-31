@@ -1,7 +1,7 @@
 <template>
     <div>
         <div v-for="(question, i) in questions" :key="i">
-            <QuestionPreview :question="question" class="mt-5"/>
+            <QuestionPreview :question="question" class="mt-2 mb-5"/>
         </div>
     </div>
 </template>

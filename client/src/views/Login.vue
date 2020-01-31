@@ -49,6 +49,10 @@ export default {
     }
   },
   created(){
+    if(localStorage.token){
+      console.log('jalan commit set login status')
+      this.$store.commit('SET_LOGIN_STATUS', true)
+    }
     if(this.$store.state.loginStatus){
       this.$router.push('/home')
     }

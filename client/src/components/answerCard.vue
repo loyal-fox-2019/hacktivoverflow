@@ -11,6 +11,8 @@
                     <h2><i class="fa fa-arrow-circle-o-up" aria-hidden="true"></i></h2>
                     <h2 class="upvotes mr-1"> {{answer.upvotes.length - answer.downvotes.length}}</h2>
                     <h2><i class="fa fa-arrow-circle-o-down" aria-hidden="true"></i></h2>
+                    <button v-if="edit" @click="showEditAnswer(answer)" type="submit" class="btn btn-dark mt-3 mr-3">Edit</button>
+                    <button v-if="edit" @click="deleteAnswer(answer._id)" type="submit" class="btn btn-dark mt-3">Delete</button>
                 </div>
             </div>
     </div>
@@ -20,6 +22,23 @@
 export default {
     props : {
         answer : Object
+    },
+    data(){
+        return {
+            edit : false
+        }
+    },
+    methods : {
+        showEditAnswer(answer){
+            this.$store.commit('SET_ONE_ANSWER', answer)
+        }
+    },
+    created(){
+        if(this.$props.answer.author === localStorage.user){
+            this.edit='true'
+        } else {
+            this.edit = false
+        }
     }
 }
 </script>

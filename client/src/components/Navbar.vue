@@ -27,9 +27,11 @@ import router from '../router/index'
 export default {
     methods : {
         goToAsk(){
+            this.$store.state.oneQuestion = null
             router.push('/home/ask')
         },
         goToHome(){
+            this.$store.state.oneQuestion = null
             router.push('/home')
         },
         logOut(){

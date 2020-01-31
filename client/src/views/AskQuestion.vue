@@ -26,7 +26,8 @@
                             </div>
                         </div>
                     </div>
-                    <button @click="submitQuestion" type="submit" class="btn btn-dark mt-3">Submit</button>
+                    <button v-if="!edit" @click="submitQuestion" type="submit" class="btn btn-dark mt-3">Submit</button>
+                    <button v-if="edit" @click="editQuestion" type="submit" class="btn btn-dark mt-3">Edit</button>
                     </form>
               </div>
           </div>
@@ -66,6 +67,27 @@ export default {
             });
 
             this.$store.dispatch('submitQuestion', formData)
+        },
+        editQuestion(){
+            let formData = new FormData
+            formData.append('title', this.title)
+            formData.append('content', this.content)
+            formData.append('file', this.imgUrl)
+            formData.append('author', localStorage.user)
+            this.tags.forEach(tag => {
+                formData.append('tags[]', tag.text)
+            });
+
+            this.$store.dispatch('sendEditQuestion', formData)
+        }
+    },
+    created(){
+        if(this.$store.state.oneQuestion){
+            this.title = this.$store.state.oneQuestion.title
+            this.content = this.$store.state.oneQuestion.content
+            this.tags = this.$store.state.oneQuestion.tags
+            this.imgUrl = this.$store.state.oneQuestion.imgUrl
+            this.edit = true
         }
     }
 }

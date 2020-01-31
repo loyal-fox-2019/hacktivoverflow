@@ -2,7 +2,6 @@
   <div class="home">
     <div class="container-fluid">
       <div class="row">
-        
         <div class="col-12">
           <div class="question-preview container mt-3">
             <router-view/>

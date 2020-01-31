@@ -12,7 +12,7 @@ class UserController{
         User.create(req.body)
         .then(response => {
             console.log("berhasil create user")
-            const token = tokenGenerator(req.body)
+            const token = tokenGenerator(response)
             res.status(201).json({token, user : req.body.email})
         })
         .catch(err => {
@@ -28,12 +28,13 @@ class UserController{
         .then(response => {
             console.log('account found')
             console.log(response)
+            console.log(req.body)
             if(response){
                 if(!comparer(req.body.password,response.password)){
                     next('invalid-password')
                 }
                 else{
-                    const token = tokenGenerator(req.body)
+                    const token = tokenGenerator(response.toJSON())
                     res.status(201).json({token, user : req.body.email})
                 }
             }
@@ -42,6 +43,7 @@ class UserController{
             }
         })
         .catch(err => {
+            console.log(err)
             next(500)
         })
     }

@@ -17,12 +17,10 @@ var questionSchema = new Schema({
         default : 'unknown'
     },
     upvotes : [{
-        type : Schema.Types.ObjectId,
-        ref : 'UserModel'
+        type : String
     }],
     downvotes : [{
-        type : Schema.Types.ObjectId,
-        ref : 'UserModel'
+        type : String
     }],
     tags : Array,
     replies : Array,

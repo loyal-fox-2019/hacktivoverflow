@@ -84,6 +84,92 @@ class QuestionController {
             next(500)
         })
     }
+
+    static upvote(req,res,next){
+        Question.findOne({
+            _id : req.params._id
+        })
+        .then(response => {
+            if(!response.upvotes.includes(req.body.user_id)){
+                console.log('ya gak ada')
+                Question.update({
+                    _id : req.params._id,
+                },{
+                    $addToSet : {
+                        "upvotes" : req.body.user_id
+                    }
+                })
+                .then(response => {
+                    res.status(201).json({message : 'upvote success'})
+                })
+                .catch(err => {
+                    console.log(err)
+                    res.status(400).json({message : 'upvote fail'})
+                })
+            }
+            else {
+                Question.update({
+                    _id : req.params._id
+                },{
+                    $pull : {
+                        upvotes : req.body.user_id
+                    }
+                })
+                .then(response => {
+                    console.log('berhasil hapus upvote')
+                    console.log(response)
+                    res.status(201).json({message : 'upvote retracted'})
+                })
+                .catch(err => {
+                    console.log(err)
+                    res.status(400).json({message : 'retraction fail'})
+                })
+            }
+        })
+    }
+    
+    static downvote(req,res,next){
+        Question.findOne({
+            _id : req.params._id
+        })
+        .then(response => {
+            if(!response.downvotes.includes(req.body.user_id)){
+                console.log('ya gak ada')
+                Question.update({
+                    _id : req.params._id,
+                },{
+                    $addToSet : {
+                        "downvotes" : req.body.user_id
+                    }
+                })
+                .then(response => {
+                    res.status(201).json({message : 'downvote success'})
+                })
+                .catch(err => {
+                    console.log(err)
+                    res.status(400).json({message : 'downvote fail'})
+                })
+            }
+            else {
+                Question.update({
+                    _id : req.params._id
+                },{
+                    $pull : {
+                        downvotes : req.body.user_id
+                    }
+                })
+                .then(response => {
+                    console.log('berhasil hapus downvote')
+                    console.log(response)
+                    res.status(201).json({message : 'downvote retracted'})
+                })
+                .catch(err => {
+                    console.log(err)
+                    res.status(400).json({message : 'retraction fail'})
+                })
+            }
+        })
+    }
 }
 
 module.exports = QuestionController

@@ -20,7 +20,7 @@ const routes = [
       },
       {
         name : 'questiondetail',
-        path : '/q/:_id',
+        path : '/:_id',
         component : QuestionDetail,
       },
       {

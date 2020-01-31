@@ -23,5 +23,7 @@ router.post('/', upload.single('file') , Question.create)
 router.get('/:_id', Question.findOne)
 router.put('/:_id', upload.single('file'), Question.edit)
 router.delete('/:_id', Question.delete)
+router.post('/upvote/:_id', Question.upvote)
+router.post('/downvote/:_id', Question.downvote)
 
 module.exports = router
