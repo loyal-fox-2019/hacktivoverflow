@@ -59,7 +59,7 @@ const routes = [
     path: '/editAnswer/:id',
     name: 'editAnswer',
     component: EditAnswer
-  },
+  }
 ]
 
 const router = new VueRouter({

@@ -3,7 +3,7 @@ var User = require('../models/User')
 var nodemailer = require('../helpers/nodemailer')
 
 function cron() {
-    new CronJob('@weekly', function () {
+    new CronJob('1 * * * *', function () {
         User.find()
             .then(usr => {
                 let dataEmail = []
