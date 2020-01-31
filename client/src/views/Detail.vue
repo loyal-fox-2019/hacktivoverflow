@@ -123,7 +123,7 @@ export default {
       } else {
         axios({
           method: "post",
-          url: `http://localhost:3000/answers/${this.$route.params.questionID}/`,
+          url: `https://hacktivoverflow-server.prograami.com/answers/${this.$route.params.questionID}/`,
           data: {
             answer: this.addAnswerContent
           },
@@ -140,7 +140,7 @@ export default {
             );
             axios
               .get(
-                `http://localhost:3000/questions/${this.$route.params.questionID}`
+                `https://hacktivoverflow-server.prograami.com/questions/${this.$route.params.questionID}`
               )
               .then(({ data }) => {
                 this.question = data.question;
@@ -165,7 +165,7 @@ export default {
       } else {
         axios({
           method: "patch",
-          url: `http://localhost:3000/questions/${this.$route.params.questionID}/`,
+          url: `https://hacktivoverflow-server.prograami.com/questions/${this.$route.params.questionID}/`,
           data: {
             title: this.editQuestionTitle,
             question: this.editQuestionContent,
@@ -184,7 +184,7 @@ export default {
             );
             axios
               .get(
-                `http://localhost:3000/questions/${this.$route.params.questionID}`
+                `https://hacktivoverflow-server.prograami.com/questions/${this.$route.params.questionID}`
               )
               .then(({ data }) => {
                 this.question = data.question;
@@ -212,7 +212,7 @@ export default {
         if (result.value) {
           axios({
             method: "delete",
-            url: `http://localhost:3000/questions/${this.$route.params.questionID}`,
+            url: `https://hacktivoverflow-server.prograami.com/questions/${this.$route.params.questionID}`,
             headers: {
               Authorization: "token " + localStorage.getItem("access_token")
             }
@@ -237,7 +237,7 @@ export default {
       } else {
         axios({
           method: "patch",
-          url: `http://localhost:3000/questions/${this.$route.params.questionID}/votes`,
+          url: `https://hacktivoverflow-server.prograami.com/questions/${this.$route.params.questionID}/votes`,
           data: {
             vote: 1
           },
@@ -253,7 +253,7 @@ export default {
             );
             axios
               .get(
-                `http://localhost:3000/questions/${this.$route.params.questionID}`
+                `https://hacktivoverflow-server.prograami.com/questions/${this.$route.params.questionID}`
               )
               .then(({ data }) => {
                 this.question = data.question;
@@ -279,7 +279,7 @@ export default {
       } else {
         axios({
           method: "patch",
-          url: `http://localhost:3000/questions/${this.$route.params.questionID}/votes`,
+          url: `https://hacktivoverflow-server.prograami.com/questions/${this.$route.params.questionID}/votes`,
           data: {
             vote: -1
           },
@@ -295,7 +295,7 @@ export default {
             );
             axios
               .get(
-                `http://localhost:3000/questions/${this.$route.params.questionID}`
+                `https://hacktivoverflow-server.prograami.com/questions/${this.$route.params.questionID}`
               )
               .then(({ data }) => {
                 this.question = data.question;
@@ -313,7 +313,7 @@ export default {
     },
     fetch() {
       axios
-        .get(`http://localhost:3000/questions/${this.$route.params.questionID}`)
+        .get(`https://hacktivoverflow-server.prograami.com/questions/${this.$route.params.questionID}`)
         .then(({ data }) => {
           this.question = data.question;
           this.editQuestionTitle = data.question;
@@ -337,7 +337,7 @@ export default {
   },
   beforeCreate() {
     axios
-      .get(`http://localhost:3000/questions/${this.$route.params.questionID}`)
+      .get(`https://hacktivoverflow-server.prograami.com/questions/${this.$route.params.questionID}`)
       .then(({ data }) => {
         this.question = data.question;
         this.editQuestionTitle = data.question.title;

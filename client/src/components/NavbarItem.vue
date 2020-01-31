@@ -8,6 +8,7 @@
         <b-navbar-nav class="ml-auto" v-if="this.$store.state.isLogin">
           <b-nav-item href="#" @click.prevent="callModalAddQuestion">Add Question</b-nav-item>
           <b-nav-item href="#">{{$store.state.name}}</b-nav-item>
+          <b-nav-item href="#">Watched Tags</b-nav-item>
           <b-nav-item href="#" @click.prevent="logout">Logout</b-nav-item>
         </b-navbar-nav>
         <b-navbar-nav class="ml-auto" v-if="!this.$store.state.isLogin">

@@ -27,7 +27,7 @@ router.beforeEach((to, from, next) => {
     store.commit('SET_LOGIN_TRUE')
     axios({
       method: 'get',
-      url: 'http://localhost:3000/users/',
+      url: 'https://hacktivoverflow-server.prograami.com/users/',
       headers: {
         Authorization: `token ` + localStorage.getItem('access_token')
       }

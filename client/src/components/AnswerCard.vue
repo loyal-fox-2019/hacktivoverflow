@@ -71,7 +71,7 @@ export default {
       } else {
         axios({
           method: "post",
-          url: `http://localhost:3000/answers/${id}/votes`,
+          url: `https://hacktivoverflow-server.prograami.com/answers/${id}/votes`,
           data: {
             vote: 1
           },
@@ -105,7 +105,7 @@ export default {
       } else {
         axios({
           method: "post",
-          url: `http://localhost:3000/answers/${id}/votes`,
+          url: `https://hacktivoverflow-server.prograami.com/answers/${id}/votes`,
           data: {
             vote: -1
           },

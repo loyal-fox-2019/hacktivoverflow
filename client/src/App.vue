@@ -174,7 +174,7 @@ export default {
       this.isLoading = true;
       axios({
         method: "POST",
-        url: "http://localhost:3000/users/login",
+        url: "https://hacktivoverflow-server.prograami.com/users/login",
         data: {
           email: this.loginEmail,
           password: this.loginPassword
@@ -202,7 +202,7 @@ export default {
       this.isLoading = true;
       axios({
         method: "POST",
-        url: "http://localhost:3000/users/register",
+        url: "https://hacktivoverflow-server.prograami.com/users/register",
         data: {
           name: this.registerName,
           email: this.registerEmail,
@@ -226,7 +226,7 @@ export default {
       // alert(this.addQuestionContent)
       axios({
         method: "POST",
-        url: "http://localhost:3000/questions",
+        url: "https://hacktivoverflow-server.prograami.com/questions",
         headers: {
           Authorization: "token " + localStorage.getItem("access_token")
         },

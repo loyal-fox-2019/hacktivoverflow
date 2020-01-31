@@ -36,7 +36,7 @@ export default new Vuex.Store({
   actions: {
     fetch_question(context, payload) {
       axios
-        .get("http://localhost:3000/questions")
+        .get("https://hacktivoverflow-server.prograami.com/questions")
         .then(({ data }) => {
           context.commit('SET_QUESTIONS_LIST', data.questions)
         })
