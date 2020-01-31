@@ -4,9 +4,15 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 const index = require('./routes/index');
 const port = 3000
+const mailer = require('./helpers/mailer')
+const cron = require('cron').CronJob
 
 require('dotenv').config();
 
+const job = new cron('* * * * *', function(){
+    mailer()
+})
+job.start()
 
 var mongoDB = 'mongodb+srv://JPetra:15081997@mini-wp-158z1.mongodb.net/hacktiv-overflow?retryWrites=true&w=majority';
 mongoose.connect(mongoDB, { useNewUrlParser: true, useUnifiedTopology : true });
