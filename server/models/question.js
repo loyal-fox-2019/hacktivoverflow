@@ -29,7 +29,11 @@ const questionSchema = new Schema({
     }],
     tags: [{
         type: String
-    }]
+    }],
+    hasAnswer: {
+        type: Boolean,
+        default: false
+    }
 }, {timestamps : true},{versionKey : false});   //timestamps add createdAt, updatedAt fields
 
 questionSchema.pre('save',function(next) {

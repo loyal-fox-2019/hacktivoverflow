@@ -86,7 +86,7 @@
                     this.tags = [];
                     this.description = "";
                     this.$store.dispatch('getAllQuestions')
-                    this.$store.dispatch('getMyQuestions')
+                    this.$store.dispatch('getMyQuestions',this.$cookies.get('token'))
                     newQn = data;
                 })
                 .finally(() => {

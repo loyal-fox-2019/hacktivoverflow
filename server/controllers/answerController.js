@@ -223,6 +223,69 @@ class AnswerController
             
         })
     }
+
+    static setAnswerAcceptance(req, res, next)
+    {
+        let originalQnId;
+        Answer.findById(req.params.id)
+        .populate('question')
+        .exec()
+        .then((answer) => {
+            if(answer.question.user.toString() == req.userInfo.id.toString())
+            {
+                answer.isAccepted = !answer.isAccepted;
+                originalQnId = answer.question._id;
+                return answer.save();
+            }
+            else
+            {
+                res.status(403).json({
+                    msg: "Only asker can accept/unaccept answers."
+                })
+            }
+        })
+        .then(() => {
+            return Question.findById(originalQnId).populate('answers').exec();
+        })
+        .then((question) => {
+            let hasAnswer = false;
+            for(let i=0;i<question.answers.length;i++)
+            {
+                if(question.answers[i].isAccepted)
+                {
+                    hasAnswer = true;
+                    break;
+                }
+            }
+            question.hasAnswer = hasAnswer;
+            return question.save();
+        })
+        .then(() => {
+            res.status(201).json({
+                msg: "Accept/Unaccept success."
+            })
+        })
+        .catch((err) => {
+            console.log(err);
+            
+        })
+    }
+
+    static getAnswerAcceptance(req, res, next)
+    {
+        Answer.findById(req.params.id)
+        .populate('question')
+        .exec()
+        .then((answer) => {            
+            res.status(200).json({
+                isAccepted: answer.isAccepted
+            })
+        })
+        .catch((err) => {
+            console.log(err);
+            
+        })
+    }
 }
 
 module.exports = AnswerController;

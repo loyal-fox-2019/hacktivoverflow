@@ -1,6 +1,6 @@
 <template>
     <div class="view-qn-answer">
-        <div class="view-ans-content ans-content">
+        <div class="view-ans-content ans-content" :class="isAccepted ? 'accepted-card' : ''">
             <div class="ans-votes">
                 <div>
                     <button class="btn btn-outline-secondary" :class="answerVote==1 ? 'voted' : ''" @click="voteAns(1)">
@@ -13,6 +13,11 @@
                 <div>
                     <button class="btn btn-outline-secondary" :class="answerVote==-1 ? 'voted' : ''" @click.prevent="voteAns(-1)">
                         <span class="fas fa-caret-down"></span>
+                    </button>
+                </div>
+                <div>
+                    <button class="btn" :class="isAccepted ? 'accepted' : 'unaccepted'" @click.prevent="setAcceptance">
+                        <span class="fas fa-check"></span>
                     </button>
                 </div>
             </div>
@@ -53,12 +58,13 @@ import axiosReq from "../config/axios";
         data() {
             return {
                 answerVote: 0,
-                modalText: ""
+                modalText: "",
+                isAccepted: false
             }
         },
         created(){
             this.checkAnswerVote();
-
+            this.checkAcceptance();
         },
         methods: {
             voteAns(v) {
@@ -103,6 +109,38 @@ import axiosReq from "../config/axios";
             },
             editAnswerForm() {
                 this.$router.push({path: `/editanswer/${this.answer._id}`})
+            },
+            checkAcceptance() {
+                axiosReq({
+                    url: `/answers/${this.answer._id}/accept`,
+                    method: "get"
+                })
+                .then(({data}) => {
+                    this.isAccepted = data.isAccepted
+                })
+            },
+            setAcceptance() {
+                axiosReq({
+                    url: `/answers/${this.answer._id}/accept`,
+                    method: "post",
+                    headers: {
+                        token: this.$cookies.get('token')
+                    }
+                })
+                .then(() => {
+                    this.isAccepted = !this.isAccepted;
+                })
+                .catch((err) => {
+                    if(err.response.status==401)
+                    {
+                        this.modalText = "Please login first."                        
+                    }
+                    else
+                    {
+                        this.modalText = "You cannot accept answers for someone else's question."
+                    }
+                    this.$bvModal.show('vote-ans-fail-modal'+this.answer._id)
+                })
             }
         }
     }
@@ -135,6 +173,15 @@ import axiosReq from "../config/axios";
 }
 .voted {
     background-color: darkorange
+}
+.accepted {
+    color: green
+}
+.unaccepted {
+    color: grey;
+}
+.accepted-card {
+    background-color: greenyellow;
 }
 
 .btn-manage {

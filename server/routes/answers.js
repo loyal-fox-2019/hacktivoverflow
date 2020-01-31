@@ -6,6 +6,8 @@ const authorisation = require("../middlewares/authorisation").answer_authorisati
 
 answersRouter.get('/:id',AnswerController.getOneAnswer);
 
+answersRouter.get('/:id/accept',AnswerController.getAnswerAcceptance);
+
 answersRouter.use('/',authentication);
 
 answersRouter.post('/',AnswerController.addNewAnswer);
@@ -13,6 +15,8 @@ answersRouter.post('/',AnswerController.addNewAnswer);
 answersRouter.get('/:id/vote',AnswerController.getMyVote);
 
 answersRouter.post('/:id/vote',AnswerController.voteAnswer);
+
+answersRouter.post('/:id/accept',AnswerController.setAnswerAcceptance);
 
 answersRouter.patch('/:id',authorisation,AnswerController.updateAnswer);
 

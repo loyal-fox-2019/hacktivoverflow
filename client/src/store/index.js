@@ -49,7 +49,18 @@ export default new Vuex.Store({
         }
       })
       .then(({data}) => {
-        context.commit('SET_MY_QUESTIONS',data);
+        let selected;
+        if(context.state.searchStr.length > 0) {
+          selected = data.filter((v) => {
+              return RegExp(`\\b${context.state.searchStr}`,'i').test(v.title) || 
+                  RegExp(`\\b${context.state.searchStr}`,'i').test(v.description)
+          });
+        }
+        else
+        {
+          selected = data
+        }
+        context.commit('SET_MY_QUESTIONS',selected);
       })
 
     },

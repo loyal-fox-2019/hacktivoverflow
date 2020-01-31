@@ -5,8 +5,8 @@
                 <img src="../../public/bulb.png" width="30" height="30" class="d-inline-block align-top" alt="">
             iHaveAQuestion!
             </router-link>
-        <form class="form-inline my-2 my-lg-0 mr-auto">
-            <input class="form-control mr-sm-2" type="search" placeholder="Search" v-model="searchbarStr">
+        <form class="form-inline my-2 my-lg-0 mr-auto" @submit.prevent="">
+            <input class="form-control mr-sm-2" type="search" placeholder="Search" v-model="searchbarStr" @keyup="changeSearchStr">
             <button class="btn btn-primary my-2 my-sm-0"
                     id="search-btn"
                     >Search</button>
@@ -45,6 +45,11 @@
             this.$cookies.remove('email');
             this.$store.commit('SET_LOGIN_STATE',false);
             this.$router.push('/')
+          },
+          changeSearchStr() {
+            this.$store.commit('SET_SEARCH_STR',this.searchbarStr);
+            this.$store.dispatch('getAllQuestions');
+            this.$store.dispatch('getMyQuestions',this.$cookies.get('token'));
           }
         }
     }

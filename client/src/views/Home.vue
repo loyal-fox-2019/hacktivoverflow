@@ -12,8 +12,11 @@
     </router-link>
     <h1>Questions</h1>
     <div v-if="loading" style="width:50vw">Loading...</div>
-    <div v-if="!loading">
-      <questionSummary v-for="qn in questionsArr" :key="qn._id" :question="qn"></questionSummary>
+    <div v-if="!loading && showAll">
+      <questionSummary v-for="qn in allQuestions" :key="qn._id" :question="qn"></questionSummary>
+    </div>
+    <div v-if="!loading && !showAll">
+      <questionSummary v-for="qn in myQuestions" :key="qn._id" :question="qn"></questionSummary>
     </div>
     
   </div>
@@ -33,9 +36,17 @@ export default {
       loading: false
     }
   },
+  computed: {
+    allQuestions() {
+      return this.$store.state.allQuestions
+    },
+    myQuestions() {
+      return this.$store.state.myQuestions
+    }
+  },
   created() {
     this.$store.dispatch('getAllQuestions')
-    this.$store.dispatch('getMyQuestions')
+    this.$store.dispatch('getMyQuestions',this.$cookies.get('token'))
     this.loading = true;
     setTimeout(() => {
       this.questionsArr = this.$store.state.allQuestions
@@ -51,10 +62,10 @@ export default {
       this.loading = true;
       setTimeout(() => {
         if(this.showAll) {        
-          this.questionsArr = this.$store.state.allQuestions
+          this.questionsArr = this.allQuestions
         }
         else {
-          this.questionsArr = this.$store.state.myQuestions
+          this.questionsArr = this.myQuestions
         }
         this.loading = false;
       },2000)

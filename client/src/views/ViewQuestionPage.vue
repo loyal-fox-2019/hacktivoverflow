@@ -58,23 +58,26 @@
         <answer-card class="answer-card" v-for="ans in this.$store.state.currentQuestion.answers" :key="ans._id" :answer="ans"></answer-card>
 
         <form id="ans-form" @submit.prevent="addAnswer">
-        <button class="btn btn-primary" id="ans-qn-btn" type="submit">Submit answer</button>
+        <button class="btn btn-primary" id="ans-qn-btn" type="submit" v-if="this.$store.state.isLogin">Submit answer</button>
             <h3>Give an answer</h3>
-            <div class="form-group">
-                Title*
-                <input type="text" class="form-control" v-model="title" required>
+            <div v-if="this.$store.state.isLogin">
+                <div class="form-group">
+                    Title*
+                    <input type="text" class="form-control" v-model="title" required>
+                </div>
+                <!-- <div class="form-group">
+                    Image
+                    <input type="file" class="form-control" name="file" ref="file" @change="handleFile">
+                </div> -->
+                <div class="form-group">
+                    Description*
+                    <!-- <textarea class="form-control" v-model="description" required></textarea> -->
+    
+                    <quill-editor v-model="description" ref="myQuillEditor" :options="editorOption" required>
+                    </quill-editor>
+                </div>
             </div>
-            <!-- <div class="form-group">
-                Image
-                <input type="file" class="form-control" name="file" ref="file" @change="handleFile">
-            </div> -->
-            <div class="form-group">
-                Description*
-                <!-- <textarea class="form-control" v-model="description" required></textarea> -->
-
-                <quill-editor v-model="description" ref="myQuillEditor" :options="editorOption" required>
-                </quill-editor>
-            </div>
+            <div v-else>Please <router-link to="/login">login</router-link> to answer.</div>
             
             
         </form>

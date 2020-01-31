@@ -5,7 +5,7 @@
         <div class="card-body">
             <div class="stats">
                 <div>{{question.upvotes.length - question.downvotes.length}}<br>upvotes</div>
-                <div>{{question.answers.length}}<br>answers</div>
+                <div :class="question.hasAnswer ? 'has-answer' : ''">{{question.answers.length}}<br>answers</div>
             </div>
             
             <div class="content">
@@ -75,5 +75,8 @@
 }
 .content {
     width: 80%;
+}
+.has-answer {
+    background: lightgreen;
 }
 </style>

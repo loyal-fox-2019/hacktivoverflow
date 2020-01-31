@@ -32,7 +32,7 @@ export default {
       const email = profile.getEmail();
       
       const id_token = googleUser.getAuthResponse().id_token;
-      console.log("id_token",id_token);
+      // console.log("id_token",id_token);
       
       axiosReq({
         url: "/users/gsignin",

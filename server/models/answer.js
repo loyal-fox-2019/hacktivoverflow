@@ -27,6 +27,10 @@ const answerSchema = new Schema({
         type: Schema.Types.ObjectId,
         ref: 'Question'
     },
+    isAccepted: {
+        type: Boolean,
+        default: false
+    }
 }, {timestamps : true},{versionKey : false});   //timestamps add createdAt, updatedAt fields
 
 answerSchema.pre('save',function(next) {
