@@ -8,7 +8,7 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
-    baseUrl: 'http://localhost:3000',
+    baseUrl: 'http://54.169.93.127:3000',
     isLogin: false,
     userID: null,
     isEdit: false,
@@ -165,8 +165,8 @@ export default new Vuex.Store({
         .catch(err => {
           Swal.fire({
             icon: 'error',
-            title: 'Failed',
-            text: err.response.status + ' ' + err.response.statusText
+            title: err.response.status,
+            text: 'Sorry, you have to logged in to do this action'
           })
         })
     },
@@ -185,8 +185,8 @@ export default new Vuex.Store({
         .catch(err => {
           Swal.fire({
             icon: 'error',
-            title: 'Failed',
-            text: err.response.status + err.response.statusText
+            title: err.response.status,
+            text: 'Sorry, you have to logged in to do this action'
           })
         })
     },
@@ -200,8 +200,8 @@ export default new Vuex.Store({
         .catch(err => {
           Swal.fire({
             icon: 'error',
-            title: 'Failed',
-            text: err.response.status + err.response.statusText
+            title: err.response.status,
+            text: 'Sorry, you have to logged in to do this action'
           })
         })
     },
@@ -238,8 +238,8 @@ export default new Vuex.Store({
         .catch(err => {
           Swal.fire({
             icon: 'error',
-            title: 'Failed',
-            text: err.response.status + ' ' + err.response.statusText
+            title: err.response.status,
+            text: 'Sorry, you have to logged in to do this action'
           })
         })
     },
@@ -259,8 +259,8 @@ export default new Vuex.Store({
         .catch(err => {
           Swal.fire({
             icon: 'error',
-            title: 'Failed',
-            text: err.response.status + err.response.statusText
+            title: err.response.status,
+            text: 'Sorry, you have to logged in to do this action'
           })
         })
     },

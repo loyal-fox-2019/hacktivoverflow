@@ -21,8 +21,8 @@
         class="ma-2"
         id="btn"
         outlined
-        color="white"
-        style="color: white;"
+        color="orange"
+        style="background-color: white;"
         @click.prevent="changePage"
         v-show="!isLogin"
         >Login Or Register</v-btn
@@ -89,7 +89,7 @@ export default {
 
 <style lang="css">
 #btn:hover {
-  background-color: white;
-  color: orange !important;
+  background-color: orange !important;
+  color: white !important;
 }
 </style>

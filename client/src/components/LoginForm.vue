@@ -98,7 +98,7 @@ export default {
       password: '',
       googleSignInParams: {
         client_id:
-          '2425414127-192o13psano8b1mjb1gnnh60l0ngp9pm.apps.googleusercontent.com'
+          '2425414127-fjk95e6eoncr511u292486qh9h28pkg8.apps.googleusercontent.com'
       }
     }
   },
@@ -121,7 +121,6 @@ export default {
           Swal.fire('Success', 'Login Success', 'success')
         })
         .catch(err => {
-          console.log(err)
           this.email = ''
           this.password = ''
           Swal.fire({
@@ -150,7 +149,6 @@ export default {
           this.name = ''
           this.email = ''
           this.password = ''
-          console.log(err.response)
           Swal.fire({
             icon: 'error',
             title: 'Registration Failed',
@@ -178,7 +176,6 @@ export default {
           this.name = ''
           this.email = ''
           this.password = ''
-          console.log(err.response)
           Swal.fire({
             icon: 'error',
             title: 'Registration Failed',
@@ -188,7 +185,11 @@ export default {
     },
     onSignInError(error) {
       // `error` contains any error occurred.
-      console.log('OH NOES', error)
+      Swal.fire({
+        icon: 'error',
+        title: 'Registration Failed',
+        text: error
+      })
     }
   }
 }

@@ -1,7 +1,7 @@
 <template>
   <div>
     <v-content>
-      <div class="container">
+      <div class="container fadeIn animated">
         <Toolbar :title="{ name: 'Question Detail' }" />
         <Detail />
         <div v-show="comment" class="mt-4">

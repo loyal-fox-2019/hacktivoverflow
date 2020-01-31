@@ -74,7 +74,6 @@ export default {
   },
   methods: {
     upvote(id) {
-      console.log(id)
       this.$store.dispatch('UPVOTE_QUESTION', id)
     },
     downvote(id) {

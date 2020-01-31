@@ -20,7 +20,7 @@ export default {
       Swal.fire({
         icon: 'info',
         title: 'Oops...',
-        text: 'You must login to do this'
+        text: 'Sorry, you are not legged in'
       })
       next('/')
     }

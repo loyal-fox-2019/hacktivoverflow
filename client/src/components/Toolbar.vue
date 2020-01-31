@@ -30,7 +30,8 @@ export default {
     openComment() {
       if (!localStorage.getItem('token')) {
         Swal.fire({
-          title: 'Sorry you dont have permission to do this',
+          title: 'Oops...',
+          text: 'Sorry, you are not logged in',
           icon: 'info'
         })
       } else {
