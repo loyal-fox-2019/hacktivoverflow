@@ -36,6 +36,7 @@ const actions = {
    },
 
    async fetchUser({commit}) {
+      console.log('fetching user')
       try {
          if(localStorage.token) {
             const {data} = await axios.get('/user', {

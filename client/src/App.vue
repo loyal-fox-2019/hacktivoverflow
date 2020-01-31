@@ -44,6 +44,7 @@ export default {
   created() {
     this.checkLoggedIn()
     if(localStorage.token) {
+      console.log('ada token fetching')
       this.fetchUser()
     }
   }

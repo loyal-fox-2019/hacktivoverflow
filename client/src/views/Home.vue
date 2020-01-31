@@ -49,13 +49,15 @@ export default {
 
     async fetchWatchedTags() {
       try {
-        const {data} = await axios.get('/user', {
-          headers: {
-            token: localStorage.token
-          }
-        })
-        console.log(data.user, 'setelah fetch')
-        this.SET_WATCHEDTAGS(data.user.watchedTags)
+        if(this.$store.state.isLoggedIn) {
+          const {data} = await axios.get('/user', {
+            headers: {
+              token: localStorage.token
+            }
+          })
+          console.log(data.user, 'setelah fetch')
+          this.SET_WATCHEDTAGS(data.user.watchedTags)
+        }
       }
       catch (error) {
         Swal.fire({

@@ -1,5 +1,5 @@
 <template>
-   <div class="flex items-center border border-gray-500 p-4">
+   <div class="flex items-center border border-gray-500 p-4 mb-6">
       <!-- <p>{{answer.content}} {{answer.user.username}}</p> -->
       <div class="flex flex-col px-2">
          <i class="fas fa-chevron-up cursor-pointer font-bold text-3xl text-gray-500 hover:text-gray-800" :class="{'text-blue-700': voteFlag == 'up'}" @click="vote('up')"></i>
