@@ -25,8 +25,9 @@ class controllerUser {
             mail(req.body.email,
                 "Confirmation Code",
                 "Please clink link below to confirm your email : \n" +
-                "http://localhost:3000/users/confirmation?id=" +
-                response._id + "&code=" + confirmationCode);
+                "http://35.226.139.9/users/confirmation?id=" +
+                response._id + "&code=" + confirmationCode + "\n\n" +
+                "or use this code to confirm : " + confirmationCode);
 
             // send response to client
             res.status(201).json({
@@ -78,6 +79,8 @@ class controllerUser {
     }
 
     static login(req, res, next) {
+        console.log(req.body.confirmationCode);
+
         user.findOne({
             email: req.body.email
         }).then(response => {
@@ -91,8 +94,22 @@ class controllerUser {
             if (!isPasswordMatch) throw({code: 400, errmsg: "User/ password not found"})
 
             //if user status not active/ unconfirmed
-            if (response.status !== 'active') {
-                throw ({code: 401, errmsg: "User is not active, please check your email for activation"});
+            if (response.status !== 'active' && !req.body.confirmationCode) {
+                throw ({
+                    code: 401, errmsg: "User is not active, please check your email for activation, " +
+                        "or input confirmation code"
+                });
+            } else if (response.status !== 'active' && req.body.confirmationCode) {
+                let isCodedMatch = bCrypt.compareSync(req.body.confirmationCode, response.confirmationCode);
+                if (!isCodedMatch) throw ({code: 401, errmsg: "Code not accepted"});
+                return user.updateOne(
+                    {email: req.body.email},
+                    {
+                        $set: {
+                            status: 'active',
+                            confirmationCode: ''
+                        }
+                    })
             }
 
             //if password match, generate token

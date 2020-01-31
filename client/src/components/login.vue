@@ -26,6 +26,16 @@
                                required
                                transparent/>
                 </sui-form-field>
+                <sui-divider />
+                <small>Confirmation code for new user</small>
+                <sui-form-field>
+                    <sui-input size="25"
+                               type="text"
+                               placeholder="confirmation code"
+                               class="input"
+                               v-model="confirmationCode"
+                               transparent/>
+                </sui-form-field>
                 <sui-form-field align="center">
                     <sui-button basic>Sign In
                         <sui-icon name="arrow right"/>
@@ -53,6 +63,7 @@
             return {
                 email: null,
                 password: null,
+                confirmationCode: null,
                 msgHeader: "msgHeader",
                 msgMessage: "msgMessage",
                 msgVisible: false
@@ -65,7 +76,8 @@
                     url: '/users/login',
                     data: {
                         email: this.email,
-                        password: this.password
+                        password: this.password,
+                        confirmationCode: this.confirmationCode
                     }
                 }).then(response => {
                     console.log(response.data);

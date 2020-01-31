@@ -5,8 +5,8 @@ import router from "../router";
 
 Vue.use(Vuex);
 
-// const server = 'http://35.226.139.9';
-const server = 'http://localhost:3000';
+const server = 'http://35.226.139.9';
+// const server = 'http://localhost:3000';
 
 const base = axios.create({
     baseURL: server
