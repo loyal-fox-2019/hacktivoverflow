@@ -131,6 +131,9 @@ export default new Vuex.Store({
           }
         })
         .catch(err => {
+          if (err.response.data.msg === "Invalid Token") {
+            Vue.swal("Error", "Login first to vote", "error");
+          }
           if (err.response.data) {
             Vue.swal(
               "Error",

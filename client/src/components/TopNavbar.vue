@@ -67,6 +67,7 @@ export default {
       localStorage.removeItem("id");
       localStorage.removeItem("token");
       localStorage.removeItem("name");
+      location.reload();
       this.$store.state.isLogin = false;
       if (this.$route.name !== "try list") {
         this.$router.replace({ name: "try list" });

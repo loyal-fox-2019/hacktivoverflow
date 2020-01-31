@@ -8,7 +8,7 @@
           title="This try is challenging"
           @click.prevent="vote('up')"
           :style="
-            data.upvotes.includes(userId)
+            data.upvotes.includes(userId) && isLogin
               ? { color: 'darkgreen' }
               : { color: 'lightgrey' }
           "
@@ -22,7 +22,7 @@
           title="This try does not show any effort"
           @click.prevent="vote('down')"
           :style="
-            data.downvotes.includes(userId)
+            data.downvotes.includes(userId) && isLogin
               ? { color: 'darkgreen' }
               : { color: 'lightgrey' }
           "
@@ -167,6 +167,9 @@ export default {
         return this.data.user._id === localStorage.id;
       }
       return null;
+    },
+    isLogin() {
+      return this.$store.state.isLogin;
     }
   }
 };
