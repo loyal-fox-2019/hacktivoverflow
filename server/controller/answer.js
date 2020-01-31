@@ -59,7 +59,14 @@ class controllerAnswer {
             let like = response.upVotes;
             let isUserAlreadyLike = like.indexOf(req._id);
             if (isUserAlreadyLike > -1) {
-                throw({code: 400, errmsg: "You already like this answer"});
+                // throw({code: 400, errmsg: "You already like this answer"});
+                return answer.findByIdAndUpdate(
+                    req.params.id,
+                    {
+                        "$pull": {
+                            upVotes: req._id
+                        }
+                    })
             }
 
             let unLike = response.downVotes;
@@ -100,7 +107,14 @@ class controllerAnswer {
             let isUserAlreadyUnLike = unLike.indexOf(req._id);
 
             if (isUserAlreadyUnLike > -1) {
-                throw({code: 400, errmsg: "You already unlike this question"});
+                // throw({code: 400, errmsg: "You already unlike this question"});
+                return answer.findByIdAndUpdate(
+                    req.params.id,
+                    {
+                        "$pull": {
+                            downVotes: req._id
+                        }
+                    })
             }
 
             let like = response.upVotes;
