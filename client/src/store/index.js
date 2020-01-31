@@ -17,7 +17,8 @@ export default new Vuex.Store({
         questionsList: "",
         questionData: {},
         user: {},
-        tags: []
+        tags: [],
+        message: ""
     },
     mutations: {
         listOfQuestions(state, payload) {
@@ -33,7 +34,9 @@ export default new Vuex.Store({
             state.user = {}
         },
         setTags(state, payload) {
-            state.tags.push(payload)
+            if (state.tags.indexOf(payload) <= -1) {
+                state.tags.push(payload)
+            }
         },
         clearTags(state, payload) {
             state.tags = []
@@ -50,9 +53,17 @@ export default new Vuex.Store({
                 }
             }).then(response => {
                 console.log(response.data);
+                this.state.message = {
+                    title: 'success',
+                    message: response.data.message
+                };
             }).catch(err => {
                 console.log(err.response.data.error);
-            })
+                this.state.message = {
+                    title: 'error',
+                    message: err.response.data.error
+                };
+            });
         },
         listOfQuestions(context, payload) {
             base({
@@ -67,9 +78,11 @@ export default new Vuex.Store({
                 context.commit("clearTags");
 
                 response.data.data.forEach(listTag => {
-                    listTag.tags.forEach(tag => {
-                        context.commit('setTags', tag);
-                    })
+                    if (listTag.tags.length > 0) {
+                        listTag.tags.forEach(tag => {
+                            context.commit('setTags', tag);
+                        })
+                    }
                 })
             }).catch(err => [
                 console.log(err.response)
@@ -86,7 +99,7 @@ export default new Vuex.Store({
                     watchTags: payload
                 }
             }).then(response => {
-                // console.log(response.data)
+                console.log(response.data)
             }).catch(err => [
                 console.log(err.response)
             ])
@@ -128,7 +141,7 @@ export default new Vuex.Store({
                     Authorization: "token " + Vue.$cookies.get('token')
                 }
             }).then(response => {
-                // console.log(response);
+                console.log(response.data);
                 router.push("/")
             }).catch(err => [
                 console.log(err.response)
@@ -159,6 +172,9 @@ export default new Vuex.Store({
         },
         tags: state => {
             return state.tags
+        },
+        message: state => {
+            return state.message
         }
     }
 })

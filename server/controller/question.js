@@ -3,6 +3,10 @@ const answer = require('../models/answer');
 
 class controllerQuestion {
     static create(req, res, next) {
+        if (req.body.tags === null) {
+            req.body.tags = ['data']
+        }
+
         question.create({
             title: req.body.title,
             description: req.body.description,

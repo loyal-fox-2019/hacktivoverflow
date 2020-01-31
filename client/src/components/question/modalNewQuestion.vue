@@ -1,54 +1,53 @@
 <template>
-    <sui-form @submit.prevent="postQuestion">
+    <div>
         <sui-modal v-model="open">
-            <sui-modal-header>
-                New Question
-                <sui-icon name="write"/>
+            <sui-modal-header align="right">
+                <sui-button negative @click="toggle" icon="cancel"/>
             </sui-modal-header>
             <sui-modal-content>
                 <message :header="msgHeader" :message="msgMessage"
                          :visible="msgVisible" @dismiss="msgDismiss"/>
-                <sui-form-field>
-                    <label>Title</label>
-                    <sui-input v-model="title" maxlength="75" required class="input" transparent/>
-                    <small>Max 75 Character</small>
-                </sui-form-field>
 
-                <sui-form-field>
-                    <label>Tags</label>
-                    <sui-dropdown
-                            multiple
-                            id="question-tags"
-                            :options="tagList"
-                            v-model="tags"
-                            placeholder="Tags"
-                            search
-                            selection
-                            allow-additions
-                            required/>
-                </sui-form-field>
+                <sui-form @submit.prevent="postQuestion">
 
-                <sui-form-field>
-                    <label>Description</label>
-                    <vue-editor v-model="content"></vue-editor>
-                    <small>Max 500 Character</small>
-                </sui-form-field>
+                    <sui-form-field>
+                        <label>Title</label>
+                        <sui-input v-model="title" maxlength="75" required class="input" transparent/>
+                        <small>Max 75 Character</small>
+                    </sui-form-field>
+
+                    <sui-form-field>
+                        <label>Tags</label>
+                        <sui-dropdown
+                                multiple
+                                id="question-tags"
+                                :options="tagList"
+                                v-model="tags"
+                                placeholder="Tags"
+                                search
+                                selection
+                                allow-additions
+                                required/>
+                    </sui-form-field>
+
+                    <sui-form-field>
+                        <label>Description</label>
+                        <vue-editor v-model="content"></vue-editor>
+                        <small>Max 500 Character</small>
+                    </sui-form-field>
+                    <sui-form-field align="right">
+                        <sui-button primary icon="save">Post</sui-button>
+                    </sui-form-field>
+                </sui-form>
             </sui-modal-content>
-            <sui-modal-actions>
-                <sui-form-field>
-                    <sui-button primary icon="save">Post</sui-button>
-                    <sui-button negative @click.native="toggle" icon="cancel">
-                        Close
-                    </sui-button>
-                </sui-form-field>
-            </sui-modal-actions>
         </sui-modal>
-    </sui-form>
+    </div>
 </template>
 
 <script>
     import message from "../message";
     import {VueEditor, Quill} from 'vue2-editor'
+    import {mapGetters} from "vuex";
 
     export default {
         name: "modalNewQuestion",
@@ -67,6 +66,21 @@
         props: {
             open: Boolean
         },
+        computed: {
+            ...mapGetters([
+                "message",
+                "questionsList"
+            ])
+        },
+        watch: {
+            message(a, b) {
+                this.$toast[this.message.title](this.message)
+                if (this.message.title === 'success'){
+                    this.$store.dispatch('listOfQuestions');
+                    this.toggle()
+                }
+            },
+        },
         methods: {
             toggle() {
                 this.$emit('click')
@@ -77,8 +91,6 @@
                     tags: this.tags,
                     description: this.content
                 });
-                this.$store.dispatch('listOfQuestions');
-                this.toggle()
             },
             msgDismiss() {
                 this.msgVisible = false

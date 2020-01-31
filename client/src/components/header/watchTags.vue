@@ -6,7 +6,7 @@
                         multiple
                         id="question-tags"
                         :options="tagList"
-                        v-model="tags"
+                        v-model="newTags"
                         placeholder="Watch Tags"
                         search
                         :max-selections="8"
@@ -25,9 +25,9 @@
         name: "watchTags",
         data() {
             return {
-                tags: [],
+                newTags: [],
                 tagList: [],
-                addTag: false
+                // addTag: false
             }
         },
         props: {
@@ -36,6 +36,28 @@
         },
         watch: {
             data(a, b) {
+                this.listCurrentTags()
+            },
+            dataUser(a, b){
+                this.listWatchTags()
+            },
+            // getCurrentUser(a, b){
+            //     // this.addWatchTags()
+            // }
+        },
+        methods: {
+            addWatchTags() {
+                this.$store.dispatch('addWatchTags', this.newTags);
+                // this.$store.dispatch('listOfQuestions');
+            },
+            listWatchTags(){
+                // if (this.addTag === false) {
+                    this.newTags = this.dataUser.watchTags;
+                    this.addTag = true;
+                // }
+            },
+            listCurrentTags(){
+                this.tagList = [];
                 this.data.forEach(tag => {
                     this.tagList.push({
                         value: tag,
@@ -43,22 +65,7 @@
                         text: tag
                     })
                 });
-            },
-            dataUser(a, b){
-                if (this.addTag === false) {
-                    this.tags = this.dataUser.watchTags;
-                    this.addTag = true;
-                }
-            },
-            getCurrentUser(a, b){
-                this.addWatchTags()
             }
-        },
-        methods: {
-            addWatchTags() {
-                this.$store.dispatch('addWatchTags', this.tags);
-                this.$store.dispatch('listOfQuestions');
-            },
         },
         computed: {
             ...mapGetters([
@@ -66,6 +73,10 @@
                 'tags',
                 'getCurrentUser'
             ]),
+        },
+        mounted() {
+            this.listWatchTags();
+            this.listCurrentTags();
         }
     }
 </script>
@@ -78,10 +89,5 @@
     #sui-form-fields {
         padding: 0;
         margin: 0;
-    }
-
-    .container-watch-tags{
-        display: inline-block;
-        margin: 10px;
     }
 </style>

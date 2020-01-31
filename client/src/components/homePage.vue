@@ -49,12 +49,12 @@
             }
         },
         watch: {
-            questionList(a, b) {
-                this.$store.dispatch('listOfQuestions');
-            },
-            getCurrentUser(a, b) {
-                this.$store.dispatch('getCurrentUser');
-            },
+            // questionList(a, b) {
+            //     // this.$store.dispatch('listOfQuestions');
+            // },
+            // getCurrentUser(a, b) {
+            //     this.$store.dispatch('getCurrentUser');
+            // }
         },
         mounted() {
             this.$store.dispatch('listOfQuestions');
