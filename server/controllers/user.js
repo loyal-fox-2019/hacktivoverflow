@@ -182,7 +182,6 @@ class User {
             .then(({
                 payload
             }) => {
-                console.log({payload});
                 gPayload = payload
                 return userModel
                     .findOne({
@@ -190,7 +189,6 @@ class User {
                     })
             })
             .then((user) => {
-                console.log({user});
                 if (user) {
                     return user
                 } else {
@@ -205,8 +203,6 @@ class User {
                         })
                 }
             }).then((registeredUser) => {
-                console.log({registeredUser});
-                
                 userData = registeredUser
                 return jwt.sign({
                     _id: registeredUser._id,
