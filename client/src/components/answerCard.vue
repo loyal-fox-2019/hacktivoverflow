@@ -8,11 +8,10 @@
                     </div>
                 </div>
                 <div class="col-6 text-right">
-                    <h2><i class="fa fa-arrow-circle-o-up" aria-hidden="true"></i></h2>
-                    <h2 class="upvotes mr-1"> {{answer.upvotes.length - answer.downvotes.length}}</h2>
-                    <h2><i class="fa fa-arrow-circle-o-down" aria-hidden="true"></i></h2>
+                    <h2><i @click="upvote(answer._id)" class="fa fa-arrow-circle-o-up" aria-hidden="true"></i></h2>
+                    <h2 class="upvotes mr-1"> {{votes}}</h2>
+                    <h2><i @click="downvote(answer._id)" class="fa fa-arrow-circle-o-down" aria-hidden="true"></i></h2>
                     <button v-if="edit" @click="showEditAnswer(answer)" type="submit" class="btn btn-dark mt-3 mr-3">Edit</button>
-                    <button v-if="edit" @click="deleteAnswer(answer._id)" type="submit" class="btn btn-dark mt-3">Delete</button>
                 </div>
             </div>
     </div>
@@ -25,13 +24,27 @@ export default {
     },
     data(){
         return {
-            edit : false
+            edit : false,
+            editAnswer : ''
+        }
+    },
+    computed : {
+        votes(){
+            return this.$props.answer.upvotes.length - this.$props.answer.downvotes.    length 
         }
     },
     methods : {
         showEditAnswer(answer){
-            this.$store.commit('SET_ONE_ANSWER', answer)
-        }
+            this.$store.commit('SET_ANSWER_EDIT', answer.content)
+            this.$store.commit('SET_ANSWER_EDIT_ID', answer._id)
+            this.$store.commit('SET_IS_EDITING_ANSWER', true)
+        },
+        upvote(id){
+            this.$store.dispatch('upvoteAns', {id : id, questionId : this.$route.params._id})
+        },
+        downvote(id){
+            this.$store.dispatch('downvoteAns', id)
+        },
     },
     created(){
         if(this.$props.answer.author === localStorage.user){

@@ -4,7 +4,7 @@
             <div class="row w-100">
                 <div class="col-6">
                     <div class="row pl-4">
-                        <h1 @click="upvoted">{{question.title}}</h1>
+                        <h1>{{question.title}}</h1>
                     </div>
                     <p class="pl-4 author">{{question.author}}  | {{question.createdAt | moment("from", "now")}}</p>
                 </div>
@@ -24,7 +24,7 @@
         <div class="answer-sign mt-5 p-3">
             <h3>Answers</h3>
         </div>
-        <answerCard v-for="answer in answers" :key="answer" :answer="answer"></answerCard>  
+        <answerCard v-for="(answer, i) in answers" :key="i" :answer="answer"></answerCard>  
         <div class="answer-sign mt-5 p-3">
             <div class="col-12">
                 <form>
@@ -102,7 +102,10 @@ export default {
             return this.$store.state.answers
         }
     },
-    created(){
+    mounted(){
+        if(this.$store.state.answerEdit){
+            this.answers = this.$store.state.answerEdit
+        }
         this.$store.dispatch('fetchOneQuestion', this.$route.params._id)
         if(this.$store.state.oneAnswer){
             this.answer = this.answer.content

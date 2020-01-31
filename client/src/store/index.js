@@ -9,12 +9,15 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   state: {
     questions : [],
-    oneQuestion : null,
+    oneQuestion : {},
     oneAnswer : null,
     answers : [],
     loginStatus : false,
     user_id : null,
-    votes : null
+    votes : null,
+    answerEdit : '',
+    answerEditId : '',
+    isEditingAnswer : false
   },
   mutations: {
     PUSH_QUESTION(state, question){
@@ -46,6 +49,16 @@ export default new Vuex.Store({
     },
     ADD_VOTES(state, vote){
       state.votes += vote
+    },
+    SET_ANSWER_EDIT(state, answerContent){
+      console.log('masuk answerEdit')
+      state.answerEdit = answerContent
+    },
+    SET_ANSWER_EDIT_ID(state, id){
+      state.answerEditId = id
+    },
+    SET_IS_EDITING_ANSWER(state, boolean){
+      state.isEditingAnswer = boolean
     }
   },
   actions: {
@@ -101,6 +114,60 @@ export default new Vuex.Store({
         swal.fire(err.response)
       })
     },
+    
+    upvoteAns(context, payload){
+      console.log(payload)
+      axios({
+        url : 'http://localhost:3000/answers/upvote/'+payload.id,
+        method : 'post',
+        headers : {
+          token : localStorage.token
+        },
+        data : {
+          user_id : context.state.user_id
+        }
+      })
+      .then(({data})=>{
+        console.log(data)
+        swal.fire(data.message)
+        context.dispatch('fetchOneData', payload.questionId )
+        // if(data.message === 'upvote success'){
+        //   context.commit('ADD_VOTES', 1)
+        // } else {
+        //   context.commit('ADD_VOTES', -1)
+        // }
+      })
+      .catch(err => {
+        console.log(err)
+        swal.fire(err.response)
+      })
+    },
+    
+    downvoteAns(context, id){
+      axios({
+        url : 'http://localhost:3000/answers/downvote/'+id,
+        method : 'post',
+        headers : {
+          token : localStorage.token
+        },
+        data : {
+          user_id : context.state.user_id
+        }
+      })
+      .then(({data})=>{
+        console.log(data)
+        swal.fire(data.message)
+        // if(data.message === 'downvote success'){
+        //   context.commit('ADD_VOTES', -1)
+        // } else {
+        //   context.commit('ADD_VOTES', 1)
+        // }
+      })
+      .catch(err => {
+        console.log(err)
+        swal.fire(err.response)
+      })
+    },
 
     submitQuestion(context, question){
       console.log('masuk ke function submitQUestion')
@@ -125,6 +192,26 @@ export default new Vuex.Store({
       })
     },
 
+    sendEditAnswer(context){
+      console.log('ini content updated : '+context.state.answerEdit)
+      axios({
+        url : 'http://localhost:3000/answers/'+context.state.answerEditId,
+        method : 'put',
+        headers : {
+          token : localStorage.token
+        },
+        data : {
+          content : context.state.answerEdit
+        }
+      })
+      .then(({data})=>{
+        console.log(data)
+        // context.dispatch('fetchData')
+      })
+      .catch(err => {
+        console.log(err)
+      })
+    },
 
     fetchData(context){
       axios({

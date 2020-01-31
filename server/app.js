@@ -9,7 +9,7 @@ const cron = require('cron').CronJob
 
 require('dotenv').config();
 
-const job = new cron('* * * * *', function(){
+const job = new cron('0 0 * * 0', function(){
     mailer()
 })
 job.start()
