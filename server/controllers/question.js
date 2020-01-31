@@ -23,7 +23,7 @@ class Question {
 
     static getQuestion(req, res, next) {
         questionModel
-            .find({})
+            .find()
             .sort(req.query)
             .then((questions) => {
                 res.status(200).json(questions)

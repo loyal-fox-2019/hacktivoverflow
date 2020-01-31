@@ -7,6 +7,7 @@ Vue.use(Vuex);
 export default new Vuex.Store({
   state: {
     API: "http://13.250.122.239",
+    // API: "http://localhost:3000",
     registerData: null,
     isLogin: !!localStorage.token,
     userLogin: localStorage.name,
@@ -75,8 +76,7 @@ export default new Vuex.Store({
 
       axios({
         method: "GET",
-        url: `${this.state.API}/questions`,
-        params
+        url: `${this.state.API}/questions`
       })
         .then(({ data }) => {
           context.commit("SET_QUESTIONS", data);
