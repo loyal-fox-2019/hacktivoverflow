@@ -13,7 +13,7 @@
                 <input type="file" class="form-control" name="file" ref="file" @change="handleFile">
             </div> -->
             <div class="form-group">
-                Tags* (separated with spaces)
+                Tags (separated with spaces, comma or semicolon)
                 <b-form-tags
                     v-model="tags"
                     separator=" ,;"

@@ -17,4 +17,8 @@ usersRouter.use('/',authentication);
 
 usersRouter.get('/myquestions',UserController.getMyQuestions);
 
+usersRouter.get('/tags',authorisation,UserController.getUserTags);
+
+usersRouter.patch('/tags',authorisation,UserController.updateUserTags);
+
 module.exports = usersRouter;

@@ -1,6 +1,6 @@
 <template>
     <div class="qn-sum">
-        <div class="card-header">
+        <div class="card-header"  :class="isTagged ? 'tagged' : ''" style="border-radius: 15px;">
             <button class="btn btn-success" style="float:right!important;width:10%" @click="viewQuestion">View</button>
         <div class="card-body">
             <div class="stats">
@@ -14,6 +14,9 @@
                 <p class="card-text">
                     {{strippedDesc}}
                 </p>
+                <div>
+                    <button class="btn btn-outline-secondary tag-buttons" :class="userTags.includes(tag) ? 'matched-tag' : ''" v-for="tag in question.tags" :key="tag">{{tag}}</button>
+                </div>
                 <div style="float:right">
                     Asked by {{question.user.username}}
                     <h6 class="card-subtitle mb-2 text-muted" style="font-size:12px"><br>
@@ -39,7 +42,13 @@
         },
         data() {
             return {
-                strippedDesc: this.question.description.replace(/<\/?[^>]+>/ig, " ").substr(0,200)+(this.question.description.replace(/<\/?[^>]+>/ig, " ").length > 200 ? "..." : "")
+                strippedDesc: this.question.description.replace(/<\/?[^>]+>/ig, " ").substr(0,200)+(this.question.description.replace(/<\/?[^>]+>/ig, " ").length > 200 ? "..." : ""),
+                isTagged: false
+            }
+        },
+        computed: {
+            userTags() {
+                return this.$store.state.myTags
             }
         },
         methods: {
@@ -47,7 +56,16 @@
                 this.$router.push({path: `/question/${this.question._id}`})
             }
         },
-
+        created() {
+            for(let i=0;i<this.question.tags.length;i++)
+            {
+                if(this.userTags.includes(this.question.tags[i]))
+                {
+                    this.isTagged = true;
+                    break;
+                }
+            }
+        }
     }
 </script>
 
@@ -78,5 +96,17 @@
 }
 .has-answer {
     background: lightgreen;
+}
+.tag-buttons {
+    font-size: 10px;
+    padding: 3px;
+    margin: 3px
+}
+.matched-tag {
+    background-color: cornflowerblue;
+    color: white
+}
+.tagged {
+    background-color: lightsalmon
 }
 </style>

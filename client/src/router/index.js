@@ -38,6 +38,11 @@ const routes = [
     path: '/editanswer/:id',
     name: 'editanswer',
     component: () => import(/* webpackChunkName: "about" */ '../views/EditAnswerFormPage.vue')
+  },
+  {
+    path: '/account',
+    name: 'manageaccount',
+    component: () => import(/* webpackChunkName: "about" */ '../views/AccountPage.vue')
   }
 ]
 

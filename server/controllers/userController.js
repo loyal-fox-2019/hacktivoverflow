@@ -76,6 +76,55 @@ class UserController
             
         })
     }
+
+    static getUserTags(req, res, next)
+    {
+        User.findById(req.userInfo.id)
+        .exec()        
+        .then((user) => {
+            res.status(201).json({
+                tags: user.watched_tags
+            });
+        })
+        .catch((err) => {
+            console.log(err);            
+        });
+    }
+
+    static updateUserTags(req, res, next)
+    {
+        const data = _.pick(req.body,'watched_tags');
+        User.findById(req.userInfo.id)
+        .exec()
+        .then((user) => {
+            if(user)
+            {
+                for(let key in user)
+                {
+                    if(data.hasOwnProperty(key))
+                    {
+                        user[key] = data[key];
+                    }
+                }
+
+                return user.save();
+            }
+            else
+            {
+                res.status(404).json({
+                    msg: "User not found."
+                });
+            }
+        })
+        .then(() => {
+            res.status(201).json({
+                msg: "Update success."
+            });
+        })
+        .catch((err) => {
+            console.log(err);            
+        });
+    }
 }
 
 module.exports = UserController;

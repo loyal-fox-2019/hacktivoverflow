@@ -47,6 +47,7 @@ export default {
   created() {
     this.$store.dispatch('getAllQuestions')
     this.$store.dispatch('getMyQuestions',this.$cookies.get('token'))
+    this.$store.dispatch('getMyTags',this.$cookies.get('token'))
     this.loading = true;
     setTimeout(() => {
       this.questionsArr = this.$store.state.allQuestions

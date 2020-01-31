@@ -8,6 +8,7 @@ export default new Vuex.Store({
   state: {
     allQuestions: [],
     myQuestions: [],
+    myTags: [],
     isLogin: false,
     searchStr: "",
     currentQuestion: {}
@@ -27,7 +28,10 @@ export default new Vuex.Store({
     },
     SET_CURRENT_QUESTION(state,payload) {
       state.currentQuestion = payload;
-    }
+    },
+    SET_MY_TAGS(state,payload) {
+      state.myTags = payload;
+    },
   },
   actions: {
     getAllQuestions(context) {
@@ -72,7 +76,20 @@ export default new Vuex.Store({
       .then(({data}) => {
         context.commit('SET_CURRENT_QUESTION',data);
       })
-    }
+    },
+    getMyTags(context,token) {
+      axiosReq({
+        url: `/users/tags`,
+        method: "get",
+        headers: {
+          token: token
+        }
+      })
+      .then(({data}) => {        
+        context.commit('SET_MY_TAGS',data.tags);
+      })
+
+    },
   },
   modules: {
   }
