@@ -9,7 +9,7 @@
             <button v-else @click="edit=false" class="trans text-sm text-white bg bg-blue-500 rounded border-t-2 border-blue-300 px-1 hover:bg-blue-600">Cancel</button>
           </div>
       </div>
-      <div class="flex mt-2">
+      <div v-if="tags.length > 0" class="flex mt-2">
         <div v-for="(tag,i) in tags" :key="i" class="trans mx-1 flex bg bg-gray-400 px-1 rounded cursor-pointer hover:bg-gray-500">
             <p @click="getTagged(tag)" class="text-xs px-2 py-1 rounded text-gray-700">
                 {{tag}}

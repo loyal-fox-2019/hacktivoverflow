@@ -60,9 +60,6 @@ export default {
             this.edit = false
         }
     },
-    created() {
-        console.log(this.answer)
-    }
 }
 </script>
 

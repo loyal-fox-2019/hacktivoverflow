@@ -80,7 +80,7 @@ export default {
         addQuestion({commit,rootState},payload) {
             axios({
                 method: 'post',
-                url: 'question',
+                url: '/question',
                 data: {
                     name: payload.name,
                     description: payload.description,
