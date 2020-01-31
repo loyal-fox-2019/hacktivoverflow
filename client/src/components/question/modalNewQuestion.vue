@@ -9,7 +9,6 @@
                          :visible="msgVisible" @dismiss="msgDismiss"/>
 
                 <sui-form @submit.prevent="postQuestion">
-
                     <sui-form-field>
                         <label>Title</label>
                         <sui-input v-model="title" maxlength="75" required class="input" transparent/>

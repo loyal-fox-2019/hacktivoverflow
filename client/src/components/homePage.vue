@@ -50,10 +50,11 @@
         },
         watch: {
             // questionList(a, b) {
+            //     // console.log(this.questionList)
             //     // this.$store.dispatch('listOfQuestions');
             // },
             // getCurrentUser(a, b) {
-            //     this.$store.dispatch('getCurrentUser');
+            //     // this.$store.dispatch('getCurrentUser');
             // }
         },
         mounted() {

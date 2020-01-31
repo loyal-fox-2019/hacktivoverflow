@@ -103,6 +103,9 @@
             },
             tags(a, b) {
                 this.isTagged()
+            },
+            dataUser(a, b){
+                this.isTagged()
             }
         },
         mounted() {

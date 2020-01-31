@@ -27,7 +27,6 @@
             return {
                 newTags: [],
                 tagList: [],
-                // addTag: false
             }
         },
         props: {
@@ -36,27 +35,24 @@
         },
         watch: {
             data(a, b) {
-                this.listCurrentTags()
+                this.listCurrentTags();
             },
-            dataUser(a, b){
+            dataUser(a, b) {
                 this.listWatchTags()
-            },
-            // getCurrentUser(a, b){
-            //     // this.addWatchTags()
-            // }
+            }
         },
         methods: {
             addWatchTags() {
                 this.$store.dispatch('addWatchTags', this.newTags);
-                // this.$store.dispatch('listOfQuestions');
+                this.$store.dispatch('getCurrentUser');
+                this.$store.dispatch('listOfQuestions');
+                console.log(this.getCurrentUser);
             },
-            listWatchTags(){
-                // if (this.addTag === false) {
-                    this.newTags = this.dataUser.watchTags;
-                    this.addTag = true;
-                // }
+            listWatchTags() {
+                this.newTags = this.dataUser.watchTags;
+                this.addTag = true;
             },
-            listCurrentTags(){
+            listCurrentTags() {
                 this.tagList = [];
                 this.data.forEach(tag => {
                     this.tagList.push({
