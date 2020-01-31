@@ -26,6 +26,7 @@ export default {
   },
   actions: {
     async addComment({ commit, dispatch }, payload) {
+      console.log(payload);
       const headers = {
         token: localStorage.getItem('stuckoverlow.token'),
       };

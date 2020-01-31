@@ -7,7 +7,7 @@ import store from './store';
 import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap-vue/dist/bootstrap-vue.css';
 
-Axios.defaults.baseURL = 'http://54.254.178.2';
+Axios.defaults.baseURL = 'http://localhost:3000';
 
 Vue.config.productionTip = false;
 

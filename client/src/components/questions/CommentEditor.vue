@@ -5,7 +5,7 @@
       <button class="btn btn-sm btn-dark" @click="updateComment(comment)" v-if="isUpdate">
         Update
       </button>
-      <button class="btn btn-sm btn-dark" @click="addComment(comment)" v-else>Save</button>
+      <button class="btn btn-sm btn-dark" @click="preAddComment()" v-else>Save</button>
     </div>
   </div>
 </template>
@@ -30,6 +30,13 @@ export default {
   },
   methods: {
     ...mapActions('Comment', ['addComment', 'updateComment']),
+    preAddComment() {
+      const form = {
+        questionId: this.questionId,
+        content: this.comment.content,
+      };
+      this.addComment(form);
+    },
   },
   created() {
     this.comment.questionId = this.questionId;
