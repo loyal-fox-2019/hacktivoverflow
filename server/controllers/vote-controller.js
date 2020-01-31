@@ -19,14 +19,16 @@ class VoteController {
             value: req.body.value,
           })
         } else {
-          question.votes[voteIndex].value += Number(req.body.value)
+          if (question.votes[voteIndex].value == req.body.value) {
+            if (req.body.value == 1) {
+              question.votes[voteIndex].value -= 1
+            }
 
-          if (question.votes[voteIndex].value < -1) {
-            question.votes[voteIndex].value = -1
-          }
-
-          if (question.votes[voteIndex].value > 1) {
-            question.votes[voteIndex].value = 1
+            if (req.body.value == -1) {
+              question.votes[voteIndex].value += 1
+            }
+          } else {
+            question.votes[voteIndex].value = req.body.value
           }
 
           if (question.votes[voteIndex].value == 0) {
@@ -66,20 +68,22 @@ class VoteController {
         })
 
         if (voteIndex == -1) {
-          // push it
+          // not found, push it
           answer.votes.push({
-            value: req.body.value,
             owner: req.payload.id,
+            value: req.body.value,
           })
         } else {
-          answer.votes[voteIndex].value += Number(req.body.value)
+          if (answer.votes[voteIndex].value == req.body.value) {
+            if (req.body.value == 1) {
+              answer.votes[voteIndex].value -= 1
+            }
 
-          if (answer.votes[voteIndex].value < -1) {
-            answer.votes[voteIndex].value = -1
-          }
-
-          if (answer.votes[voteIndex].value > 1) {
-            answer.votes[voteIndex].value = 1
+            if (req.body.value == -1) {
+              answer.votes[voteIndex].value += 1
+            }
+          } else {
+            answer.votes[voteIndex].value = req.body.value
           }
 
           if (answer.votes[voteIndex].value == 0) {

@@ -50,6 +50,15 @@ class AnswerController {
       })
       .catch(next)
   }
+
+  static getAnswer(req, res, next) {
+    Question.findOne({ _id: req.params.questionId })
+      .then(question => {
+        const answer = question.answers.id(req.params.answerId)
+        res.json(answer)
+      })
+      .catch(next)
+  }
 }
 
 module.exports = AnswerController

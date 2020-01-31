@@ -40,6 +40,7 @@ module.exports = {
       .catch(next)
   },
   authorizeAnswer: function(req, res, next) {
+    console.log(req.body)
     Question.findOne({ _id: req.body.questionId })
       .then(question => {
         if (!question) {

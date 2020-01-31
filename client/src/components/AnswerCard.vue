@@ -17,7 +17,28 @@
         >Answered at {{ localeTime }}</small
       >
     </div>
-    <div class="flex justify-end mb-2">
+    <!-- <div class="flex justify-end mb-2 border border-red-900"> -->
+    <div
+      class="flex mb-2"
+      :class="{
+        'justify-between': answer.owner._id == userId,
+        'justify-end': answer.owner._id != userId,
+      }"
+    >
+      <div v-if="answer.owner._id == userId">
+        <small
+          class="text-sm italic text-white bg-gray-500 px-1 rounded-sm"
+          style="cursor: pointer;"
+          @click="editAnswer"
+          >edit</small
+        >
+        <small
+          class="text-sm italic text-white bg-red-800 px-1 rounded-sm ml-2"
+          style="cursor: pointer;"
+          @click="deleteAnswer"
+          >delete</small
+        >
+      </div>
       <div class="border border-gray-300 py-2 px-2 flex items-start rounded-sm">
         <img :src="localeAvatar" width="32" height="32" />
         <p class="ml-2">{{ answer.owner.username }}</p>
@@ -50,9 +71,14 @@ export default {
     token() {
       return this.$store.state.token
     },
+    userId() {
+      return this.$store.state._id
+    },
   },
   methods: {
     vote(val) {
+      this.$store.commit('UPDATE_IS_LOADING', true)
+
       api
         .post(
           '/votes/answer',
@@ -72,6 +98,53 @@ export default {
             method: 'get',
             url: `/questions/${this.$route.params.questionId}`,
             success: 'UPDATE_QUESTION',
+          })
+        })
+        .catch(err => {
+          this.$store.commit('UPDATE_IS_LOADING', false)
+          if (err.response) {
+            err.response.data.errors.forEach(error => {
+              this.$toast.open({
+                message: error,
+                type: 'error',
+                position: 'top-right',
+                duration: 1500,
+              })
+            })
+          } else {
+            this.$toast.open({
+              message: 'Error has happened, please refresh browser',
+              type: 'error',
+              position: 'top-right',
+              duration: 50000,
+            })
+          }
+        })
+    },
+    editAnswer() {
+      this.$router.push(
+        `/edit/answer/${this.$route.params.questionId}/${this.answer._id}`,
+      )
+    },
+    deleteAnswer() {
+      this.$store.commit('UPDATE_IS_LOADING', true)
+
+      api
+        .delete('/answers', {
+          data: {
+            questionId: this.$route.params.questionId,
+            answerId: this.answer._id,
+          },
+          headers: {
+            token: this.token,
+          },
+        })
+        .then(({ data }) => {
+          this.$store.dispatch('fetchQuestion', {
+            method: 'get',
+            url: `/questions/${this.$route.params.questionId}`,
+            success: 'UPDATE_QUESTION',
+            successMessage: 'Answer deleted',
           })
         })
         .catch(err => {

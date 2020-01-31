@@ -66,12 +66,28 @@ const routes = [
       import(/* webpackChunkName: "ask-question" */ '@/views/AskQuestion.vue'),
   },
   {
-    path: '/edit/:questionId',
-    name: 'edit-question',
+    path: '/edit',
+    name: 'edit',
     component: () =>
-      import(
-        /* webpackChunkName: "edit-question" */ '@/views/EditQuestion.vue'
-      ),
+      import(/* webpackChunkName: "edit-bridge" */ '@/views/EditView.vue'),
+    children: [
+      {
+        path: 'question/:questionId',
+        name: 'edit-question',
+        component: () =>
+          import(
+            /* webpackChunkName: "edit-question" */ '@/views/EditQuestion.vue'
+          ),
+      },
+      {
+        path: 'answer/:questionId/:answerId',
+        name: 'edit-answer',
+        component: () =>
+          import(
+            /* webpackChunkName: "edit-answer" */ '@/views/EditAnswer.vue'
+          ),
+      },
+    ],
   },
 ]
 

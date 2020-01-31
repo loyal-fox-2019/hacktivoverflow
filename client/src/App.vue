@@ -28,6 +28,7 @@ export default {
             email: data.email,
             tags: data.tags,
             username: data.username,
+            id: data.id,
           })
         })
         .catch(err => {

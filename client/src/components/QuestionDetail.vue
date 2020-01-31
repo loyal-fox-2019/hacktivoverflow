@@ -30,7 +30,6 @@
             <span v-html="question.description"></span>
           </div>
         </div>
-        <!-- <div class="flex justify-between mt-5"> -->
         <div
           class="mt-5 flex"
           :class="{
@@ -237,7 +236,7 @@ export default {
         })
     },
     editQuestion() {
-      this.$router.push(`/edit/${this.$route.params.questionId}`)
+      this.$router.push(`/edit/question/${this.$route.params.questionId}`)
     },
     deleteQuestion() {
       this.$store.commit('UPDATE_IS_LOADING', true)

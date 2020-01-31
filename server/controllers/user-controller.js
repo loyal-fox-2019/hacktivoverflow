@@ -52,6 +52,7 @@ class UserController {
   static getUserDetail(req, res, next) {
     User.findOne({ _id: req.payload.id })
       .then(user => {
+        console.log(user.id)
         res.json({
           username: user.username,
           email: user.email,
