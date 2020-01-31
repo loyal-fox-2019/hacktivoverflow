@@ -108,12 +108,10 @@ class ControllerUser {
             platform: 'google',
             password: process.env.G_SIGN_DEF_PASSWORD
           }
-          console.log(newUser)
           return User.create(newUser)
         }
       })
       .then((newUser) => {
-        console.log(newUser)
         const token = generateToken({
           id: newUser._id,
           username: newUser.username,
@@ -127,7 +125,6 @@ class ControllerUser {
         })
       })
       .catch((err) => {
-        // console.log(err);
         next(err)
       })
   }

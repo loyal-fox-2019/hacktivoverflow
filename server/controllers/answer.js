@@ -9,7 +9,6 @@ class ControllerAnswer {
       user: req.userInfo.id
     })
       .then((answer) => {
-        console.log(answer)
         return Question.findByIdAndUpdate(req.body.question, {
           $push: {
             answers: answer._id
@@ -37,21 +36,52 @@ class ControllerAnswer {
       })
   }
 
+  static findOne(req, res, next) {
+    Answer.findById({
+      _id: ObjectId(req.params.id)
+    })
+      .then((result) => {
+        res.status(200).json(result)
+      })
+      .catch((err) => {
+        next(err)
+      })
+  }
+
   static findOwn(req, res, next) {
     Question.find({
       answers: {
         $gt: []
       }
     })
-      .populate({
-        path: 'answers',
-        populate: {
-          path: 'author',
-          match: { _id: ObjectId(req.userInfo.id) }
-        }
-      })
+      .populate([
+        {
+          path: 'answers',
+          populate: {
+            path: 'user',
+            match: { _id: ObjectId(req.userInfo.id) }
+          }
+        },
+        'author'
+      ])
       .then((result) => {
-        console.log(result)
+        res.status(200).json(result)
+      })
+      .catch((err) => {
+        next(err)
+      })
+  }
+
+  static update(req, res, next) {
+    Answer.findByIdAndUpdate(
+      {
+        _id: ObjectId(req.params.id)
+      },
+      {
+        description: req.body.description
+      }
+    )
+      .then((result) => {
         res.status(200).json(result)
       })
       .catch((err) => {
@@ -60,7 +90,6 @@ class ControllerAnswer {
   }
 
   static upvote(req, res, next) {
-    // console.log(req.params.id)
     let answerData
     Answer.findById({
       _id: ObjectId(req.params.id)

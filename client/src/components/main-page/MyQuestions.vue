@@ -117,7 +117,7 @@ export default {
         .onOk(() => {
           axios({
             method: 'delete',
-            url: 'http://localhost:3000/questions/delete/' + questionId,
+            url: 'http://3.1.84.218:3000/questions/delete/' + questionId,
             headers: {
               token: localStorage.token
             }

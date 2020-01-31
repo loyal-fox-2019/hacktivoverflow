@@ -62,7 +62,7 @@ export default {
       let questionId = this.$route.params.id
       axios({
         method: 'put',
-        url: 'http://localhost:3000/questions/update/' + questionId,
+        url: 'http://3.1.84.218:3000/questions/update/' + questionId,
         headers: {
           token: localStorage.token
         },

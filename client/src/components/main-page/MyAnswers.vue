@@ -1,6 +1,6 @@
 <template>
   <div class="q-mx-auto" style="width:80%;">
-    <pre>{{ myAnswers }}</pre>
+    <!-- <pre>{{ myAnswers }}</pre> -->
     <FormQuestion class="flex justify-end q-mt-none" />
 
     <h4>My Answers</h4>
@@ -10,7 +10,7 @@
       <h4>You Have Not Answering Any Questions Yet</h4>
     </q-intersection>
 
-    <!-- <q-intersection
+    <q-intersection
       v-for="item in myAnswers"
       :key="item._id"
       transition="scale"
@@ -24,21 +24,16 @@
           style="margin:auto; border-right:1px solid orange"
         >
           <p>
-            {{
-              votes(
-                item.question.upvotes.length,
-                item.question.downvotes.length
-              )
-            }}
+            {{ votes(item.upvotes.length, item.downvotes.length) }}
           </p>
           <p>Votes</p>
-          <p>{{ item.question.answers.length }}</p>
+          <p>{{ item.answers.length }}</p>
           <p>Answers</p>
         </div>
         <div class="col-11 block">
-          <h6 class="text-blue-10 q-ml-md">{{ item.question.title }}</h6>
+          <h6 class="text-blue-10 q-ml-md">{{ item.title }}</h6>
           <p class="q-ml-md">
-            {{ description(item.question.description) }}
+            {{ description(item.description) }}
           </p>
           <div class="flex">
             <q-btn
@@ -46,16 +41,16 @@
               push
               color="primary"
               label="Detail"
-              @click="$router.push('/question/' + item.question._id)"
+              @click="$router.push('/question/' + item._id)"
             />
           </div>
         </div>
         <div class="col-12">
-          <p class="text-right">Author : {{ item.question.author.username }}</p>
+          <p class="text-right">Author : {{ item.author.username }}</p>
         </div>
         <q-separator class="col-12" color="orange" />
       </div>
-    </q-intersection> -->
+    </q-intersection>
 
     <!-- place QPageScroller at end of page -->
     <q-page-scroller

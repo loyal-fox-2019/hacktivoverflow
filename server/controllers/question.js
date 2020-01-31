@@ -19,6 +19,7 @@ class ControllerQuestion {
 
   static find(req, res, next) {
     Question.find()
+      .sort({ createdAt: -1 })
       .populate(['author', 'username'])
       .then((result) => {
         res.status(200).json(result)
@@ -73,7 +74,6 @@ class ControllerQuestion {
       data
     )
       .then((result) => {
-        console.log(result)
         res.status(200).json(result)
       })
       .catch((err) => {
@@ -98,14 +98,12 @@ class ControllerQuestion {
         })
       })
       .then((response) => {
-        console.log(response)
         res.status(200).json(response)
       })
       .catch(next)
   }
 
   static upvote(req, res, next) {
-    // console.log(req.params.id)
     let questionData
     Question.findById({
       _id: ObjectId(req.params.id)

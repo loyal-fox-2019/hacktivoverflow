@@ -1,5 +1,5 @@
 <template>
-  <div class="q-mt-none q-mx-auto" style="width:80%; margin-top: -5%;">
+  <div class="q-mt-none q-mx-auto" style="width:80%;">
     <FormQuestion class="flex justify-end q-mt-none" />
     <div v-if="questionList.length === 0">
       <div>
@@ -8,7 +8,7 @@
     </div>
 
     <div v-else>
-      <pre>{{ questionList }}</pre>
+      <!-- <pre>{{ questionList }}</pre> -->
       <h4>All Questions</h4>
 
       <q-separator class="col-12" color="orange" />

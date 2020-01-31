@@ -54,8 +54,11 @@
         <q-separator class="col-12" color="orange" />
         <Answer />
       </div>
-      <form @submit.prevent="onSubmit(question._id)" class="col-12 q-mt-lg">
-        <p>Post your answer :</p>
+      <form
+        @submit.prevent="onSubmit(question._id)"
+        class="col-12 q-mt-lg q-mb-lg"
+      >
+        <p>Answer this question :</p>
         <Editor @text="text" />
         <q-btn
           class="q-mt-md q-mx-auto flex"
@@ -112,43 +115,77 @@ export default {
       return upvote - downvote
     },
     onSubmit(questionId) {
-      if (this.answer.length <= 6) {
-        this.$q.notify({
-          color: 'red-5',
-          textColor: 'white',
-          icon: 'warning',
-          message: 'Your answer is too short'
-        })
+      if (!localStorage.token) {
+        this.alert()
       } else {
-        axios({
-          method: 'post',
-          url: 'http://localhost:3000/answers/',
-          headers: {
-            token: localStorage.token
-          },
-          data: {
-            question: questionId,
-            description: this.answer
-          }
-        })
-          .then(({ data }) => {
-            // console.log(data)
-            if (data.name === 'Not Found') {
+        if (this.answer.length <= 6) {
+          this.$q.notify({
+            color: 'red-5',
+            textColor: 'white',
+            icon: 'warning',
+            message: 'Your answer is too short'
+          })
+        } else {
+          axios({
+            method: 'post',
+            url: 'http://3.1.84.218:3000/answers/',
+            headers: {
+              token: localStorage.token
+            },
+            data: {
+              question: questionId,
+              description: this.answer
+            }
+          })
+            .then(({ data }) => {
+              // console.log(data)
+              if (data.name === 'Not Found') {
+                this.$q.notify({
+                  color: 'red-5',
+                  textColor: 'white',
+                  icon: 'warning',
+                  message: data.message + ' or already deleted'
+                })
+              } else {
+                this.$store.dispatch('FETCH_QUESTION_DETAIL', questionId)
+                this.$q.notify({
+                  color: 'green-4',
+                  textColor: 'white',
+                  icon: 'cloud_done',
+                  message: 'Answer Posted'
+                })
+              }
+            })
+            .catch((err) => {
               this.$q.notify({
                 color: 'red-5',
                 textColor: 'white',
                 icon: 'warning',
-                message: data.message + ' or already deleted'
+                message: 'Something went wrong'
               })
-            } else {
-              this.$store.dispatch('FETCH_QUESTION_DETAIL', questionId)
-              this.$q.notify({
-                color: 'green-4',
-                textColor: 'white',
-                icon: 'cloud_done',
-                message: 'Answer Posted'
-              })
-            }
+            })
+        }
+      }
+    },
+    upvote(questionId) {
+      if (!localStorage.token) {
+        this.alert()
+      } else {
+        axios({
+          method: 'post',
+          url: 'http://3.1.84.218:3000/questions/upvote/' + questionId,
+          headers: {
+            token: localStorage.token
+          }
+        })
+          .then(({ data }) => {
+            this.$store.dispatch('FETCH_QUESTION_DETAIL', questionId)
+            this.$q.notify({
+              color: 'green-4',
+              textColor: 'white',
+              icon: 'cloud_done',
+              message: 'Upvote Success'
+            })
           })
           .catch((err) => {
             this.$q.notify({
@@ -160,56 +197,45 @@ export default {
           })
       }
     },
-    upvote(questionId) {
-      axios({
-        method: 'post',
-        url: 'http://localhost:3000/questions/upvote/' + questionId,
-        headers: {
-          token: localStorage.token
-        }
-      })
-        .then(({ data }) => {
-          this.$store.dispatch('FETCH_QUESTION_DETAIL', questionId)
-          this.$q.notify({
-            color: 'green-4',
-            textColor: 'white',
-            icon: 'cloud_done',
-            message: 'Upvote Success'
-          })
-        })
-        .catch((err) => {
-          this.$q.notify({
-            color: 'red-5',
-            textColor: 'white',
-            icon: 'warning',
-            message: 'Something went wrong'
-          })
-        })
-    },
     downvote(questionId) {
-      axios({
-        method: 'post',
-        url: 'http://localhost:3000/questions/downvote/' + questionId,
-        headers: {
-          token: localStorage.token
-        }
-      })
-        .then(({ data }) => {
-          this.$store.dispatch('FETCH_QUESTION_DETAIL', questionId)
-          this.$q.notify({
-            color: 'green-4',
-            textColor: 'white',
-            icon: 'cloud_done',
-            message: 'Downvote Success'
-          })
+      if (!localStorage.token) {
+        this.alert()
+      } else {
+        axios({
+          method: 'post',
+          url: 'http://3.1.84.218:3000/questions/downvote/' + questionId,
+          headers: {
+            token: localStorage.token
+          }
         })
-        .catch((err) => {
-          this.$q.notify({
-            color: 'red-5',
-            textColor: 'white',
-            icon: 'warning',
-            message: 'Something went wrong'
+          .then(({ data }) => {
+            this.$store.dispatch('FETCH_QUESTION_DETAIL', questionId)
+            this.$q.notify({
+              color: 'green-4',
+              textColor: 'white',
+              icon: 'cloud_done',
+              message: 'Downvote Success'
+            })
           })
+          .catch((err) => {
+            this.$q.notify({
+              color: 'red-5',
+              textColor: 'white',
+              icon: 'warning',
+              message: 'Something went wrong'
+            })
+          })
+      }
+    },
+    alert() {
+      this.$q
+        .dialog({
+          title: 'Sorry',
+          icon: 'warning',
+          message: 'You must login first'
+        })
+        .onOk(() => {
+          this.$router.push('/login')
         })
     }
   }

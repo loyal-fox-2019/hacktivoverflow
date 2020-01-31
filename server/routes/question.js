@@ -4,13 +4,13 @@ const ControllerQuestion = require('../controllers/question')
 
 const authenticate = require('../middlewares/authenticate')
 
-questionRouter.use(authenticate)
-
 questionRouter.get('/', ControllerQuestion.find)
 
-questionRouter.get('/lists', ControllerQuestion.findOwn)
-
 questionRouter.get('/:id', ControllerQuestion.findOne)
+
+questionRouter.use(authenticate)
+
+questionRouter.get('/lists', ControllerQuestion.findOwn)
 
 questionRouter.post('/', ControllerQuestion.create)
 

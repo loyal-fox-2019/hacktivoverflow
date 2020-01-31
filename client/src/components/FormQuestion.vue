@@ -1,6 +1,6 @@
 <template>
   <div>
-    <q-btn label="Ask Question" color="primary" @click="dialog = true">
+    <q-btn label="Ask Question" color="primary" @click="checkLogin">
       <q-tooltip>
         Post New Question
       </q-tooltip>
@@ -133,6 +133,13 @@ export default {
   },
   computed: {},
   methods: {
+    checkLogin() {
+      if (!localStorage.token) {
+        this.alert()
+      } else {
+        this.dialog = true
+      }
+    },
     onSubmit() {
       this.confirm = true
     },
@@ -147,7 +154,7 @@ export default {
       // console.log(this.description, this.title)
       axios({
         method: 'post',
-        url: 'http://localhost:3000/questions/',
+        url: 'http://3.1.84.218:3000/questions/',
         headers: {
           token: localStorage.token
         },
@@ -175,6 +182,17 @@ export default {
             icon: 'warning',
             message: 'Something went wrong'
           })
+        })
+    },
+    alert() {
+      this.$q
+        .dialog({
+          title: 'Sorry',
+          icon: 'warning',
+          message: 'You must login first'
+        })
+        .onOk(() => {
+          this.$router.push('/login')
         })
     }
   }

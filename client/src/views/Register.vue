@@ -78,7 +78,7 @@ export default {
     onSubmit() {
       axios({
         method: 'post',
-        url: 'http://localhost:3000/user/register',
+        url: 'http://3.1.84.218:3000/user/register',
         data: {
           username: this.username,
           email: this.email,
@@ -99,7 +99,7 @@ export default {
             localStorage.setItem('platform', data.platform)
             localStorage.setItem('id', data.id)
             this.$store.state.isLogin = true
-            this.$router.replace('/home')
+            this.$router.replace('/')
             this.$q.notify({
               color: 'green-4',
               textColor: 'white',

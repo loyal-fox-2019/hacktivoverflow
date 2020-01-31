@@ -1,9 +1,9 @@
 <template>
   <div class="flex justify-between">
     <q-tabs align="left">
-      <q-route-tab to="/home" label="Home" />
-      <q-route-tab to="/my-questions" label="My Questions" />
-      <q-route-tab to="/my-answers" label="My Answers" />
+      <q-route-tab to="/" label="Home" />
+      <q-route-tab to="/my-questions" label="My Questions" v-if="isLogin" />
+      <q-route-tab to="/my-answers" label="My Answers" v-if="isLogin" />
     </q-tabs>
 
     <q-tabs class="q-mr-sm" align="center" v-if="!isLogin">
@@ -56,7 +56,7 @@ export default {
       localStorage.removeItem('token')
       localStorage.removeItem('platform')
       localStorage.removeItem('username')
-      this.$router.push('/home')
+      this.$router.push('/')
       this.$store.state.isLogin = false
     }
   }

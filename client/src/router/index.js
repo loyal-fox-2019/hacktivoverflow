@@ -10,6 +10,7 @@ import DetailQuestion from '../components/DetailQuestion'
 import MyQuestions from '../components/main-page/MyQuestions'
 import EditQuestion from '../components/EditQuestion'
 import MyAnswers from '../components/main-page/MyAnswers'
+import EditAnswer from '../components/EditAnswer'
 
 Vue.use(VueRouter)
 
@@ -20,16 +21,30 @@ const routes = [
     component: Home,
     children: [
       {
-        path: 'home',
+        path: '/',
         component: Questions
       },
       {
         path: 'my-questions',
-        component: MyQuestions
+        component: MyQuestions,
+        beforeEnter(to, from, next) {
+          if (localStorage.token) {
+            next()
+          } else {
+            next('/')
+          }
+        }
       },
       {
         path: 'my-answers',
-        component: MyAnswers
+        component: MyAnswers,
+        beforeEnter(to, from, next) {
+          if (localStorage.token) {
+            next()
+          } else {
+            next('/')
+          }
+        }
       }
     ]
   },
@@ -40,7 +55,18 @@ const routes = [
       if (localStorage.token) {
         next()
       } else {
-        next('/home')
+        next('/')
+      }
+    }
+  },
+  {
+    path: '/answer/:id',
+    component: EditAnswer,
+    beforeEnter(to, from, next) {
+      if (localStorage.token) {
+        next()
+      } else {
+        next('/')
       }
     }
   },
@@ -51,12 +77,26 @@ const routes = [
   {
     path: '/login',
     name: 'login',
-    component: Login
+    component: Login,
+    beforeEnter(to, from, next) {
+      if (!localStorage.token) {
+        next()
+      } else {
+        next('/')
+      }
+    }
   },
   {
     path: '/register',
     name: 'register',
-    component: Register
+    component: Register,
+    beforeEnter(to, from, next) {
+      if (!localStorage.token) {
+        next()
+      } else {
+        next('/')
+      }
+    }
   }
 ]
 

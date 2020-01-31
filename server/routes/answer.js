@@ -10,7 +10,11 @@ answerRouter.post('/', ControllerAnswer.create)
 
 answerRouter.get('/question/:id', ControllerAnswer.find)
 
+answerRouter.get('/answer/:id', ControllerAnswer.findOne)
+
 answerRouter.get('/lists', ControllerAnswer.findOwn)
+
+answerRouter.put('/update/:id', ControllerAnswer.update)
 
 answerRouter.post('/upvote/:id', ControllerAnswer.upvote)
 

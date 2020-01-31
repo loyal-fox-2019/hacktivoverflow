@@ -82,7 +82,7 @@ export default {
     onSubmit() {
       axios({
         method: 'post',
-        url: 'http://localhost:3000/user/login',
+        url: 'http://3.1.84.218:3000/user/login',
         data: {
           email: this.email,
           password: this.password
@@ -123,7 +123,7 @@ export default {
         idToken: idToken
       }
       axios
-        .post('http://localhost:3000/user/g-sign-in', token)
+        .post('http://3.1.84.218:3000/user/g-sign-in', token)
         .then(({ data }) => {
           localStorage.setItem('token', data.token)
           localStorage.setItem('platform', data.platform)
