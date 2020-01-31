@@ -2,7 +2,7 @@
   <div class="question-list-wrapper">
     <VoteButton :modeURL="'answer'" :data="answer"/>
     <div class="answer-content">
-      <p class="content">{{ answer.content }}</p>
+      <p class="content"><span v-html="answer.content"></span></p>
       <span style="font-size:12px">Author: {{ answer.author.name }}</span> &nbsp;&nbsp;
       <span style="font-size:12px">Created at: {{ createdAt }}</span>
     </div>
