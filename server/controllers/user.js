@@ -52,6 +52,28 @@ class userController {
       })
       .catch(next)
   }
+  static editTags(req, res, next) {
+    let id = req.decoded.id
+    const { tags } = req.body
+    let value = {
+      tags
+    }
+    User
+      .findByIdAndUpdate(id, value, { new: true, omitUndefined: true })
+      .then((user) => {
+        res.status(200).json(user)
+      })
+      .catch(next)
+  }
+
+  static fetchTags(req, res, next) {
+    let id = req.decoded.id
+    User
+      .findById(id)
+      .then(data => {
+        res.status(200).json(data.tags)
+      })
+  }
 }
 
 module.exports = userController

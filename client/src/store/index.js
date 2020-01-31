@@ -9,7 +9,8 @@ export default new Vuex.Store({
     isLogin: false,
     question: [],
     detailQuestion: {},
-    detailAnswer: {}
+    detailAnswer: {},
+    tags: []
   },
   mutations: {
     SET_QUESTION (state, payload) {
@@ -23,6 +24,9 @@ export default new Vuex.Store({
     },
     SET_LOGIN (state, payload) {
       state.isLogin = payload
+    },
+    SET_TAGS (state, payload) {
+      state.tags = payload
     }
   },
   actions: {
@@ -153,6 +157,29 @@ export default new Vuex.Store({
     // Register
     register ({ commit }, payload) {
       return axios.post('users/register', payload)
+    },
+    // Tags
+    editTags ({ commit }, payload) {
+      let value = { tags: payload }
+      return axios({
+        method: 'PATCH',
+        url: `users/tags`,
+        data: value,
+        headers: { token: localStorage.getItem('token') }
+      })
+    },
+    fetchTags ({ commit }) {
+      axios({
+        method: 'GET',
+        url: `users/tags`,
+        headers: { token: localStorage.getItem('token') }
+      })
+        .then(({ data }) => {
+          commit('SET_TAGS', data)
+        })
+        .catch((err) => {
+          console.log(err.response)
+        })
     }
   },
   modules: {

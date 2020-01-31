@@ -9,14 +9,18 @@
       </template>
       <div class="d-block text-center">
         <form @submit.stop.prevent="login">
-          <b-form-tags
-                  v-model="tags"
-                  separator=" "
-                  placeholder="Enter new tags separated by space"
-                  remove-on-delete
-                  no-add-on-enter
-                  class="mb-2"
-                ></b-form-tags>
+        <b-form-tags
+            v-model="tags"
+            separator=" "
+            placeholder="Enter new tags separated by space"
+            remove-on-delete
+            no-add-on-enter
+            class="mb-2"
+          ></b-form-tags>
+          <label v-for="(tag, index) in fetchTags" :key="index">
+          <button type="button" class="btn btn-sm btn-danger disabled ml-2 tags" data-toggle="button" aria-pressed="false">
+          {{tag}}
+          </button></label>
           <b-button class="mt-5" block @click="create" variant="info">
             Add</b-button>
         </form>
@@ -31,38 +35,44 @@ import swal from 'sweetalert2'
 export default {
   data () {
     return {
-      tags: [],
+      tags: []
     }
   },
   methods: {
     create () {
-        // db.collection('project').add({
-        //   title: this.title,
-        //   description: this.description,
-        //   point: this.point,
-        //   assign: this.assign,
-        //   status: 'Back Log',
-        // })
-        //   .then((docRef) => {
-        //     swal.fire({
-        //       title: 'Success!',
-        //       text: 'Task successfully to create',
-        //       icon: 'success',
-        //       confirmButtonText: 'Ok',
-        //     });
-        //     this.$bvModal.hide('bv-modal-example');
-        //     this.onReset();
-        //   })
-        //   .catch((err) => {
-        //   });
-      }
+      this.$store.dispatch('editTags', this.tags)
+        .then(({ data }) => {
+          swal.fire({
+            title: 'Success!',
+            text: 'Tags successfully to added',
+            icon: 'success',
+            confirmButtonText: 'Ok'
+          })
+          this.$store.commit('SET_TAGS', data.tags)
+          this.$bvModal.hide('bv-modal-example')
+          this.onReset()
+        })
+        .catch((err) => {
+          swal.fire({
+            title: 'Success!',
+            text: err.response,
+            icon: 'success',
+            confirmButtonText: 'Ok'
+          })
+        })
     },
     onReset () {
-      this.title = ''
-      this.description = ''
-      this.point = null
-      this.assign = ''
+      this.tags = []
     }
+  },
+  computed: {
+    fetchTags () {
+      return this.$store.state.tags
+    }
+  },
+  created () {
+    this.$store.dispatch('fetchTags')
+  }
 }
 </script>
 
