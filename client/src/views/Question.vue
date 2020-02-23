@@ -1,15 +1,23 @@
 /* eslint-disable vue/valid-v-for */
 <template>
 <div class="mt-9">
-<v-btn
-        class="ma-2 mt-1"
-        @click="expand = !expand"
-        small color="primary"
-        style="position: fixed; right: 15px"
-        >Ask Question</v-btn>
+    <v-btn
+      class="ma-2 mt-1"
+      @click="expand = !expand"
+      small color="primary"
+      style="position: fixed; right: 15px"
+      >Ask Question</v-btn>
+    <v-btn
+      class="ma-2 mt-10"
+      @click.prevent="deleteThis"
+      v-if="$store.state.who == quest.author.email"
+      outlined
+      small color="error"
+      style="position: fixed; right: 15px"
+      >Delete this Question?</v-btn>
 
   <v-expand-transition class="mx-auto">
-    <FormQ :formType="'questions'" v-show="expand" />
+    <FormQ :formType="'questions'" v-show="expand" @tutupForm="expand = !expand"/>
   </v-expand-transition>
 
  <Cards
@@ -26,11 +34,13 @@
     :key="index"
     @loadUlangAnswer="refreshAnswers"
     :data="jawab"
-    :tipe="'answers'"
     style="width: 60vw"
   class="ml-auto"/>
-
-  <FormQ :formType="'asnwers'" /> // blom ubah v show di sana
+<hr>
+<h5 style="margin-left: 20vw">Your answer here:</h5>
+<div style="background-color: white; width: 60vw" class="mx-auto">
+  <FormQ :formType="'answers'"/>
+</div>
 </div>
 
 </template>
@@ -57,11 +67,35 @@ export default {
         'fetchTheAnswer',
         this.$route.params.id
       )
+    },
+    deleteThis () {
+      this.axios({
+        method: 'DELETE',
+        headers: {
+          token: localStorage.getItem('token')
+        },
+        url: 'questions/' + this.$route.params.id
+      })
+        .then(({ data }) => {
+          this.$router.push('/')
+          this.$store.commit('SET_ALERT', {
+            message: `${data.title} deleted`,
+            variant: 'success'
+          })
+          // this.$store.commit('DELETE_QUESTION', data)
+          this.$store.dispatch('fetchAllQuestion')
+        }).catch((err) => {
+          console.log(err.response.data.message)
+          this.$store.commit('SET_ALERT', {
+            message: err.response.data.message,
+            variant: 'danger'
+          })
+        })
     }
   },
   computed: {
     quest () {
-      return this.$store.state.singleQuestion
+      return this.$store.getters.questy
     },
     answers: {
       set (val) {
@@ -71,6 +105,9 @@ export default {
       get () {
         return this.$store.state.theAnswer
       }
+    },
+    author () {
+      return this.quest.author.email
     }
   },
   components: {
@@ -98,6 +135,9 @@ export default {
         this.$route.params.id
       )
     }
+  },
+  mounted () {
+    console.log(this.quest)
   }
 }
 </script>

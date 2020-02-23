@@ -11,13 +11,22 @@ class Controller {
             }).catch(next);
     }
 
-    static register(req, res, next) {
-        const { email, password, photo, name } = req.body
+    static getOneUser(req,res,next){
+        User.findById(req.decoded.id).select('email watched_tags')
+        .then((user) => {
+            res.status(200).json(user)
+        }).catch(next);
+    }
 
-        User.create({ email, password, photo, name })
+    static register(req, res, next) {
+        console.log(req.body.file);
+        const { email, password, file, name } = req.body
+        console.log(req.body);
+
+        User.create({ email, password, photo: file, name })
             .then((user) => {
                 let token = genToken({ id: user._id })
-                res.status(201).json(token)
+                res.status(201).json({token, email: user.email})
             }).catch(next);
     }
 
@@ -29,18 +38,19 @@ class Controller {
                 if (!user || !dehash(password, user.password)) throw ({ status: 400, msg: "username/email or password incorrect" })
 
                 let token = genToken({ id: user._id })
-                res.status(200).json(token)
+                res.status(200).json({token, email: user.email, tags: user.watched_tags})
             }).catch(next);
     }
 
     static addTags(req, res, next) {
-        console.log(req.body.tags);
+        console.log(req.body.tags, 'ini yg ke body');
         const { tags } = req.body
         // tags = ['ayam', 'goreng']
         User.findByIdAndUpdate(req.decoded.id, {
-            $addToSet: { watched_tags: { $each: tags } }
+            watched_tags: tags
         }, { new: true }).select('watched_tags -_id')
             .then((user) => {
+                console.log('setelah', user);
                 res.status(200).json(user)
             }).catch(next);
     }

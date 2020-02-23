@@ -5,6 +5,9 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
+    search: '',
+    watched: [],
+    who: '',
     alertMessage: '',
     alertVariant: '',
     dismissSecs: 2,
@@ -13,9 +16,29 @@ export default new Vuex.Store({
     myQuestions: [],
     allQuestions: [],
     singleQuestion: {},
-    theAnswer: []
+    theAnswer: [],
+    filter: []
   },
   mutations: {
+    SET_FILTER(state, payload){
+      state.filter = state.allQuestions.filter(question => question.title.toLowerCase().includes(payload.toLowerCase()))
+    },
+    SET_WATCH (state, payload) {
+      state.watched = payload
+    },
+    SET_WHO (state, payload) {
+      state.who = payload
+    },
+    DELETE_QUESTION (state, payload) {
+      console.log(state.allQuestions.includes(payload))
+      // state.allQuestions = state.allQuestions.filter(quest => quest !== payload)
+    },
+    PUSH_QUESTION (state, payload) {
+      state.allQuestions.unshift(payload)
+    },
+    PUSH_ANSWER (state, payload) {
+      state.theAnswer.push(payload)
+    },
     SET_ALERT (state, payload) {
       state.dismissCountDown = state.dismissSecs
       state.alertMessage = payload.message
@@ -97,5 +120,16 @@ export default new Vuex.Store({
     }
   },
   modules: {
+  },
+  getters: {
+    questy: state => {
+      return state.singleQuestion
+    },
+    tagu: state => {
+      return state.watched
+    },
+    filtered: state => {
+      return state.filter
+    }
   }
 })

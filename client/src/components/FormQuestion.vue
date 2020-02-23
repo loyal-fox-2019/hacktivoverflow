@@ -2,6 +2,7 @@
   <v-form v-model="valid" @submit.prevent="createPOST" class="mx-auto">
     <v-container>
       <v-col
+      v-if="formType === 'questions'"
           class="mx-auto w-75"
         >
           <v-text-field
@@ -19,6 +20,7 @@
         </v-col>
 
         <v-col
+        v-if="formType === 'questions'"
           class="mx-auto w-75"
         >
             <b-form-tags v-model="tags" separator=" ,;" class="mb-2"></b-form-tags>
@@ -27,7 +29,7 @@
         <v-col
         class="mx-auto w-75"
         >
-        <v-btn small color="primary" type="submit" :block="true">Primary</v-btn>
+        <v-btn small color="primary" type="submit" :block="true">Submit</v-btn>
         </v-col>
     </v-container>
   </v-form>
@@ -62,12 +64,20 @@ export default {
             url: 'questions',
             data: {
               title: this.title,
-              content: this.this.content,
+              content: this.content,
               tags: this.tags
+            },
+            headers: {
+              token: localStorage.getItem('token')
             }
           })
             .then(({ data }) => {
-              this.$store.state.theAnswer.push(data)
+            //   this.$store.state.theAnswer.push(data)
+              this.$store.commit('PUSH_QUESTION', data)
+              this.title = ''
+              this.content = ''
+              this.tags = []
+              this.$emit('tutupForm')
             }).catch((err) => {
               console.log(err.response.data.message)
               this.$store.commit('SET_ALERT', {
@@ -75,16 +85,24 @@ export default {
                 variant: 'danger'
               })
             })
-        } else if (this.formType === 'answers') {
+        } else {
+          console.log('masuk kasndasf')
           this.axios({
             method: 'post',
             url: 'answers/' + this.$route.params.id,
             data: {
-              content: this.this.content
+              content: this.content
+            },
+            headers: {
+              token: localStorage.getItem('token')
             }
           })
             .then(({ data }) => {
-              this.$store.state.theAnswer.push(data)
+              this.title = ''
+              this.content = ''
+              this.tags = []
+              this.$store.commit('PUSH_ANSWER', data)
+              this.$emit('tutupForm')
             }).catch((err) => {
               console.log(err.response.data.message)
               this.$store.commit('SET_ALERT', {
@@ -94,6 +112,9 @@ export default {
             })
         }
       } else {
+        localStorage.setItem('title', this.title)
+        localStorage.setItem('content', this.content)
+        localStorage.setItem('tags', this.tags)
         this.$store.commit('SET_ALERT', {
           message: 'Join the Hack beloflow community',
           variant: 'warning'
@@ -101,6 +122,20 @@ export default {
         this.$store.state.dismissCountDown = 3
         this.$router.push('/signin/login')
       }
+    }
+  },
+  created(){
+    if(localStorage.getItem('title')){
+      this.title = localStorage.getItem('title')
+      localStorage.removeItem('title')
+    }
+    if(localStorage.getItem('content')){
+      this.content = localStorage.getItem('content')
+      localStorage.removeItem('content')
+    }
+    if(localStorage.getItem('tags')){
+      this.tags = localStorage.getItem('tags')
+      localStorage.removeItem('tags')
     }
   }
 }
