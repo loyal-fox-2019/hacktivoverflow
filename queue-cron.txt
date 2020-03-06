@@ -1,0 +1,8 @@
+QUEUE DAN CRON SCENARIO
+
+saat user post pertanyaan maka dia akan dapat email notif per jam 12 malam jika ada balasan baru untuk pertanyaannya
+jika tidak maka tidak dikirimkan email apapun
+
+scheduler cron nya per jam 12 malam dan hanya kirim email untuk komen2 baru yang belum pernah dikirim sebelumnya, jika memang sudah dikirim maka tidak perlu dikirim lagi
+untuk email yg dikirim berupa link ke post pertanyaan yang mendapatkan jawaban baru
+jika ternyata 1 orang melakukan post lebih dari 1 dan ada yg jawab semua maka akan dikirimkan semua link nya ke user yang melakukan post pertanyaan
